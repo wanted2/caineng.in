@@ -8,7 +8,7 @@ kramdown:
 title:            AiFi
 tagline:          'A freelancer blog'
 description:      ''
-url:              https://caineng.in
+url:              https://d1oozge46goiac.cloudfront.net
 baseurl:          '/'
                   # the optional subpath of your site, e.g. "/blog"
                   # NB: This applies to all pages in your Jekyll site.
