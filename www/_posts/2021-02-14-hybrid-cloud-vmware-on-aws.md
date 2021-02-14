@@ -24,6 +24,8 @@ tags:
 
 _Note: this post is about building Customer Data Center (CDC) for enterprise, not about applications for end-users._
 
+![](/assets/img/vmcaws.png)
+
 For many years, enterprise customers have been deployed their infrastructure into VMware cloud with powerful and secure virtualization technologies like [vSphere](https://www.vmware.com/products/vsphere.html) for computing resources (VMs, .etc.), [vSAN](https://www.vmware.com/products/vsan.html) (storage) and [NSX](https://www.vmware.com/products/nsx.html) (networking). 
 While new and leading public cloud solutions like Amazon Web Services (AWS) offer lower cost tiers, with greater opportunities in building innovative solutions, transforming from the exsiting VMware cloud to AWS is a trade-off between reliability (on existing solutions) with better business offers.
 Building a hybrid cloud using [VMware Cloud on AWS](https://cloud.vmware.com/vmc-aws) is a way to achieve both goals: maintaining customers' trust while migrating to novel solutions.
@@ -58,7 +60,29 @@ VMware has offered a great solution to this problem: hybrid clouds with [VMware 
 
 * [Migrating MS SQL Server to AWS using VMware Cloud](https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.919a954a9b6ca17cdc719ec42cda1401/GUID-E62521730EDBE3DC125813A448BA3B45.html)
 
-* [Managing Oracle Database using VMwar Cloud on AWS](https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.fd6ed3145c4c711ec04722e9f7803c98/GUID-354BA0BF983966BFF710F44563729DF7.html)
+* [Managing Oracle Database using VMware Cloud on AWS](https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.fd6ed3145c4c711ec04722e9f7803c98/GUID-354BA0BF983966BFF710F44563729DF7.html)
+
+* [Performance Characterization of Microsoft SQL Server Using VMware Cloud on AWS](https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.324e0c5bdd4624ae8c3fbcd7460a8837/GUID-3F613B502E44AE64E4C88ED56EF7535A.html)
+
+* [Optimize Virtual Machine Configurations in VMware Cloud on AWS for Enterprise Applications Workload](https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.91696a39d9cb804e2888c43d538bab50/GUID-2892F57D4799679E31DB27E9DF358475.html)
+
+* [DNS Strategies for VMware Cloud on AWS](https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/GUID-25B7F9346825C50F67BF60403CCCAE21.html)
+
+* [Using an On-Premises DHCP server](https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/GUID-F0065BCA2A940BFF7F4D3220ED2DB286.html)
+
+* [Understanding Integrations with AWS Services](https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.c4d719788a38caf2d1599242f2b1b8cc/GUID-ECE503736CC8F886BE7B85CB79DB7405.html)
+
+### Official guides
+
+* [User guides](https://docs.vmware.com/jp/VMware-Cloud-on-AWS/index.html)
+* [AWS guides](https://aws.amazon.com/jp/vmware/)
+
+### Others
+
+* [Series on how-to VMC on AWS](https://blogs.vmware.com/emea/en/2019/08/vmware-cloud-on-aws-get-your-basics-right-part-1/)
+* [VMware Cloud on AWS Tech Zone](https://vmc.techzone.vmware.com/vmware-cloud-aws-tech-zone)
+* [Introducing the HashiCorp Terraform Provider for VMware Cloud on AWS](https://nicovibert.com/2020/01/29/terraform-for-vmware-cloud-on-aws/)
+
 # Conclusion
 
 Small business customers are likely to accept the solutions using new platforms like AWS because they don't possess an existing solution their own.
