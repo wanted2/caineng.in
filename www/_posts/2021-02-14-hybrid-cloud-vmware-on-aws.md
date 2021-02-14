@@ -47,8 +47,18 @@ VMware has offered a great solution to this problem: hybrid clouds with [VMware 
 
 ## Benefits
 
+* Access to a public cloud environment that is consistent with an on-premises environment and can be operated with the same tools and skill sets as customers’ on-premises VMware environments, allowing easy migration, operations, and integration with customers’ on-premises environments
+* Ability to add or remove resources on demand within minutes and use resources with hourly pay-as-you-go pricing, enabling agility and flexibility with customers’ VMware environments
+* Access to AWS public cloud services, including databases, data analytics services, and emerging technologies such as artificial intelligence/machine learning (AI/ML)
+* Delivered as a completely managed service by VMware, with pay-as-you-go pricing and no up-front commitments
+
 ## Learning resources
 
+### Tutorials
+
+* [Migrating MS SQL Server to AWS using VMware Cloud](https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.919a954a9b6ca17cdc719ec42cda1401/GUID-E62521730EDBE3DC125813A448BA3B45.html)
+
+* [Managing Oracle Database using VMwar Cloud on AWS](https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.fd6ed3145c4c711ec04722e9f7803c98/GUID-354BA0BF983966BFF710F44563729DF7.html)
 # Conclusion
 
 Small business customers are likely to accept the solutions using new platforms like AWS because they don't possess an existing solution their own.
