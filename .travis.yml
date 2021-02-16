@@ -7,6 +7,7 @@ gemfile:
   - www/Gemfile
 before_install:
   - gem install bundler
+  - apt install -y python3-pip
   - pip3 install -U awscli
   - mkdir ~/.aws
   - echo $AWS_SECRET_ID >> ~/.aws/credentials
