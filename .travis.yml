@@ -5,9 +5,12 @@ rvm:
   - 3.0
 gemfile:
   - www/Gemfile
+addons:
+  apt:
+    update: true
 before_install:
   - gem install bundler
-  - apt install -y python3-pip
+  - sudo apt install -y python3-pip
   - pip3 install -U awscli
   - mkdir ~/.aws
   - echo $AWS_SECRET_ID >> ~/.aws/credentials
