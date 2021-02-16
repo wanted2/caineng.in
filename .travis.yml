@@ -14,9 +14,8 @@ jobs:
   - stage: build
     name: Build Jekyll website
     script: cd www && jekyll b
-    if: |
-      # Can skip if commit message has wip or no deploy
-      commit_message !~ /(no-deploy|wip)/ AND type = push
+    # Can skip if commit message has wip or no deploy
+    if: commit_message !~ /(no-deploy|wip)/ AND type = push
     after_success:
       - echo "Built Jekyll website"
   - stage: tests
