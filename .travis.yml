@@ -43,7 +43,7 @@ jobs:
     name: Deploy to AWS S3 Prod
     script: cd www && jekyll b
     # Can skip if commit message has wip or no test and only deploy if branch is \"main\"
-    if: commit_message !~ /(no-deploy|wip)/ AND branch = main AND type = pull_request
+    if: commit_message !~ /(no-deploy|wip)/ AND branch = main AND type != pull_request
     after_script:
       - aws s3 cp --recursive _site s3://$BUCKET_NAME
 stages:
