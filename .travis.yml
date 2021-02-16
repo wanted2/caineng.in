@@ -1,0 +1,20 @@
+language: ruby
+dist: bionic
+sudo: false
+rvm:
+  - 3.0
+gemfile:
+  - www/Gemfile
+before_install:
+  - gem install bundler
+install:
+  - bundle install
+jobs:
+  include:
+    - stage: build
+      name: Build Jekyll website
+      script: cd www && jekyll b
+
+stages:
+  - build
+  
