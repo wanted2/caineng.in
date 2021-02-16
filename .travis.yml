@@ -2,13 +2,13 @@ language: ruby
 dist: bionic
 sudo: false
 rvm:
-- 3.0
+  - 3.0
 gemfile:
-- www/Gemfile
+  - www/Gemfile
 before_install:
-- gem install bundler
+  - gem install bundler
 install:
-- bundle install
+  - bundle install
 jobs:
   include:
   - stage: build
@@ -18,14 +18,15 @@ jobs:
       # Can skip if commit message has wip or no deploy
       commit_message !~ /(no-deploy|wip)/ AND type = push
     after_success:
-    - echo "Built Jekyll website"
+      - echo "Built Jekyll website"
   - stage: tests
     name: Test when branch is not blog posts
     if: | 
       # Can skip if commit message has wip or no test
       commit_message !~ /(no-test|no-deploy|wip)/ AND 
       # only test if branch is "feature/*"
-      branch =~ /feature/ AND type = push
+      branch =~ /feature/ AND \
+      type = push
     script: echo "Actually, no useful tests for a blog"
   - stage: deploy
     name: Deploy to AWS S3
@@ -33,7 +34,8 @@ jobs:
       # Can skip if commit message has wip or no test
       commit_message !~ /(no-deploy|wip)/ AND 
       # only deploy if branch is \"main\"
-      branch = main AND type = pull_request
+      branch = main AND \
+      type = pull_request
     deploy:
       provider: s3
       access_key_id: "$AWS_SECRET_ID"
@@ -44,9 +46,9 @@ jobs:
       region: us-east-1
       local_dir: www/_site
 stages:
-- build
-- tests
-- deploy
+  - build
+  - tests
+  - deploy
 env:
   global:
   - secure: BAAGxJgF1l20bUtFmGw7lwCiKx0eGFuh1J7addFNKwgohFDjXAQpwvVSfoGXCfRVfXHiFBs17sctSCz+ekl8dGe3xYfGJAEKoXHwHCWvshoz7cVRf3y+NX2lR7jfHVMlJzyQdRxRFMh3NXCqrJKDeiFzb7IZqn8yI/xR6sWKG4vAFE/NwfpX1pAb8MbpamZqZw36YSMEyGCkWMCGoY/xBDnomtKRboNPn2H28ToSmgWup+h+li0SIP1/2HSLkWof8ecLWJYmUjepfU4Gyyxzg40tBv/qrHXT0mC30OLzGMVJS9oMFa2pTx9RDXKx18RLAalbCDLi0EtJjNl+kPTs13B79P6UEyJuI4aBIFDkeqm6iG2SUNUG1ThegCutZHmSn66O2kRLOWo0dnJeHcvnO1H5P3ZdwzQbelE57nq4P78H4YoBIdoADaonD/rG91NW3bKaS97SBmdamZDMIeX9iZaow31SHvVZLzleIQeto85LHa+yIGrvA8pi8mMZMLCog//Bk/NAxbUX/pfFYjalJhp06N2JS2DBE8pogD9LBM98pzl8yZp+WUN0zZe4dzG8cfpq85yBMnk+e2ed1wfpYTyKqVWZgqKEcznkb8vhZONZ9dIpE+aJNuW8cZN4mdfVFL1/gnOhok625hRG8Y3XB2yTdELnsqSN0YUTlx95xuM=
