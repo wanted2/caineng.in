@@ -20,26 +20,18 @@ jobs:
       - echo "Built Jekyll website"
   - stage: tests
     name: Test when branch is not blog posts
-    if: | 
-      # Can skip if commit message has wip or no test
-      commit_message !~ /(no-test|no-deploy|wip)/ AND 
-      # only test if branch is "feature/*"
-      branch =~ /feature/ AND \
-      type = push
+    # Can skip if commit message has wip or no test and only test if branch is "feature/*"
+    if: commit_message !~ /(no-test|no-deploy|wip)/ AND branch =~ /feature/ AND type = push
     script: echo "Actually, no useful tests for a blog"
   - stage: deploy
     name: Deploy to AWS S3
-    if: |
-      # Can skip if commit message has wip or no test
-      commit_message !~ /(no-deploy|wip)/ AND 
-      # only deploy if branch is \"main\"
-      branch = main AND \
-      type = pull_request
+    # Can skip if commit message has wip or no test and only deploy if branch is \"main\"
+    if: commit_message !~ /(no-deploy|wip)/ AND branch = main AND type = pull_request
     deploy:
       provider: s3
-      access_key_id: "$AWS_SECRET_ID"
-      secret_access_key: "$AWS_SECRET_ACCESS_KEY"
-      bucket: "$BUCKET_NAME"
+      access_key_id: $AWS_SECRET_ID
+      secret_access_key: $AWS_SECRET_ACCESS_KEY
+      bucket: $BUCKET_NAME
       skip_cleanup: true
       acl: public_read
       region: us-east-1
