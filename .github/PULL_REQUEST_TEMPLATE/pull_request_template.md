@@ -24,3 +24,5 @@ Please describe about your works.
 * Since there would be no technical errors, please mere `post` directly to `main` branch.
 
 * After setting a sufficient Jekyll site, there will be no `feature` PRs, and only `post` PRs are merged.
+
+* Only allow PRs from `staging` to `main`. PRs from other branches to `main` will be rejected.
