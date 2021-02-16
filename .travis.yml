@@ -11,14 +11,14 @@ install:
   - bundle install
 jobs:
   include:
-  - stage: build
+  - stage: deploy
     name: Build Jekyll website
     script: cd www && jekyll b
     # Can skip if commit message has wip or no deploy
     if: commit_message !~ /(no-deploy|wip)/ AND type = push
     after_success:
       - echo "Built Jekyll website"
-  - stage: tests
+  - stage: deploy
     name: Test when branch is not blog posts
     # Can skip if commit message has wip or no test and only test if branch is "feature/*"
     if: commit_message !~ /(no-test|no-deploy|wip)/ AND branch =~ /feature/ AND type = push
@@ -37,8 +37,6 @@ jobs:
       region: us-east-1
       local_dir: www/_site
 stages:
-  - build
-  - tests
   - deploy
 env:
   global:
