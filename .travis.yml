@@ -1,6 +1,6 @@
 language: ruby
 dist: bionic
-sudo: false
+os: linux
 rvm:
   - 3.0
 gemfile:
@@ -11,20 +11,21 @@ install:
   - bundle install
 jobs:
   include:
-  - stage: deploy
+  - stage: build
     name: Build Jekyll website
     script: cd www && jekyll b
     # Can skip if commit message has wip or no deploy
     if: commit_message !~ /(no-deploy|wip)/ AND type = push
     after_success:
       - echo "Built Jekyll website"
-  - stage: deploy
+  - stage: testing
     name: Test when branch is not blog posts
     # Can skip if commit message has wip or no test and only test if branch is "feature/*"
     if: commit_message !~ /(no-test|no-deploy|wip)/ AND branch =~ /feature/ AND type = push
-    script: if [ -d "www/_site" ]; then echo "Actually, no useful tests for a blog"; else exit 1; fi
+    script: cd www && jekyll b && if [ -d "_site" ]; then echo "Actually, no useful tests for a blog"; else exit 1; fi
   - stage: deploy
     name: Deploy to AWS S3
+    script: cd www && jekyll b
     # Can skip if commit message has wip or no test and only deploy if branch is \"main\"
     if: commit_message !~ /(no-deploy|wip)/ AND branch = main AND type = pull_request
     deploy:
@@ -32,12 +33,13 @@ jobs:
       access_key_id: $AWS_SECRET_ID
       secret_access_key: $AWS_SECRET_ACCESS_KEY
       bucket: $BUCKET_NAME
-      skip_cleanup: true
+      cleanup: true
       acl: public_read
       region: us-east-1
       local_dir: www/_site
 stages:
-  - deploy
+  - build
+  - testing
 env:
   global:
   - secure: BAAGxJgF1l20bUtFmGw7lwCiKx0eGFuh1J7addFNKwgohFDjXAQpwvVSfoGXCfRVfXHiFBs17sctSCz+ekl8dGe3xYfGJAEKoXHwHCWvshoz7cVRf3y+NX2lR7jfHVMlJzyQdRxRFMh3NXCqrJKDeiFzb7IZqn8yI/xR6sWKG4vAFE/NwfpX1pAb8MbpamZqZw36YSMEyGCkWMCGoY/xBDnomtKRboNPn2H28ToSmgWup+h+li0SIP1/2HSLkWof8ecLWJYmUjepfU4Gyyxzg40tBv/qrHXT0mC30OLzGMVJS9oMFa2pTx9RDXKx18RLAalbCDLi0EtJjNl+kPTs13B79P6UEyJuI4aBIFDkeqm6iG2SUNUG1ThegCutZHmSn66O2kRLOWo0dnJeHcvnO1H5P3ZdwzQbelE57nq4P78H4YoBIdoADaonD/rG91NW3bKaS97SBmdamZDMIeX9iZaow31SHvVZLzleIQeto85LHa+yIGrvA8pi8mMZMLCog//Bk/NAxbUX/pfFYjalJhp06N2JS2DBE8pogD9LBM98pzl8yZp+WUN0zZe4dzG8cfpq85yBMnk+e2ed1wfpYTyKqVWZgqKEcznkb8vhZONZ9dIpE+aJNuW8cZN4mdfVFL1/gnOhok625hRG8Y3XB2yTdELnsqSN0YUTlx95xuM=
