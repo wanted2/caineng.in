@@ -31,25 +31,27 @@ jobs:
     name: Test when branch is not blog posts
     # Can skip if commit message has wip or no test and only test if branch is "feature/*"
     if: commit_message !~ /(no-test|no-deploy|wip)/ AND branch =~ /feature/ AND type = push
-    script: cd www && jekyll b && if [ -d "_site" ]; then echo "Actually, no useful tests for a blog"; else exit 1; fi
+    script: cd www && jekyll b 
+    after_script:
+      - if [ -d "_site" ]; then echo "Actually, no useful tests for a blog"; else exit 1; fi
   - stage: deploy_staging
     name: Deploy to AWS S3 Staging
     script: cd www && jekyll b
     # Can skip if commit message has wip or no test and only deploy if branch is \"staging\"
-    if: commit_message !~ /(no-deploy|wip)/ AND branch = staging AND type = pull_request
+    if: commit_message !~ /(no-deploy|wip)/ AND branch = staging AND type = push
     after_script:
-      - aws s3 cp --recursive _site s3://$BUCKET_NAME_STAGING
+      - if [ -d "_site" ]; then aws s3 cp --recursive _site s3://$BUCKET_NAME_STAGING; else exit 1; fi
   - stage: deploy_prod
     name: Deploy to AWS S3 Prod
     script: cd www && jekyll b
     # Can skip if commit message has wip or no test and only deploy if branch is \"main\"
-    if: commit_message !~ /(no-deploy|wip)/ AND branch = main AND type != pull_request
+    if: commit_message !~ /(no-deploy|wip)/ AND branch = main AND type = push
     after_script:
-      - aws s3 cp --recursive _site s3://$BUCKET_NAME
+      - if [ -d "_site" ]; then aws s3 cp --recursive _site s3://$BUCKET_NAME; else exit 1; fi
 stages:
   - build
   - testing
-  - deploy_stating
+  - deploy_staging
   - deploy_prod
 env:
   global:
