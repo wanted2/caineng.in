@@ -13,6 +13,7 @@ before_install:
   - sudo apt install -y python3-pip python3-setuptools
   - pip3 install -U awscli
   - mkdir ~/.aws
+  - echo "[default]" >> ~/.aws/credentials
   - echo "aws_access_key_id = $AWS_SECRET_ID" >> ~/.aws/credentials
   - echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
 install:
