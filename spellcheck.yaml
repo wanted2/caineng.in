@@ -1,8 +1,11 @@
 matrix:
 - name: Markdown
   hunspell:
-    lang: en
+    d: en_US
   dictionary:
+    wordlists:
+    - www/en-custom.txt
+    output: build/dictionary/python.dic
     encoding: utf-8
   pipeline:
   - pyspelling.filters.markdown:
