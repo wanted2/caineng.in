@@ -1,0 +1,19 @@
+matrix:
+- name: Markdown
+  hunspell:
+    d: en_US
+  dictionary:
+    wordlists:
+    - www/en-custom.txt
+    output: build/dictionary/python.dic
+    encoding: utf-8
+  pipeline:
+  - pyspelling.filters.markdown:
+  - pyspelling.filters.html:
+    comments: false
+    ignores:
+    - code
+    - pre
+  sources:
+  - '**/*.md'
+  default_encoding: utf-8
