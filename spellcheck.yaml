@@ -1,7 +1,6 @@
-spellchecker: hunspell
 matrix:
 - name: Markdown
-  aspell:
+  hunspell:
     lang: en
   dictionary:
     encoding: utf-8
