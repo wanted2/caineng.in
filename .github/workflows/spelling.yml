@@ -28,4 +28,7 @@ jobs:
         bucket: .github/actions/spelling
         project: common
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: GitHub Spellcheck Action
+      uses: rojopolis/spellcheck-github-actions@0.10.0
+
 
