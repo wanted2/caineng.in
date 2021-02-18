@@ -24,7 +24,7 @@ For example, [Zoom also chose OCI to deploy their infra](https://www.lastweekina
 Unsurprisingly, I found that the structure of services in OCI is similar to AWS in several foundational categories: Management, Security, Identity, Database, Compute, Storage, .etc. 
 
 However, in terms of Artifical Intelligence and IoT applications, it feels like OCI has less showcases and developers who use OCI will be likely to have more tedious work to work.
-For example, building a chatbot is a relatively simple task for IBM Watson users or AWS ML users.
+For example, building a chatbot is a relatively affordable task for IBM Watson users or AWS ML users.
 
 Quite ecently, OCI has announced some of their tutorials in [Fraud Detection](https://blogs.oracle.com/machinelearning/a-two-step-process-for-detecting-fraud-using-oracle-machine-learning), and released their Oracle Machine Learning (OML) solution.
 
