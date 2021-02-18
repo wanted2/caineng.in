@@ -1,3 +1,4 @@
+spellchecker: hunspell
 matrix:
 - name: Markdown
   aspell:
@@ -6,38 +7,6 @@ matrix:
     encoding: utf-8
   pipeline:
   - pyspelling.filters.markdown:
-    ignores:
-    - CRM
-    - Odoo
-    - aws
-    - crm
-    - ec
-    - odoo
-    - postgresql
-    - sre
-    - NSX
-    - VMware
-    - vSAN
-    - vSphere
-    - HashiCorp
-    - Terraform
-    - analytics
-    - VMC
-    - DHCP
-    - OCI
-    - OML
-    - IoT
-    - ai
-    - cdc
-    - hyrbid
-    - nsx
-    - oci
-    - sre
-    - vmware
-    - vsan
-    - vsphere
-    - pdf
-
   - pyspelling.filters.html:
     comments: false
     ignores:
