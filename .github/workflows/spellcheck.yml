@@ -24,4 +24,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Check spelling more
       uses: check-spelling/check-spelling@0.0.17-alpha
+      with:
+        only: \.md$
 
