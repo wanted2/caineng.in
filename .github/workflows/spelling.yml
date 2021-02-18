@@ -1,34 +1,15 @@
-# This is a basic workflow to help you get started with Actions
+name: Spellcheck Action
+on: push
 
-name: Typo CI
-
-on:
-  push:
-    branches-ignore:
-      - main
-      - staging
 jobs:
-  spellcheck:
-    name: Typo CI (GitHub Action)
+  build:
+    name: Spellcheck
     runs-on: ubuntu-latest
-    timeout-minutes: 4
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - name: TypoCheck
-      uses: typoci/spellcheck-action@master
-      # with:
-        # A license can be purchased via:
-        # https://gumroad.com/l/MvvBE
-        # typo_ci_license_key: ${{ secrets.TYPO_CI_LICENSE_KEY }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Check spelling more
-      uses: check-spelling/check-spelling@0.0.17-alpha
-      env:
-        bucket: .github/actions/spelling
-        project: common
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: GitHub Spellcheck Action
-      uses: rojopolis/spellcheck-github-actions@0.10.0
-
-
+    # The checkout step
+    - uses: actions/checkout@master
+    - uses: rojopolis/spellcheck-github-actions@0.10.0
+      name: Spellcheck
+      with:
+        source_files: www/_posts/*.md
+        task_name: Markdown
