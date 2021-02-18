@@ -9,7 +9,7 @@ tags:
   - cloud platforms
   - public clouds
   - private clouds
-  - hyrbid clouds
+  - hybrid clouds
   - customer data center
   - cdc
   - vmware
@@ -27,13 +27,13 @@ _Note: this post is about building Customer Data Center (CDC) for enterprise, no
 ![](/assets/img/vmcaws.png)
 
 For many years, enterprise customers have been deployed their infrastructure into VMware cloud with powerful and secure virtualization technologies like [vSphere](https://www.vmware.com/products/vsphere.html) for computing resources (VMs, .etc.), [vSAN](https://www.vmware.com/products/vsan.html) (storage) and [NSX](https://www.vmware.com/products/nsx.html) (networking). 
-While new and leading public cloud solutions like Amazon Web Services (AWS) offer lower cost tiers, with greater opportunities in building innovative solutions, transforming from the exsiting VMware cloud to AWS is a trade-off between reliability (on existing solutions) with better business offers.
+While new and leading public cloud solutions like Amazon Web Services (AWS) offer lower cost tiers, with greater opportunities in building innovative solutions, transforming from the existing VMware cloud to AWS is a trade-off between reliability (on existing solutions) with better business offers.
 Building a hybrid cloud using [VMware Cloud on AWS](https://cloud.vmware.com/vmc-aws) is a way to achieve both goals: maintaining customers' trust while migrating to novel solutions.
 <!--more-->
 
 # Introduction: Migration to AWS
 
-Enterprise customers refer to the companies who have more than 500 personels each (See the report [1], [pdf](https://www.vmware.com/content/dam/learn/en/amer/fy21/pdf/691726_2020_Business_Value_Running_Applications_VMware_Cloud_AWS_VMware_Hybrid_Cloud_Environments.pdf)).
+Enterprise customers refer to the companies who have more than 500 personnels each (See the report [1], [pdf](https://www.vmware.com/content/dam/learn/en/amer/fy21/pdf/691726_2020_Business_Value_Running_Applications_VMware_Cloud_AWS_VMware_Hybrid_Cloud_Environments.pdf)).
 These customers have some characteristics in common: they have adopted a stable and reliable infrastructure for years and of course, they are refraining from making a sudden changes in what is already running well.
 For example, a company who already have their infrastructure running on VMware Cloud and the system have established and have been running well for 20 years, then now it would be difficult t persuade the executives to change to AWS and destroy all what already been running well so far.
 
