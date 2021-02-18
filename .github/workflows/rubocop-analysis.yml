@@ -37,7 +37,7 @@ jobs:
     - name: Upload Sarif output
       uses: github/codeql-action/upload-sarif@v1
       with:
-        sarif_file: rubocop.sarif
+        sarif_file: www/rubocop.sarif
     - name: Cache
       uses: actions/cache@v2.1.4
       with:
