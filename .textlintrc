@@ -1,0 +1,13 @@
+{
+    "rules": {
+        "spelling": {
+            "language": "en",
+            "skipPatterns": ["JavaScript", "Python", "Java", "PHP"],
+            "wordDefinitionRegexp": "/[\\w']+/g",
+            "suggestCorrections": true,
+        },
+        "alex": {
+            "allow": []
+        }
+    }
+}

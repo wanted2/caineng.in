@@ -34,13 +34,13 @@ Building a hybrid cloud using [VMware Cloud on AWS](https://cloud.vmware.com/vmc
 # Introduction: Migration to AWS
 
 Enterprise customers refer to the companies who have more than 500 personnel each (See the report [1], [pdf](https://www.vmware.com/content/dam/learn/en/amer/fy21/pdf/691726_2020_Business_Value_Running_Applications_VMware_Cloud_AWS_VMware_Hybrid_Cloud_Environments.pdf)).
-These customers have some characteristics in common: they have adopted a stable and reliable infrastructure for years and of course, they are refraining from making a sudden changes in what is already running well.
-For example, a company who already have their infrastructure running on VMware Cloud and the system have established and have been running well for 20 years, then now it would be difficult t persuade the executives to change to AWS and destroy all what already been running well so far.
+These customers have some characteristics in common: they have adopted a stable and reliable infrastructure for years and they are refraining from making a sudden changes in what is already running well.
+For example, a company who already have their infrastructure running on VMware Cloud and the system have established and have been running well for 20 years, then now it would be difficult t persuade the executives to change to AWS and stop all what already been running well so far.
 
 The problems arise when persuading customer to migrate to a new platform like AWS:
 
-* **The cost of destroying what have been running well**: Our infrastructure in VMware have been running well for 20 years, now if we destroy everything, we need to investigate on re-training our staffs to be familiar with new systems. The cost of migrating our products to new platform is also high and the waste should be considerable. This is a common customer claim.
-* **The gain of new business opportunities in new platform**: Does new platform offer us genuine solutions? Is the gain bigger than the cost?
+* **The cost of destroying what have been running well**: Our infrastructure in VMware have been running well for 20 years, now if we stop everything, we need to investigate on re-training our staffs to be familiar with new systems. The cost of migrating our products to new platform is also high and the waste should be considerable. This is a common customer claim.
+* **The gain of new business opportunities in new platform**: Does new platform offer us genuine solutions? Is the gain better than the cost?
 
 Solving these trade-offs is a hurdle for migration to new businesses.
 VMware has offered a great solution to this problem: hybrid clouds with [VMware Cloud on AWS](https://cloud.vmware.com/vmc-aws). In short, this means the customers **deploy their data center to AWS Cloud using VMware Cloud technologies**. All of the resources will be allocated in AWS but the management will be done using VMware Cloud solutions such as vSphere, vSAN and NSX [2, 3].
@@ -49,7 +49,7 @@ VMware has offered a great solution to this problem: hybrid clouds with [VMware 
 
 ## Benefits
 
-* Access to a public cloud environment that is consistent with an on-premises environment and can be operated with the same tools and skill sets as customers’ on-premises VMware environments, allowing easy migration, operations, and integration with customers’ on-premises environments
+* Access to a public cloud environment that is consistent with an on-premises environment and can be operated with the same tools and skill sets as customers’ on-premises VMware environments, allowing migration, operations, and integration with customers’ on-premises environments
 * Ability to add or remove resources on demand within minutes and use resources with hourly pay-as-you-go pricing, enabling agility and flexibility with customers’ VMware environments
 * Access to AWS public cloud services, including databases, data analytics services, and emerging technologies such as artificial intelligence/machine learning (AI/ML)
 * Delivered as a completely managed service by VMware, with pay-as-you-go pricing and no up-front commitments
@@ -88,7 +88,7 @@ VMware has offered a great solution to this problem: hybrid clouds with [VMware 
 Small business customers are likely to accept the solutions using new platforms like AWS because they don't possess an existing solution their own.
 However, medium and large enterprises will need to consider the waste when migrating to new business platforms.
 Therefore, a solution like VMware Cloud on AWS is a big deal. 
-Enterprises will not need to destroy their existing infrastructures, they only move the underlying resources which they rarely need to interact with to AWS, while they still use the same tools (vSphere, vSAN, NSX) for management in VMware Cloud.
+Enterprises will not need to stop their existing infrastructures, they only move the underlying resources which they rarely need to interact with to AWS, while they still use the same tools (vSphere, vSAN, NSX) for management in VMware Cloud.
 
 # References
 
