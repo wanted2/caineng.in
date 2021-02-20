@@ -19,7 +19,7 @@ jobs:
         pr_template: ".github/PULL_REQUEST_TEMPLATE.md"   # Path to pull request template, requires pr_title to be set, excludes pr_body
         pr_reviewer: "wanted2"                         # Comma-separated list (no spaces)
         pr_assignee: ""                         # Comma-separated list (no spaces)
-        pr_label: "auto-pr"                               # Comma-separated list (no spaces)
+        pr_label: "auto-pr,merge"                               # Comma-separated list (no spaces)
         # pr_milestone: "Milestone 1"                       # Milestone name
         pr_draft: false                                    # Creates pull request as draft
         pr_allow_empty: false                              # Creates pull request even if there are no changes
