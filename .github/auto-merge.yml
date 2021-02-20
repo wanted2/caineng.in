@@ -69,6 +69,7 @@ blockingBaseBranches:
 # their base branch (into which the PR would be merged) is matching any regular expression listed.
 requiredBaseBranches:
 - main
+- staging
 
 # Blocking labels are the labels that can be attached to a pull request to make sure the pull request
 # is not being automatically merged.
