@@ -17,6 +17,7 @@ tags:
   - odoo
 ---
 ![Odoo perf](https://odoocdn.com/openerp_website/static/src/img/2020/home/market_position_update.svg)
+*Source: [Odoo website](https://odoocdn.com/openerp_website/static/src/img/2020/home/market_position_update.svg)*
 
 # Introduction
 
@@ -50,6 +51,7 @@ There are several aspects to care about the pricing of introducing Odoo Enterpri
 * _Where do you host Odoo?_: There are 3 hosting types: Cloud hosting, on-premises, and [Odoo.sh platform](https://www.odoo.sh/). The first two options add no extra costs. You will pay by yourself to Cloud provider (AWS, IBM Cloud, etc.) or server costs. For the third option, the [Odoo.sh platform](https://www.odoo.sh/), you can find a simulation below with a 50-employee company, using 50GB of data every month, 1 staging environment, and they will pay about 3,384.40 dollars monthly.
 
 ![](/assets/img/odo.sh-pricing.png)
+*Source: [https://www.odoo.sh/pricing](https://www.odoo.sh/pricing)*
 
 * _How do you implement Odoo?_: After purchasing license to Odoo Enterprise, you can implement by 3 ways: by yourself, by using [Odoo's Success Packs](https://www.odoo.com/pricing-packs), or by asking help from a partner company. The first option cost you nothing. The second will be available only if Odoo has some branches in your neighborhood. It will cost at least 975 dollars (after a 15% discount for new customers). The final option is to check the list of Odoo's partner company in your area, and asking them for installation and maintenance supports. Except the first option (implementing by yourself), every options to install and maintain a distrbution of Odoo Enterprise require at least 1000$/year. If you host Odoo Enterprise in your own server, Odoo Success Packs are not applied.
 
