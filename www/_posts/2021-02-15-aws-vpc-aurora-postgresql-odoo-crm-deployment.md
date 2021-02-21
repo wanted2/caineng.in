@@ -68,7 +68,7 @@ This costs A 92 dollars per month.
 | === | === | === | === |
 | Employees usage | 15 | 8$/user | 120 |
 | Discount on employees usage | 12 | -2$/user | -30|
-| App usage | 37 apps | 5$/app | 304 |
+| App usage | 37 apps | 8.22$/app | 304 |
 | Hosting (Odoo.sh) | 1 | 92 | 92 |
 | Implementation (Success Packs Standard) | 1 | 333.33 | 333.33 |
 | Discount on Success Packs Standard | 1 | -50 | -50 |
@@ -86,7 +86,7 @@ They choose to buy the Enterprise pack but buy no Odoo.sh or Success Packs. They
 | === | === | === | === |
 | Employees usage | 15 | 8$/user | 120 |
 | Discount on employees usage | 15 | -2$/user | -30|
-| App usage | 37 apps | 5$/app | 304 |
+| App usage | 37 apps | 8.22$/app | 304 |
 | Hosting (Odoo.sh) | 0 | 207.20 | 0 |
 | Implementation (Success Packs) | 0 | 333.33 | 0 |
 | Discount on Success Packs | 0 | -50 | 0 |
