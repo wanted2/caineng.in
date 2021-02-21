@@ -65,18 +65,43 @@ Let's get some example of cost model for Odoo Enterprise in a medium-sized compa
 | Discount on employees usage | 50 | -2$/user | -100|
 | App usage | 30 apps | 5$/app | 150 |
 | Hosting (Odoo.sh) | 1 | 3,384.40 | 3,384.40 |
-| Implementation (Success Packs Basic) | 1 | 1150 | 1150 |
-| Discount on Success Packs Basic | 1 | -225 | -225 |
+| Implementation (Success Packs Basic) | 1 | 95.83 | 95.83 |
+| Discount on Success Packs Basic | 1 | -18.75 | -18.75 |
 | === | === | === | === |
-| **Total** | | | **4809.40** |
+| **Total** | | | **3,911.48/month** |
+
+*Example 2:* Company B has 50 employees, using 30 apps (excluding CRM). They choose to buy the Enterprise pack but buy no Odoo.sh or Success Packs. They will implement by themselves.
+
+| **Item** | **Quantity** | **Price** | **Cost ($)** |
+| === | === | === | === |
+| Employees usage | 50 | 8$/user | 400 |
+| Discount on employees usage | 50 | -2$/user | -100|
+| App usage | 30 apps | 5$/app | 150 |
+| Hosting (Odoo.sh) | 0 | 3,384.40 | 0 |
+| Implementation (Success Packs Basic) | 0 | 95.83 | 0 |
+| Discount on Success Packs Basic | 0 | -18.75 | 0 |
+| Customer host service | 1 | 400 | 400 |
+| Development and maintenance | 1 | 2000 | 2000 |
+| === | === | === | === |
+| **Total** | | | **2,850.00/month** |
+
+The development and maintenance which company B pay for is to the developers who implement and maintain the Odoo distribution in the company.
+In normal cases, there will be one or two person in charge for this stuff.
+Note that, this is the lowest prices the author found.
+Comparing to example 1, company B pay less in total, but the processes will rely more on human, and will be more **prone to human errors**. 
 
 ### [Odoo Community](https://www.odoo.com/page/community)
 
 The pricing model will be come simpler, but you will have to implement and find hosting services yourself.
 Then, a sufficient backgroung on Odoo Community edition and deployments will be required.
-You only pay for hosting services and people who implement Odoo on your business.
+**You only pay for hosting services and people who implement Odoo on your business.**
 Note that, although the community edition does not come with some custom apps, but there is a thirdparty community which provide many alternatives for free and paid: [https://apps.odoo.com/](https://apps.odoo.com/).
 Furthermore, when the app you need isn't in the given thirdparty community, you can start adding such idea to the community since the development of Odoo is completely open source. (However, it might be better to have ready-to-use solutions).
+**The process will be highly dependent on human, and will be prone to human errors.**
+Comparing to example 2, this solution will cost less, but the customer host price and Development/Maintenance costs might not be changed.
+So will similar quality, it only reduces about 20% in the part of costs for Odoo apps.
+And because you will need specialized personnel to implement custom Odoo apps, the cost for Development/Maintenance can increase.
+It's like paying in the same pattern in *Example 1* of company A, you will pay an extra cost of 1,000 dollars every month (or 12,000 dollars a year), but you and your people can sleep better.
 
 
 # Deploying Odoo to Amazon Web Service (AWS)
