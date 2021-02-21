@@ -1,0 +1,14 @@
+name: Grammarcheck Action
+on: push
+
+jobs:
+  build:
+    name: Proofread
+    runs-on: ubuntu-latest
+    steps:
+    # The checkout step
+    - uses: actions/checkout@master
+    - name: Orthograph-err
+      uses: place-labs/orthograph-err@v1.2.0
+      with:
+        path: www/_posts/*.md
