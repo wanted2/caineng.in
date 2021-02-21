@@ -59,9 +59,9 @@ I follow the rule-of-thumb as discussed [here](https://www.odoo.com/forum/help-1
 
 Let's get some example of cost model for Odoo Enterprise in a medium-sized company:
 
-*Example 1*: Company A has 50 employees but only 15 users (HRs, accountants and sales) use Odoo.
+*Example 1*: Company A has 50 employees but only 15 users (Human Resource teams, accountants and sales) use Odoo.
 They use 37 apps (excluding CRM) and [Odoo.sh platform](https://www.odoo.sh/) with [Odoo Success Packs](https://www.odoo.com/pricing-packs) Standard.
-It requires 1 Odoo Cloud Worker, with 100GB data storage and 1 staging enviroment.
+It requires 1 Odoo Cloud Worker, with 100GB data storage and 1 staging environment.
 This costs A 92 dollars per month.
 
 | **Item** | **Quantity** | **Price** | **Cost ($)** |
@@ -78,7 +78,7 @@ This costs A 92 dollars per month.
 ![](/assets/img/odo.sh-pricing-2.png)
 *Source: [https://www.odoo.sh/pricing](https://www.odoo.sh/pricing)*
 
-*Example 2:* Company B has 50 employees but only 15 users (HRs, accountants and sales) use Odoo.
+*Example 2:* Company B has 50 employees but only 15 users (Human Resource teams, accountants and sales) use Odoo.
 They use 37 apps (excluding CRM). 
 They choose to buy the Enterprise pack but buy no Odoo.sh or Success Packs. They will implement by themselves.
 
