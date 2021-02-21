@@ -59,33 +59,44 @@ I follow the rule-of-thumb as discussed [here](https://www.odoo.com/forum/help-1
 
 Let's get some example of cost model for Odoo Enterprise in a medium-sized company:
 
-*Example 1*: Company A has 50 employees, using the package of 30 apps (excluding CRM) and using [Odoo.sh platform](https://www.odoo.sh/) with [Odoo Success Packs](https://www.odoo.com/pricing-packs) Basic.
+*Example 1*: Company A has 50 employees but only 15 users (Human Resource teams, accountants and sales) use Odoo.
+They use 37 apps (excluding CRM) and [Odoo.sh platform](https://www.odoo.sh/) with [Odoo Success Packs](https://www.odoo.com/pricing-packs) Standard.
+It requires 1 Odoo Cloud Worker, with 100GB data storage and 1 staging environment.
+This costs A 92 dollars per month.
 
 | **Item** | **Quantity** | **Price** | **Cost ($)** |
 | === | === | === | === |
-| Employees usage | 50 | 8$/user | 400 |
-| Discount on employees usage | 50 | -2$/user | -100|
-| App usage | 30 apps | 5$/app | 150 |
-| Hosting (Odoo.sh) | 1 | 207.20 | 207.20 |
-| Implementation (Success Packs Basic) | 1 | 95.83 | 95.83 |
-| Discount on Success Packs Basic | 1 | -18.75 | -18.75 |
+| Employees usage | 15 | 8$/user | 120 |
+| Discount on employees usage | 12 | -2$/user | -30|
+| App usage | 37 apps | 8.22$/app | 304 |
+| Hosting (Odoo.sh) | 1 | 92 | 92 |
+| Implementation (Success Packs Standard) | 1 | 333.33 | 333.33 |
+| Discount on Success Packs Standard | 1 | -50 | -50 |
 | === | === | === | === |
-| **Total** | | | **734.28/month** |
+| **Total** | | | **769.33/month** |
 
-*Example 2:* Company B has 50 employees, using 30 apps (excluding CRM). They choose to buy the Enterprise pack but buy no Odoo.sh or Success Packs. They will implement by themselves.
+![](/assets/img/odo.sh-pricing-2.png)
+*Source: [https://www.odoo.sh/pricing](https://www.odoo.sh/pricing)*
+
+*Example 2:* Company B has 50 employees but only 15 users (Human Resource teams, accountants and sales) use Odoo.
+They use 37 apps (excluding CRM). 
+They choose to buy the Enterprise pack but buy no Odoo.sh or Success Packs. They will implement by themselves.
 
 | **Item** | **Quantity** | **Price** | **Cost ($)** |
 | === | === | === | === |
-| Employees usage | 50 | 8$/user | 400 |
-| Discount on employees usage | 50 | -2$/user | -100|
-| App usage | 30 apps | 5$/app | 150 |
+| Employees usage | 15 | 8$/user | 120 |
+| Discount on employees usage | 15 | -2$/user | -30|
+| App usage | 37 apps | 8.22$/app | 304 |
 | Hosting (Odoo.sh) | 0 | 207.20 | 0 |
-| Implementation (Success Packs Basic) | 0 | 95.83 | 0 |
-| Discount on Success Packs Basic | 0 | -18.75 | 0 |
+| Implementation (Success Packs) | 0 | 333.33 | 0 |
+| Discount on Success Packs | 0 | -50 | 0 |
 | Customer hosting service | 1 | 200 | 200 |
-| Development and maintenance | 1 | 100 | 100 |
+| Development and maintenance | 1 | 200 | 200 |
 | === | === | === | === |
-| **Total** | | | **750.00/month** |
+| **Total** | | | **794.00/month** |
+
+![](/assets/img/odo.sh-pricing-3.png)
+*Source: [https://www.odoo.sh/pricing](https://www.odoo.sh/pricing)*
 
 The development and maintenance which company B pay for is to the developers who implement and maintain the Odoo distribution in the company.
 In normal cases, there will be one or two person in charge for this stuff.
@@ -96,7 +107,7 @@ Comparing to example 1, company B pay a little bit in total, and the processes w
 
 ### [Odoo Community](https://www.odoo.com/page/community)
 
-The pricing model will be come simpler, but you will have to implement and find hosting services yourself.
+The pricing model will become simpler, but you will have to implement and find hosting services yourself.
 Then, a sufficient background on Odoo Community edition and deployments will be required.
 **You only pay for hosting services and people who implement Odoo on your business.**
 Note that, although the community edition does not come with some custom apps, but there is a third-party community which provide many alternatives for free and paid: [https://apps.odoo.com/](https://apps.odoo.com/).
