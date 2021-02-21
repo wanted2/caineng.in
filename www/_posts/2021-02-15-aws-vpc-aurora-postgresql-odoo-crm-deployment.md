@@ -110,3 +110,22 @@ And because you will need specialized personnel to implement custom Odoo apps, t
 # Deploying Odoo to Amazon Web Service (AWS)
 
 After understanding the pricing model and the merits and demerits of each editions, we will go to the deployment with [Odoo Community](https://www.odoo.com/page/community) to AWS EC2, Aurora for better understanding.
+
+## Setup VPC in a defense-in-depth style
+
+## Setup SSH Bastion server for further investigation
+
+## Setup Aurora instance
+
+## Deploy Odoo 14.0
+
+# Conclusion
+
+In the first section, we compare available solution for deployment of Odoo (both paid and free editions).
+Surprisingly, we found that paid solution, the **Odoo Enterprise can be cheaper than using the free solutions if we count all development and maintenance fees**.
+And because this is a reliable and stable solution, **Odoo Enterprise with full support from Odoo Cloud Platform** is definitely more advantageous with less effort (you and your people can sleep well).
+From the view of business, the winner is determined.
+
+In the second part, although using the community edition does not offer any real benefit in business, we still explored the way to deploy by ourselves to AWS.
+
+In conclusion, ready-to-use solutions like Odoo Enterprise with Odoo Cloud seem to be the winner.
