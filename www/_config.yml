@@ -29,6 +29,7 @@ plugins:
   - jekyll-gist
   - jekyll-paginate
   # - jekyll-multiple-languages-plugin
+  - jemoji
 
 # Sidebar link settings
 sidebar_home_link:  true
