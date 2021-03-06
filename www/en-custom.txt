@@ -88,3 +88,13 @@ de
 dl
 DL
 UAV
+deliverables
+FGC
+WEM
+pretrained
+ImageNet
+WDC
+LDM
+detections
+sheeps
+FPs
