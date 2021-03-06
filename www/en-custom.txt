@@ -98,3 +98,12 @@ LDM
 detections
 sheeps
 FPs
+Convolutional
+convolutional
+upscaling
+opencv
+scikit
+scipy
+AVS
+contrib
+macOS

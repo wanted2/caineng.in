@@ -124,7 +124,7 @@ In this course, we will implement the Animal Vision System (AVS) using latest te
   - Image features, conventional object detection methods like Viola-Jones cascade method.
   - Convolutional neural networks, convolutional/pooling/upscaling/dilated operations, etc.
 4. [ ] __Advanced problems in image enhancement (1)__
-  - Ganerative Adversarial Networks, Auto-Encoders
+  - Generative Adversarial Networks, Auto-Encoders
 5. [ ] __Advanced problems in image enhancement (2)__
   - Haze removal, artifact removal, reconstruction
   - Super-resolution, de-raining methods.
