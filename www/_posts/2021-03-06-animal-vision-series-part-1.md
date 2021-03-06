@@ -62,6 +62,47 @@ WDC firmly prevents non-target classes from being intruded into the Analytics Da
 
 5. The above information will be inserted by timestamp to the Analytics Database to display in the Dashboard to owner of the farm.
 
+In this course, we will learn the CV and ML technologies to implement this system.
+
+### Technologies
+
+#### Image classification
+
+As said, Global Anomaly Detector (GAD) for early intrusion detection, Wide-Domain Classifier for late intrusion detection can be implemented by Wide-domain models such as pretrained ImageNet models. This technology is well known today, especially after 2012 with the boost of new DL era.
+
+#### Object detection and segmentation
+These class of technology can be applied to 1-class models and RAD models above.
+
+#### Image Anomaly Detection
+This technology aims at delivering the infected instances in an image. The form of deliverables can be bounding boxes, polygons or just binary labels (diease/noon-diease).
+GAD and RAD use this technology. __Gathering training data__ can be a problem due to the frequency of rare events.
+
+#### Machine Learning
+
+Data augmentation, balancing training data, domain adaptation and transfer learning can be the core set of ML technologies we need to care.
+
+#### Image Processing
+
+Some failure cases in practice requires further care about image quality:
+
+* __Bad weather__ such as raining and snowing can result in poor detection quality. De-raining models can be useful.
+* __Camera movement__ can be complement by calibration.
+* __Low resolution__ requires up-scaling or super-resolution.
+
+The models can be run on the input images before feding to GAD.
+
+#### Attribute Detection
+
+For farming, most animal breeds were being fed for meat.
+Therefore, attributes which affect the quality of food like animal health conditions (weight and diease history) are important.
+
+
+#### Fine-Grained Categorization
+
+FGC helps to identify the breeds and origins of the animals.
+This technoloogy contributes to quality ensurance to keep tracebility of food origin.
+
+
 ## References
 
 {% bibliography --file aniv %}
