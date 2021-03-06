@@ -23,6 +23,7 @@ Learners will get through several useful applications of Computer Vision (CV) in
 * Methods to adapt to new domains in farming such as Transfer Learning and Domain Adaptation.
 * Image enhancement methods such as de-raining, super-resolution, .etc.
 * Applications such as Dog counting, animal crowd density estimation, anomaly detection.
+The objective of this course is to build a proper Animal Vision system which will be described below.
 
 <!--more-->
 
@@ -102,6 +103,50 @@ Therefore, attributes which affect the quality of food like animal health condit
 FGC helps to identify the breeds and origins of the animals.
 This technology contributes to quality insurance to keep traceability of food origin.
 
+## About this course
+
+In this course, we will implement the Animal Vision System (AVS) using latest technologies.
+
+### Tools
+
+| Language | English |
+| OS | Ubuntu, macOS, Windows x64 |
+| Programming Language | Python (C/C++) |
+| Deep Learning frameworks | PyTorch |
+| Computer Vision and Machine Learning libraries | opencv-contrib-python, scikit-learn, scipy, scikit-image |
+
+### Posts
+
+1. [x] __Introduction (this post)__
+2. [ ] __Introduction about Computer Vision (using `scikit-image` and `opencv`)__
+  - Image filters, edge detection, calibration, artifact removals, .etc.
+3. [ ] __Object detection, classification and segmentation__
+  - Image features, conventional object detection methods like Viola-Jones cascade method.
+  - Convolutional neural networks, convolutional/pooling/upscaling/dilated operations, etc.
+4. [ ] __Advanced problems in image enhancement (1)__
+  - Ganerative Adversarial Networks, Auto-Encoders
+5. [ ] __Advanced problems in image enhancement (2)__
+  - Haze removal, artifact removal, reconstruction
+  - Super-resolution, de-raining methods.
+6. [ ] __Machine learning (1)__
+  - The role of data augmentation
+  - Common learning problems: over-fitting/under-fitting
+  - Over-confidence problems: Open-world recognition
+7. [ ] __Machine learning (2)__
+  - Learning in new domains
+  - Transfer learning vs. Domain Adaptation
+8. [ ] __Machine learning (3)__
+  - One-vs-rest learning
+  - Limited-domain learners (experts) vs. Wide-domain learners (generalists) and over-confidence problems.
+9. [ ] __Machine learning (4)__
+  - Anomaly Detection
+10. [ ] __Animal Vision (1)__
+  - Object counting
+  - Density Estimation
+11. [ ] __Animal Vision (2)__
+  - Attribute detection: weight estimation and anomaly individual detection
+12. [ ] __Conclusion__
+  - The whole system
 
 ## References
 
