@@ -80,3 +80,4 @@ VPC
 vpc
 cv
 CV
+panoptic
