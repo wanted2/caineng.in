@@ -3,3 +3,4 @@ gemspec
 
 gem 'jekyll-scholar'
 gem 'jekyll-multiple-languages-plugin'
+gem 'jemoji'

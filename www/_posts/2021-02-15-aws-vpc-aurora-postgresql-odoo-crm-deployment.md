@@ -141,3 +141,4 @@ From the view of business, the winner is determined.
 In the second part, although using the community edition does not offer any real benefit in business, we still explored the way to deploy by ourselves to AWS.
 
 In conclusion, ready-to-use solutions like Odoo Enterprise with Odoo Cloud seem to be the winner.
+If you like this, please give :+1:
