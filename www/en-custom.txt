@@ -76,5 +76,6 @@ odoo
 https
 eco
 timesheet
+timesheets
 VPC
 vpc

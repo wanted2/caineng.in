@@ -108,7 +108,7 @@ Comparing to example 1, company B pays a little bit in total, and the processes 
 
 ### [Odoo Community](https://www.odoo.com/page/community)
 
-The pricing model becomes simple, but you have to implement and find hosting services yourself.
+The pricing model becomes affordable, but you have to implement and find hosting services yourself.
 Then, a sufficient background on the Odoo Community edition and deployments are required.
 **You only pay for hosting services and people who implement Odoo on your business.**
 Note that, although the community edition does not come with some custom apps, there is a third-party community with many alternatives for free and paid: [https://apps.odoo.com/](https://apps.odoo.com/).
