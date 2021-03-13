@@ -37,5 +37,13 @@ Rất nhiều tình huống kinh doanh đòi hỏi IAM và quản lý người d
 * __B2C__: Dịch vụ của bạn cho phép người dùng sử dụng định danh của 1 dịch vụ xã hội khác như Gmail, Facebook, Twitter, .v.v...
 * __B2E__: Dịch vụ của bạn cho phép nhân viên đăng nhập 1 lần duy nhất.
 
+Hậu quả của việc quản lý người dùng kém chính là việc thông tin người dùng bị lọt ra ngoài và trong môi trường kinh doanh chuyên nghiệp, 1 SLA cơ bản của mọi dịch vụ chính là cam kết bảo vệ riêng tư người dùng.
+Tuy nhiên, có nhiều nguyên nhân dẫn đến những sự vụ lọt dữ liệu cá nhân riêng tư của người dùng như quản lý yếu kém, thực thi thiếu, .v.v...
+Để đảm bảo những yếu tố trên, bắt buộc bên thực thi chức năng hệ thống quản lý người dùng cần có làm bài bản và công phu.
+Tuy nhiên, với khá nhiều business cases, chủ yếu các công ty khởi nghiệp quy mô nhỏ hoặc các công ty viện nghiên cứu, nơi yếu tố tập trung vào chuyên môn, ý tưởng nghiệp vụ quan trọng hơn những vấn đề không phải chuyên môn của họ, việc sử dụng giải pháp của nhà cung cấp bên thứ 3 trở nên cấp thiết.
+Và bên thứ 3, cung cấp giải pháp có sẵn bắt buộc phải đáng tin cậy, với chất lượng thể hiện qua SLA phải thật cao. (_SLA sẽ quan trọng hơn SLO/SLI hay KPI rất nhiều, vì SLO/SLI hay KPI chỉ là các chỉ số nội bộ vô giá trị với người dùng, còn SLA mới là cái cam kết với người dùng là dịch vụ của bạn sẽ cung cấp những hạng mục này với chất lượng như thế này_).
+
+## Các hình thái quản lý người dùng
+
 ## Tài liệu tham khảo
 {% bibliography --file auth %}
