@@ -12,5 +12,5 @@ jobs:
       name: Spellcheck
       with:
         config_path: spellcheck.yaml
-        source_files: www/_posts/*.md
+        source_files: www/_posts/*.md|!*-non-english.md
         task_name: Markdown
