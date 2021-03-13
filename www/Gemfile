@@ -1,6 +1,8 @@
 source "https://rubygems.org"
 gemspec
 
-gem 'jekyll-scholar'
-gem 'jekyll-multiple-languages-plugin'
-gem 'jemoji'
+gem "jekyll-scholar"
+gem "jekyll-multiple-languages-plugin"
+gem "jemoji"
+gem "kramdown-parser-gfm"
+gem "jekyll-toc"
