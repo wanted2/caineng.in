@@ -114,39 +114,39 @@ Do đó nếu doanh nghiệp mới bắt đầu tìm cách thực thi giải ph�
 
 ### Các yếu tố nên xem xét
 
-|  |  |
+Như đã nói, thị trường security là đã "bão hòa" và lắm cá mập.
+Nhưng ngay cả việc chỉ việc lựa chọn trong đám cá mập để xài thì cũng có rất nhiều.
+Nên chúng tôi cung cấp dưới đây danh sách yếu tố nên quan tâm khi lựa chọn nhà cung cấp giải pháp.
+
+| __Yếu tố__ | __Giải thích__ |
 |-|-|
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
+| __Hình thái triển khai__  | Nên lựa chọn giải pháp có thể triển khai ở bất cứ đâu. Ví dụ, giải pháp có thể triển khai trên cloud của cty giải pháp, trên cloud của khách hàng, hoặc trên data center của chính khách hàng. |
+| __Khả năng tích hợp__ | Tìm kiếm giải pháp có SDKs tốt, tài liệu hướng dẫn chuẩn chỉnh, APIs mạnh, các tính năng hoàn chỉnh, phong phú và quan trọng nhất là dễ cấu hình cho nhân lực của cty bạn. |
+| __Sự hỗ trợ với các nhà cung cấp dịch vụ định danh khác__ | Microsoft Active Directory, ADFS, Office 365,Google Apps và SAML là những nhà cung cấp dịch vụ mà 1 giải pháp security tốt nên hỗ trợ. Bạn nên kiểm tra kỹ xem các nhà cung cấp dịch vụ định danh mà giải pháp của bạn hỗ trợ có phù hợp nhu cầu cuả cty bạn không. |
+| __Khả năng mở rộng__ | Giải pháp security bạn lựa chọn có dễ dàng cho bạn khi muốn customize quy trình đăng nhập và đăng ký không? Nếu business của bạn thường xuyên thay đổi theo nhu cầu người dùng, bạn nên cân nhắc giải pháp có hỗ trợ mạnh việc customize (như trong e-commerce, tôi vẫn khuyên anh em xài wordpress vì nó nhiều plugin, khả năng mở rộng mạnh mà ít phải code).  |
+| __Bộ tính năng__ | Bạn nên chọn giải pháp có bộ tính năng tốt nhất trên thị trường.  |
+| __Khả năng dịch chuyển__ | Khả năng dịch chuyển dữ liệu giữa các server, hoặc từ data centers của khách hàng lên cloud của giải pháp là những yếu tố nên có.  |
+| __Dịch vụ hỗ trợ__ | Dịch vụ hỗ trợ tốt, nhanh, 24/7 là yếu tố nên có. |
+
+### Giới thiệu sơ qua về các dịch vụ định danh nổi bật trên thị trường
+
+Nhìn chung mảng bảo mật và dịch vụ định danh khá là nhiều "cá mập".
+Vì vậy, tôi nghĩ sẽ không khó để tìm được 1 dịch vụ có đầy đủ các yếu tố kể trên, cộng thêm reviews tốt nữa để nhấn nút đặt hàng.
+Nếu bạn đã triển khai dịch vụ của bạn trên cloud, đương nhiên tích hợp giải pháp định danh mà nhà cung cấp cloud có sẵn là cách đồng bộ nhất.
+Ví dụ bạn đang dùng AWS thì tốt nhất nên dùng Cognito.
+Còn nếu bạn đang triển khai trên data center của riêng cty bạn hoặc bạn vì lý do nào đó không thích giải pháp mà cloud offer, bạn có thể xem xét một số nhà cung cấp thứ 3 khác như Auth0.
+Ngoài ra, chú ý là Auth0 [1, 2] cũng hỗ trợ định danh đến từ Cognito [3], Microsoft Active Directory [4] hay Google Identity Platform [5].
+Còn 1 danh sách dài khác các ứng cử viên (cả cá mập, cá lớn lẫn cá bé) trong lĩnh vực security này, tôi xin phép đề cập khi có dịp.
 
 ## Tổng kết
+
+Nhìn chung, sự ra đời của hàng loạt dịch vụ định danh và bảo mật tính theo chiều dài lịch sử của Internet từ bong bóng Dotcom những năm 2000 đã tạo nên cục diện ngày hôm nay.
+Hầu như các giải pháp bên thứ 3 đã cung cấp nền tảng đầy đủ tính năng và phong phú về ứng dụng cho người dùng trong mảng định danh và bảo mật.
+Vì có quá nhiều nên cuộc cạnh tranh đã khiến cho người dùng có thể thoải mái lựa chọn giải pháp phù hợp nhất cho nhu cầu của mình.
+Đứng về góc độ business, tôi tin tưởng tương lai chuyển đổi số sẽ đứng về phía các dịch vụ có sẵn.
+Dù xây thì thực chất bên dưới vẫn là các nền tảng có sẵn.
+Công việc của người làm quản lý sẽ được rút ngắn, tránh overhead cho những nghiệp vụ người dùng.
+Người quản lý sẽ tập trung vào chuyên môn của doanh nghiệp và phần thời gian cho nghiệp vụ người dùng sẽ ở mức độ thao tác trên giao diện web ở mức kéo thả và thao tác cơ bản.
 
 ## Tài liệu tham khảo
 {% bibliography --file auth %}
