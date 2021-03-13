@@ -41,9 +41,22 @@ Hậu quả của việc quản lý người dùng kém chính là việc thông
 Tuy nhiên, có nhiều nguyên nhân dẫn đến những sự vụ lọt dữ liệu cá nhân riêng tư của người dùng như quản lý yếu kém, thực thi thiếu, .v.v...
 Để đảm bảo những yếu tố trên, bắt buộc bên thực thi chức năng hệ thống quản lý người dùng cần có làm bài bản và công phu.
 Tuy nhiên, với khá nhiều business cases, chủ yếu các công ty khởi nghiệp quy mô nhỏ hoặc các công ty viện nghiên cứu, nơi yếu tố tập trung vào chuyên môn, ý tưởng nghiệp vụ quan trọng hơn những vấn đề không phải chuyên môn của họ, việc sử dụng giải pháp của nhà cung cấp bên thứ 3 trở nên cấp thiết.
-Và bên thứ 3, cung cấp giải pháp có sẵn bắt buộc phải đáng tin cậy, với chất lượng thể hiện qua SLA phải thật cao. (_SLA sẽ quan trọng hơn SLO/SLI hay KPI rất nhiều, vì SLO/SLI hay KPI chỉ là các chỉ số nội bộ vô giá trị với người dùng, còn SLA mới là cái cam kết với người dùng là dịch vụ của bạn sẽ cung cấp những hạng mục này với chất lượng như thế này_).
+Và bên thứ 3, bên cung cấp giải pháp có sẵn bắt buộc phải đáng tin cậy, với chất lượng thể hiện qua SLA phải thật cao. (_SLA sẽ quan trọng hơn SLO/SLI hay KPI rất nhiều, vì SLO/SLI hay KPI chỉ là các chỉ số nội bộ vô giá trị với người dùng, còn SLA mới là cái cam kết với người dùng là dịch vụ của bạn sẽ cung cấp những hạng mục này với chất lượng như thế này_).
 
 ## Các hình thái quản lý người dùng
+
+![](/assets/img/iam.png)
+
+* __Định danh liên bang (Federated Identity)__: dữ liệu định danh được di chuyển giữa các server (A và B) mà không vi phạm kiểm tra nguồn gốc (origin). Việc này được thực hiện bởi server IAM bên ngoài.
+Nhờ vào hình thái này, người dùng của dịch vụ A có thể đăng nhập và dịch vụ B mà chưa hề đăng ký ở B.
+
+* __Single Sign-On__: đăng nhập 1 lần. Giả sử có 1 hệ sinh thái bao gồm nhiều dịch vụ khác nhau, thì đăng nhập 1 lần tức là người dùng của dịch vụ này chỉ cần đăng nhập và dịch vụ đã đăng ký là có thể tự do truy cập vào mội dịch vụ trong hệ sinh thái.
+Để thực hiện hình thái này, đòi hỏi trong hệ sinh thái có 1 dịch vụ IAM để thực hiện định dạng liên bang, tức là vận chuyển dữ liệu định danh của user giữa các dịch vụ.
+
+* __Định danh liên bang trong doanh nghiệp (Enterprise Federated)__: Định danh liên bang được dùng với các kết nối dịch vụ trong doanh nghiệp như Active Directory, SAML, LDAP, Google Apps, .v.v...
+
+Các hình thức định danh kể trên giúp việc quản lý người dùng được đồng bộ trong toàn doanh nghiệp cũng như hệ sinh thái. Trong tiếng Nhật, gọi đó là 一元管理, tức là thay vì quản lý theo nhiều dịch vụ nhiều phương diện khác nhau, sự quản lý được đơn giản hóa thành quản lý 1 chiều thống nhất.
+
 
 ## Tài liệu tham khảo
 {% bibliography --file auth %}
