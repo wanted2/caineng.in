@@ -47,6 +47,8 @@ Và bên thứ 3, bên cung cấp giải pháp có sẵn bắt buộc phải đ�
 
 ![](/assets/img/iam.png)
 
+Đầu tiên, chúng ta xem lại một vài khái niệm về định danh và quản lý người dùng.
+
 * __Định danh liên bang (Federated Identity)__: dữ liệu định danh được di chuyển giữa các server (A và B) mà không vi phạm kiểm tra nguồn gốc (origin). Việc này được thực hiện bởi server IAM bên ngoài.
 Nhờ vào hình thái này, người dùng của dịch vụ A có thể đăng nhập và dịch vụ B mà chưa hề đăng ký ở B.
 
@@ -56,6 +58,15 @@ Nhờ vào hình thái này, người dùng của dịch vụ A có thể đăng
 * __Định danh liên bang trong doanh nghiệp (Enterprise Federated)__: Định danh liên bang được dùng với các kết nối dịch vụ trong doanh nghiệp như Active Directory, SAML, LDAP, Google Apps, .v.v...
 
 Các hình thức định danh kể trên giúp việc quản lý người dùng được đồng bộ trong toàn doanh nghiệp cũng như hệ sinh thái. Trong tiếng Nhật, gọi đó là 一元管理, tức là thay vì quản lý theo nhiều dịch vụ nhiều phương diện khác nhau, sự quản lý được đơn giản hóa thành quản lý 1 chiều thống nhất.
+
+Quản lý người dùng là lĩnh vực đang biến đổi với sự gia tăng nhanh chóng của các thiết bị nhỏ gọn như điện thại di động.
+Do đó, các công nghệ mới trong toàn lĩnh vực này bao gồm __Đăng nhập 1 lần (Single Sign-On)__, __Đăng nhập không mật khẩu (Passwordless)__ và __Định danh đa hình thái (Multi-factor Authentication)__ đang trở nên nóng hổi.
+_Multifactor Authentication (MFA)_ thực hiện định danh nhiều cửa để tăng tính bảo mật.
+_Passwordless_ sử dụng các biện pháp định danh ngoài mật khẩu truyền thống như bio-metrics (vân tay, khuôn mặt, .v.v...).
+
+Thêm vào đó, các ứng dụng sử dụng dịch vụ đám mây như Amazon Web Services (AWS) hay Google Apps, cũng cần thực thi IAM do họ lưu trữ dữ liệu người dùng trên các server trên đám mây.
+Ngoài ra, _social authentication_ cũng là một nhu cầu do các ứng dụng B2C đòi hỏi liên kết với các mạng xã hội để nâng cao hiệu quả quảng cáo, marketing, cũng như gia tăng trải nghiệm người dùng.
+Với các ứng dụng B2E thì ngược lại, họ không phải quan tâm đến quá nhiều phân quyền và nhiều cấp độ truy cập. Nhưng nhà quản lý (admin) sẽ phải chịu trách nhiệm tạo tài khoản khi có thành viên mới gia nhập và vô hiệu tài khoản khi thành viên rời đi.
 
 
 ## Tài liệu tham khảo
