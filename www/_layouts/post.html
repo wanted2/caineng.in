@@ -7,6 +7,10 @@ layout: default
 </header>
 <div class="content">
   {% include post-meta.html post=page %}
+  <div id="table-of-contents">
+  <h2>Index</h2>
+    {{ content | toc_only }}
+  </div>
 
   <div class="post-body">
     {{ content }}

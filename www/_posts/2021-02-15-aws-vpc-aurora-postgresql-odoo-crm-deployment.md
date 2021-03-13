@@ -15,6 +15,7 @@ tags:
   - SQL
   - CRM
   - odoo
+toc: true
 ---
 ![Odoo perf](https://odoocdn.com/openerp_website/static/src/img/2020/home/market_position_update.svg)
 *Source: [Odoo website](https://odoocdn.com/openerp_website/static/src/img/2020/home/market_position_update.svg)*

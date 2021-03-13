@@ -11,6 +11,7 @@ tags:
   - computer vision
   - artificial intelligence
   - image processing
+toc: true
 ---
 
 ![](/assets/img/dogs.PNG)
