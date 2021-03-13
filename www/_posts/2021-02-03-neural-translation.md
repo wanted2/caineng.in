@@ -9,6 +9,7 @@ tags:
   - deep learning
   - neural network
   - neural machine translation
+toc: true
 ---
 
 <!--more-->

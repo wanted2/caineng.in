@@ -12,6 +12,7 @@ tags:
   - oracle
   - oracle cloud infrastructure
   - oci
+toc: true
 ---
 
 ![](/assets/img/oci.png)
