@@ -51,7 +51,7 @@ jobs:
 
       # Add Google Analytics ID
       - name: Google Analytics
-        run: echo 'google_analytics: ${{ secrets.GA_STAGING_ID }}' >> www/_config.yml
+        run: 'echo "google_analytics: ${{ secrets.GA_STAGING_ID }}" >> www/_config.yml'
 
       # build Jekyll website
       - name: Build Jekyll website
