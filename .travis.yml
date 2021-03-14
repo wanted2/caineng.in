@@ -22,7 +22,7 @@ jobs:
   include:
   - stage: build
     name: Build Jekyll website
-    script: cd www && jekyll b
+    script: bash build_dev.sh
     # Can skip if commit message has wip or no deploy
     if: commit_message !~ /(no-deploy|wip)/ AND type = push
     after_success:
@@ -31,12 +31,12 @@ jobs:
     name: Test when branch is not blog posts
     # Can skip if commit message has wip or no test and only test if branch is "feature/*"
     if: commit_message !~ /(no-test|no-deploy|wip)/ AND branch =~ /feature/ AND type = push
-    script: cd www && jekyll b 
+    script: bash build_dev.sh
     after_script:
       - if [ -d "_site" ]; then echo "Actually, no useful tests for a blog"; else exit 1; fi
   - stage: deploy_staging
     name: Deploy to AWS S3 Staging
-    script: cd www && echo ${GA_STAGING_ID} >> _config.yml && JEKYLL_ENV=staging bundle exec jekyll b
+    script: bash build_staging.sh
     # Can skip if commit message has wip or no test and only deploy if branch is \"staging\"
     if: commit_message !~ /(no-deploy|wip)/ AND branch = staging AND type = push
     after_script:
@@ -59,4 +59,4 @@ env:
   - secure: RVZR+46+Af4R4IJrxxMZimx2nFjl1Nb4uEsG86u3DpSE9dizWNw36Wj5iBXCkgZbdBqeL9cOU5Qer29JZMgWIBDbeIGyVTD1xTwUWKNzTemSlZG6SDc6UfzBaAH8eq10uejlUsSzeiueBO6fy6lfEpWrRis5zCEQKebBxSh2WWXU+0yLzau1up/Fc5Hhdn/6N81GzjBhYrSGAF4WJUz6RJwglo8YJUCsEYVD62CFylP/B0ONQnHzRGh/MTcHTqOVq61bcBRE618mALycrbgDd4VB9udkCZcOvaviT5XFTdTKgoJlx1KzXudd0bT5RMxj/lf5bNJ3HdzUeIKHqBzy8YiZpVhX0pSHmErSAPgHIfzH7YRf3KhlXIHQLfHQb8fri8qy9L74pATLD4Ey4jno7ilvNjbbhd8HslN1VRjuucIiuepqAM3Khd4taRTtW/3a1GPNIUpciJixEEx6ojVEeFwOP95Jq3s+3XM1Ye0EkeoU6bCGfYJQOVojZoUOvCA7g/V26aUCSyZpnha0oJOtEVBVF5FSUslGJYZmodM2QSDPB0KxJD918HHJ1xZe+0sgT2Ev6ZSSftOHs4kliG1mWfO2xJoTZJqkQVWMnnd3ClFLxuRNGDA3gvJpA/NKS1qoo2YyPetcRIBHQLYrjljyfUkme4jnUPfchB3JqVAy6A4=
   - secure: nOjVZVpb/4/LKbXVAfxaRmH6EFy8aTc8cSuJhtbP5DHYfQlG59qnwSS8tg8zf75Ht4r8eSG1irLPR+0bzJ1w6frW88G5EK2djN8614sonZgoHyWWD705nFl8w85ex22zjgkKKOrFZJtPeJsU7tN1AWGT9/+tEqNrHuNGPy9DY3FGU4hQJhjLgsN04cOwv/iKP0y16YejhAcqlFaCtWBFF6nW5Gcz2fu8eDNzX9+lqjtS9caayLpspo9qH/ljqesfCfgFd50NV2IZbkjXSPvcrP0R/R8ry48z6t919jiGZy4+zylpvTGVpFPmtBzMgwhl9/igLxbEBYL3Fx0BPNNWpnArYPaVXcXWJ8liyXAip4N/poVEz+pAxIkQHbOUyYhU80hjggc25rRuZ2hb34fFtC7iM7XJTwM3xZzKoU7DX3IXEM+9uDuVgTMgJGUEHf9p1tHPPLgtyCf10lpgV9nI/3hDZ7a4//QWbJWw1O8Fou1k/SbqrEjvaJlMxOtwN44Sd+g3UdrXGfW3OxUzm8adPyhRXNViGphguqeGnXCZoXuFoNT8EeYb0e12eIrFAQMpvot3YoBQRPfrvkADfEUZt6fzKzUude7nw0vQvDR7TATXAgNJNPquexymT/KTN/r99aEtXpOQS/g0zKPHB2UyxIRPB6e+/n5HZj5WEraFsp8=
   - secure: byr+dGEcT/oDsYTxwY4X8yi8PEhMo2CcfBHO1Ygk6JS72KIPQqZJNXFVYhZhlU/5aeKwTO+FLKDh0vX+Ze87AijI/NTxxAMOsjE/DjqmoR1e5vH9S5vQIjLZJd22C9Mg7/N6fRuCMUKano8f6jM8XAiYfWwybzdBCJwUqvCN5X2kvqZUOE8SnZ5Hb8DTkHw4vYBfYd0cIKmOJW61ow/8I8Pwmkx65kgRj2wyVOcTHNazXyQM4NlCNezJD22tqJXkSmQB0HeJHrLAgND48IFLcHv4cVzv/Tn+NcAucF5K1lr+GeprLAe1RcULf7uqgAWLTSsFwj+se/RpA94YRVIsFxQuWno1NRK+0NbwisQKNjzBAhc33fmMBifIAiLJb16N/+/xhYZLJvVNvF+ITx4XIt3jlT9BcWkO36l1gbinVUgik4Be728hj8iWdqw7zDyc73hNyg/brC/mw8IbDwC6kMCQGH/YSkrt06yPaPhSElQBdAbFdpjSdsdsAkgAqYU15+TOvn+l4b7PCRsD1+nTWfeVbqoOtxbZu4OQ9FVJe2ZIKNMUYBmBxNPqFDfMwgpkG05NgC6KwONoSa2hECzowupkrW/KopkuKsFI45kFBU1qSrwJpVilYZgeCz1NGPKavhUV0y2nqygTT1Kos07o4/Paw3M6dDH/sxVulY6gf28=
-  - secure: LGDshO9gCWDz3548qrgGgA9hMmhAJP6nTJ9mgxLPC8vF8+gbOco9IepkkUqICzoD+TGvtYKww0wIgwXq4HyiseV+ubGlRNEZdYCCNnQiUekFnoiuRjcsMQkMCvVpLedzVEvtdX5HpfMFI4A7DlanONlFsx0zJ4byUgK5BmeXsdCM62z0qOzzLNDF4YxgrOVxM3FpSm8F1NcO1rFW4LiXMeFf2g6QGQd66FT9Vr1xS/36rCSuAKtO2pK/otl0zSMfFdzIAwjdXjwJZios9d7rv8e2HMtBCUvzZ6IJ9DQfjMbyriqj8Tk5OGjoz3FODw2t/jIPsBYhXv1AMO7MHgi6uraZaVLv+I8k5xcVjQZIyCX8ln7EEP8yXwU0gbQquvQbRlAPx7Xvq1YIhgTndJIDhRZc9kjbPTZI0hAhJSg5YUmWWmB/y5nRj3iveCDEfltX2n7WL5Tas4vqG9XNDhHaRxwleersjDlOAeXDPrVeZZS/oU/E9U6TwGuC6SRACJAeK+8Nr4bYYWx3riKYR78EuVZrvAoDwOjeTaEBxODTHaT0tvuqX7fNuZhO2COSsb+LkiZcx3lFr/VZGWtzAqJoo1dGLAtJ9kyzBcCMSM0BsuNTu77XHjpJQSc5s12Lb3XPAC2SFJvkGDYgUKFEwEraexju1DWn7OHunTuumNSPCUI=
+  - secure: UojHGGozzVlB4f4iHuVOz9bppnJMaQD3D6Ayx+OPbRShFomGJtfCS9nzwjikXY6+5y/OR8QCH78hCarmSOaV77bEmKeprzvQbmS3HRq1g6X4TzEXyytNX00YnmfSMh6b+raA6Y+56D5eOr0ywUQ9aJBd2EcIa9wjWME/ZCbFGeXPKvN/KCO36Lu5xFAksirxyzHxisY25FHVyG/E/A4trDUtQ/X/6o4QDEuZSyK0isTKJ7cpIw7Dp+WIovffTRcElcAubp2CfiOFKZlpw7m6PccEIjE9YRieqjtOmuYRDC9IhcZIk6hWgM7yeyLQdVfZJQRCja5hOfJNNi9SbyLQ5nTV3/NrOr8/2tccFlRyfDPdA1QOy0M1Js9bC6pYPrss8/8mlCBfXdMdI2xrCcOTa7LplkpAHrkAnLGbYjHJ9oF08qUp+AcXgbrUqOiPO735gtVKyl36FVbh1bAPTKGfZbxye8bVvUb7iTXC0vKAjODdC4qt0FELmLl9/NANfE3p/HKUJ24Nx28j+FgjMJmzp6DTe8BGNgf68tV3k5PN5CqP2U13VUkJkeSUH8ujIObG/J+AQW6K2RtVDvu+tlwh4K9m2iHtUev16NzU1tBnnHLoHb2e3qt/vBjI8nrOySQhJpeICGk/s1OKqnGdNF3x6Q1sE07sTmOMt3gvxhE5BoQ=
