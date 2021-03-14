@@ -2,6 +2,7 @@ on:
   push:
     branches:
     - "staging"
+    - "hotfix/*"
 
 jobs:
   pull-request:
