@@ -11,6 +11,11 @@ if [[ -d 'www' ]]; then
         echo "PASSED";
     fi
     sed -i '$ d' _config.yml
+    if [ -d "_site" ]; then 
+        aws s3 cp --recursive _site s3://${BUCKET_NAME_STAGING}; 
+    else 
+        exit 1;
+    fi
 else
     exit 1;
 fi
