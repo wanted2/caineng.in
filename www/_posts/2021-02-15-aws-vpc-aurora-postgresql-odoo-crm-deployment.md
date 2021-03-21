@@ -136,7 +136,7 @@ _CAUTION_: To be frank, I think we should use already-to-go solution like Odoo C
 
 #### Provision EC2 instances, Subnets and routetables
 
-#### Provision a Bastion SSH host
+#### Provision a Bastion SSH server
 
 #### Deploy Odoo 14.0
 
