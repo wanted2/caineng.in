@@ -124,7 +124,7 @@ And because you need specialized personnel to implement custom Odoo apps, the co
 
 After understanding the pricing model and the merits and demerits of each edition, we go to the deployment with [Odoo Community](https://www.odoo.com/page/community) to AWS EC2, Aurora for better understanding.
 
-_CAUTION_: To be frank, I think we should use already-to-go solution like Odoo Cloud or using Odoo partners, but building a system like this from scratch just for ... fun!
+_CAUTION_: To be frank, I think we should use already-to-go solution like Odoo Cloud or using Odoo partners, but building a system like this from scratch is only for ... fun!
 
 ## Setup 2 VPCs in a defense-in-depth style
 
@@ -134,9 +134,9 @@ _CAUTION_: To be frank, I think we should use already-to-go solution like Odoo C
 
 #### Provision AWS Aurora Instances
 
-#### Provision EC2 instances
+#### Provision EC2 instances, Subnets and routetables
 
-#### Provision Bastion SSH hosts
+#### Provision a Bastion SSH host
 
 #### Deploy Odoo 14.0
 
