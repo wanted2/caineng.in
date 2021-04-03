@@ -116,3 +116,6 @@ mxnet
 spaCy
 AVX
 serverless
+Sagemaker
+SageMaker
+Textract
