@@ -211,6 +211,40 @@ Note, only `spacy-py37.zip` has nearly 250 megabytes when uncompressed.
 
 ### QA in Lambda
 
+#### Task QA
+Given the context, the machine looks for a part of the given context which answers the question.
+A sample triplet is as follows:
+
+```text
+Context:
+The Norman dynasty had a major political, cultural and military impact on medieval Europe and even the Near East. The Normans were famed for their martial spirit and eventually for their Christian piety, becoming exponents of the Catholic orthodoxy into which they assimilated. They adopted the Gallo-Romance language of the Frankish land they settled, their dialect becoming known as Norman, Normaund or Norman French, an important literary language. The Duchy of Normandy, which they formed by treaty with the French crown, was a great fief of medieval France, and under Richard I of Normandy was forged into a cohesive and formidable principality in feudal tenure. The Normans are noted both for their culture, such as their unique Romanesque architecture and musical traditions, and for their significant military accomplishments and innovations. Norman adventurers founded the Kingdom of Sicily under Roger II after conquering southern Italy on the Saracens and Byzantines, and an expedition on behalf of their duke, William the Conqueror, led to the Norman conquest of England at the Battle of Hastings in 1066. Norman cultural and military influence spread from these new European centres to the Crusader states of the Near East, where their prince Bohemond I founded the Principality of Antioch in the Levant, to Scotland and Wales in Great Britain, to Ireland, and to the coasts of north Africa and the Canary Islands.
+
+Question: Who was the duke in the battle of Hastings?
+Answer: William the Conqueror
+```
+#### The handler
+We pay attention to the BERT Transfomer architecture [15,16].
+BERT representations have been trained in several pretext tasks [19].
+
+![](/assets/img/bert.svg)
+_Figure 2. BERT architecture_
+
+The input of BERT models is a pair of `(question, context)` with a series of 0s and 1s representing the token types(question or context?), and the output is a triplet $(S,E,A)$.
+We formulate the probability of finding a triplet output given the contextual embedding as
+$$P(S, E, A | C) = P(S | C)\times P(E | S,C)\times P(A | C) $$
+where $C$ is the contextual embedding vector, $S$ is the start position of the answer in the context, $E$ is the end position, and $A$ is the answerable decision to the question.
+In the inference, $P(S|C)$ is modeled as the log-softmax of contextual embedding logits.
+$P(E|S,C)$ is the log-softmax of concatenated features between contextual embeddings and start features.
+$P(A|C)$ is computed using a feed-forward neural network and log-softmax.
+The beam search is then applied in the computed score $P(S,E,A|C)$ to find the best candidates for an answer.
+ALBERT [11] is a lightweight successor of BERT.
+The inference code is mostly similar.
+
+#### Custom Lambda Layer
+
+While mxnet library itself is small and takes nearly 250 megabytes, adding Gluon-NLP makes the size is over the limit.
+Therefore, while building mxnet in a custom layer, we put gluon-nlp code into a Lambda function.
+
 ### SAM template
 
 The template for the Lambdas can be found at [https://github.com/wanted2/aws-sam-spacy-mxnet-bert-puppy-talk-example](https://github.com/wanted2/aws-sam-spacy-mxnet-bert-puppy-talk-example).
