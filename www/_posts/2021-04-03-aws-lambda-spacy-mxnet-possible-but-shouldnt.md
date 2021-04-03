@@ -238,18 +238,45 @@ $P(E|S,C)$ is the log-softmax of concatenated features between contextual embedd
 $P(A|C)$ is computed using a feed-forward neural network and log-softmax.
 The beam search is then applied in the computed score $P(S,E,A|C)$ to find the best candidates for an answer.
 ALBERT [11] is a lightweight successor of BERT.
-The inference code is mostly similar.
+The inference code is almost similar.
 
 #### Custom Lambda Layer
 
 While mxnet library itself is small and takes nearly 250 megabytes, adding Gluon-NLP makes the size is over the limit.
-Therefore, while building mxnet in a custom layer, we put gluon-nlp code into a Lambda function.
+Therefore, while building mxnet in a custom layer, we put `gluon-nlp` code into a Lambda function.
 
 ### SAM template
 
 The template for the Lambdas can be found at [https://github.com/wanted2/aws-sam-spacy-mxnet-bert-puppy-talk-example](https://github.com/wanted2/aws-sam-spacy-mxnet-bert-puppy-talk-example).
 
 ## Discussion
+
+### Runtime
+We tested in Lambda and observed that
+
+* __Spacy function__: for a batch of 100 sentences, it took 5.7 seconds. For a batch of 500 sentences, it took 28.7 seconds. Therefore, we set the timeout to 30 seconds and recommend users to send batches with less than 300 items. 
+
+* __Multiprocessing__:
+There is a good guideline about multiprocessing in AWS Lambda:
+https://aws.amazon.com/jp/blogs/compute/parallel-processing-in-python-with-aws-lambda/
+I created the code (following the above article) to see if multiprocessing can help.
+__Unfortunately, multiprocessing does not help ;)__
+For a batch of 100 sentences, it took 15.5s, 3x slower than sequential processing.
+
+### Memory
+A memory budget 256MB was enough for spaCy.
+The budget for mxnet inference is 4GB.
+
+## Conclusion
+
+Some lessons we learned from this implementation:
+
+* __Simplicity is the best design__: adding custom Lambda layers requires going through the hurdle of building too many unexpected things such as custom library distributions for specific architecture and operating systems (amazon linux), adjusting the size to match the policy of Lambda, .etc.
+* __Don't think you can do whatever you want with Lambda__. By bypassing the size restrictions of Lambda code, indeed, we are `hacking` AWS in some senses. Then this is a bad design! The company made the restriction and the design of Lambda to protect their business models (maybe), and we are hacking them for more performance! :D That's the whole picture of what we were doing.
+* __Design 2 is for hackers, then Design 1 is for usual developers__.
+
+In this post, we only considered two designs with all components are in the AWS Cloud.
+In practice, the systems may have components not in the cloud, and that makes the game is far interesting.
 
 ## Reference
 
