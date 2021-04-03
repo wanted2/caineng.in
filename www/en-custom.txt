@@ -114,3 +114,5 @@ bert
 albert
 mxnet
 spaCy
+AVX
+serverless
