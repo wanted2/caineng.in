@@ -34,7 +34,7 @@ It is an open question, and this post is to explore a possible answer.
 
 Managed services like Amazon Sagemaker [4] provides a consistent and powerful platform to train and deploy machine learning models.
 Another managed service is AWS Lambda [1] can serve as the integration to API Gateway, which handles and responds to requests upon connections to other services.
-It seems that it is a natural way to put a simple and stupid function in Lambda's handler bodies.
+It seems that it is a natural way to put a simplistic function in Lambda's handler bodies.
 But it also seems like there is no such enforcement for the complexity of the bodies.
 In other words, we can put anything in them and pay-as-we-go.
 
@@ -67,7 +67,7 @@ However, we don't train models but do use state-of-the-art model ALBERT [11] for
 
 **The cumbersome systems/models** are spaCy [12] and mxnet [13,14] based BERT models [11,15,16].
 spaCy is a ready-to-use Python library for linguistics tasks like NER, PoS tagging.
-Pipelines are execution units in spaCy to chain several different components such as tokenizers, ner, pos taggers, .etc.
+Pipelines are units in spaCy to chain several different components such as tokenizers, ner, pos taggers, .etc.
 Apache mxnet is a flexible and efficient library for Deep Learning.
 Hence, the size of each library is about 250 megabytes.
 Because the total size is about 500 megabytes, we need to separate it into 2 Lambdas.
@@ -161,7 +161,7 @@ def lambda_handler(event, context):
 ```
 We remark the economy of Lambda business.
 Concurrency [18] can provide up to 10000 Lambda processes running at a time, and Amazon makes money by charging on this use by requests and by GB-seconds.
-Each time a concurrent Lambda is executed, the bootstrap runs again.
+Each time a concurrent Lambda runs, the bootstrap runs again.
 For example, the line `nlp = spacy.load('en_core_web_sm')` runs everytime invoking a concurrent Lambda.
 Therefore, using a large batch size, we gain the time of reloading the `nlp` indeed.
 However, a too large batch size (over 300 sentences) can lead to long service time.
@@ -223,7 +223,7 @@ Question: Who was the duke in the battle of Hastings?
 Answer: William the Conqueror
 ```
 #### The handler
-We pay attention to the BERT Transfomer architecture [15,16].
+We pay attention to the BERT Transformer architecture [15,16].
 BERT representations have been trained in several pretext tasks [19].
 
 ![](/assets/img/bert.svg)
