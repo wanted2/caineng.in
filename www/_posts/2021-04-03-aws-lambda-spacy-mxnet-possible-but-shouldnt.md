@@ -162,7 +162,7 @@ def lambda_handler(event, context):
 We remark the economy of Lambda business.
 Concurrency [18] can provide up to 10000 Lambda processes running at a time, and Amazon makes money by charging on this use by requests and by GB-seconds.
 Each time a concurrent Lambda runs, the bootstrap runs again.
-For example, the line `nlp = spacy.load('en_core_web_sm')` runs everytime invoking a concurrent Lambda.
+For example, the line `nlp = spacy.load('en_core_web_sm')` runs every time invoking a concurrent Lambda.
 Therefore, using a large batch size, we gain the time of reloading the `nlp` indeed.
 However, a too large batch size (over 300 sentences) can lead to long service time.
 It reduces the quality of the service and user experiences.
