@@ -30,6 +30,7 @@ plugins:
   - jekyll-paginate
   # - jekyll-multiple-languages-plugin
   - jemoji
+  - jekyll-toc
 
 # Sidebar link settings
 sidebar_home_link:  true
@@ -61,3 +62,15 @@ disqus:
   shortname: caineng
 
 # languages: ["en", "ja", "vi"]
+
+toc:
+  min_level: 1
+  max_level: 6
+  ordered_list: true
+  no_toc_section_class: no_toc_section
+  list_id: toc
+  list_class: section-nav
+  sublist_class: ''
+  item_class: toc-entry
+  # item_prefix: toc-
+

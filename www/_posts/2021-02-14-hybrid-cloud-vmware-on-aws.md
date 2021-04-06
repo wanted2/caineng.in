@@ -20,6 +20,7 @@ tags:
   - amazon web services
   - oracle cloud infrastructure
   - oci
+toc: true
 ---
 
 _Note: this post is about building Customer Data Center (CDC) for enterprise, not about applications for end-users._

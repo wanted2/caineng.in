@@ -3,6 +3,7 @@ on:
     branches:
     - "feature/*"  # Support wildcard matching
     - "post/*"
+    - "bugfix/*"
 
 jobs:
   pull-request:
