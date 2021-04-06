@@ -7,7 +7,7 @@ kramdown:
 # Setup
 title:            AiFi
 tagline:          'A freelancer blog'
-description:      'This is the final AiFi'
+description:      'The official AiFi'
 url:              https://www.caineng.in
 baseurl:          '/'
                   # the optional subpath of your site, e.g. "/blog"
