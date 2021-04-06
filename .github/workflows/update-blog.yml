@@ -71,7 +71,7 @@ jobs:
       # S3 Sync final blg
       - name: Replace urls
         if: ${{ github.ref == 'refs/heads/main' }}
-        run: cd www && sed -i "s/${STAGING_DOMAIN}/${FINAL_DOMAIN}/g" _config.yml
+        run: cd www && sed -i "s/${{ secrets.STAGING_DOMAIN }}/${{ secrets.FINAL_DOMAIN }}/g" _config.yml
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete
