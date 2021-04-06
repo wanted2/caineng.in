@@ -7,7 +7,7 @@ kramdown:
 # Setup
 title:            AiFi
 tagline:          'A freelancer blog (pre-publish versions, be careful about the preciseness)'
-description:      'This is the pre-publish version of AiFi blog. Usually, I will put drafts and pre-approved writings here. After revising, these blogs will be moved to final versin at https://www.caineng.in'
+description:      'This is the pre-publish version of AiFi blog. See final version at https://www.caineng.in'
 url:              https://d1oozge46goiac.cloudfront.net
 baseurl:          '/'
                   # the optional subpath of your site, e.g. "/blog"
