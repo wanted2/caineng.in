@@ -6,9 +6,9 @@ kramdown:
 
 # Setup
 title:            AiFi
-tagline:          'A freelancer blog (pre-publish versions, be careful about the preciseness)'
-description:      'This is the pre-publish version of AiFi blog. See final version at https://www.caineng.in'
-url:              https://d1oozge46goiac.cloudfront.net
+tagline:          'A freelancer blog'
+description:      'The official AiFi'
+url:              https://www.caineng.in
 baseurl:          '/'
                   # the optional subpath of your site, e.g. "/blog"
                   # NB: This applies to all pages in your Jekyll site.
@@ -18,7 +18,7 @@ baseurl:          '/'
 
 author:
   name:           'Tuan Nguyen-Anh'
-  url:            https://caineng.in
+  url:            https://www.caineng.in
 
 paginate:         5
 # paginate_path:    '/page:num'
