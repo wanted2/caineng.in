@@ -4,14 +4,15 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
   <!-- Enable responsiveness on mobile devices-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
 
   <title>
-    {% if page.title == "Home" %}
-      {{ site.title }}{% if site.tagline %} &middot; {{ site.tagline }}{% endif %}
-    {% else %}
-      {{ page.title }} &middot; {{ site.title }}
-    {% endif %}
+    {% if page.title == "Home" %} {{ site.title }}{% if site.tagline %} &middot;
+    {{ site.tagline }}{% endif %} {% else %} {{ page.title }} &middot; {{
+    site.title }} {% endif %}
   </title>
 
   {% include google-analytics.html %}
@@ -24,7 +25,40 @@
   {% include favicons.html %}
 
   <!-- RSS -->
-  <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ site.feed.path | default: 'feed.xml' | relative_url }}" />
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="{{ site.feed.path | default: 'feed.xml' | relative_url }}"
+  />
 
   {% include custom-head.html %}
+  <style>
+    div.chart {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .box {
+      font: 10px sans-serif;
+    }
+
+    .box line,
+    .box rect,
+    .box circle {
+      fill: #fff;
+      stroke: #000;
+      stroke-width: 1.5px;
+    }
+
+    .box .center {
+      stroke-dasharray: 3, 3;
+    }
+
+    .box .outlier {
+      fill: none;
+      stroke: #ccc;
+    }
+  </style>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://bl.ocks.org/mbostock/raw/4061502/0a200ddf998aa75dfdb1ff32e16b680a15e5cb01/box.js"></script>
 </head>
