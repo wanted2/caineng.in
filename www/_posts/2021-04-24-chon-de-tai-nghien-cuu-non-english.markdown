@@ -143,21 +143,50 @@ svg.append("g").selectAll("text")
 })
 
 </script>
-_**Ví dụ về sự phát triển của một lĩnh vực nghiên cứu trong vòng 5 năm (01/2016-01/2021) trên 1 bộ dữ liệu chuẩn công nghiệp [1]. Có thể dễ dàng thấy trong 5 năm, trên bộ dữ liệu với số lượng đối tượng hàng triệu (do vậy đạt tiêu chuẩn công nghiệp), nhưng độ chính xác chỉ tăng 30%, từ 28.8% (SSD512, [2]) lên 58.7%(Swin-L, [3]). So với nhiều mảng khác mà model tốt nhất đã lên trên 99.9% [4,5], mảng này có nhiều khả năng mất đến 5 năm nữa để đến được level tương tự để ra sản phẩm thị trường.**_
+_**Ví dụ về sự phát triển của một lĩnh vực nghiên cứu trong vòng 5 năm (01/2016-01/2021) trên 1 bộ dữ liệu chuẩn công nghiệp [1]. Có thể dễ dàng thấy trong 5 năm, trên bộ dữ liệu với số lượng đối tượng hàng triệu (do vậy đạt tiêu chuẩn công nghiệp), nhưng độ chính xác chỉ tăng 30%, từ 28.8% (SSD512, [2]) lên 58.7% (Swin-L, [3]). So với nhiều mảng khác mà model tốt nhất đã lên trên 99.9% [4,5], mảng này có nhiều khả năng mất đến 5 năm nữa để đến được level tương tự để ra sản phẩm thị trường.**_
 <!--more-->
 
 ## Giới thiệu
 Trí tuệ nhân tạo đang dần trở thành 1 lĩnh vực ứng dụng có ảnh hưởng lớn trong công nghiệp.
 Và đương nhiên thị trường việc làm cho mảng này đang dần dần mở ra.
 Vì vậy, nhiều bạn cả già lẫn trẻ đang dần có những lầm tưởng về cơ hội rộng mở trong lĩnh vực AI này.
-Việc đầu tiên trong định hướng lại nghề nghiệp của AI, chính là nhắm vào lực lượng lao động chủ chốt: các chuyên gia (sinh viên PhD, tech enthuisamist, giáo sư, giảng viên, chuyên gia công nghệ), các lập trình viên, ...
+Việc đầu tiên trong định hướng lại nghề nghiệp của AI, chính là nhắm vào lực lượng lao động chủ chốt: các chuyên gia (sinh viên PhD, tech enthusiast, giáo sư, giảng viên, chuyên gia công nghệ), các lập trình viên, ...
 Định hướng đầu tiên chính là __Chọn đề tài/bài toán nào để làm và ra có việc?__
+
+__Câu chuyện của A__
+
+__(Sự kiện 1)__ Năm 2016, A bắt đầu thực hiện dự án nghiên cứu với đề tài là mảng được mô tả trong hình vẽ ở trên. 
+Lúc đó, mảng này mô hình tốt nhất chỉ đạt được độ chính xác là 28.8%.
+__(Sự kiện 2)__ Giáo sư hướng dẫn chỉ yêu cầu A rằng, phải tìm được việc mới cho rời lab.
+3 năm trôi qua, năm 2019, A nóng lòng muốn kết thúc, tìm đến doanh nghiệp C xin việc.
+__(Sự kiện 3)__ Sau khi tìm hiểu kỹ càng về mảng nghiên cứu này, C đáp rằng khi nào mảng này tiến đến 99.9% hiệu suất trên tập dữ liệu lớn vài chục triệu đối tượng thì mới đủ tiêu chí lên sản phẩm.
+Công ty muốn ăn xổi ngay nên chỉ có những dự án ra thành phẩm ngay mới có nhu cầu tuyển dụng.
+Lúc này State-of-the-art (SOTA) mới 55%!
+__(Sự kiện 4)__ A quay về ước tính, mảng này dù A có cống hiến hay không thì với tốc độ của 5 năm qua, chắc phải thêm 5 năm nữa, tức năm 2026 mới có việc!
+
+__Quan sát 4 sự kiện trên, bạn nghĩ A đã sai những điểm nào trong năm 2016?__
 
 ## Lựa chọn lĩnh vực và bài toán
 
+### Đừng nghĩ các mảng cũng như nhau. Hãy đánh giá đúng tiềm năng thị trường.
+
+### Tiêu chí để được gọi là sản phẩm là gì?
+
+### Tốc độ phát triển của lĩnh vực hẹp ra sao?
+
 ## Nhìn trước thị trường việc làm và cơ hội nghề nghiệp
 
+### Bạn định xin việc ở đâu? Công ty "ăn xổi" hay công ty "có tầm nhìn xa"?
+
+### Các công ty công nghệ đang cần gì?
+
+### Offshore thì sao?
+
 ## Kết luận
+
+### Một số lĩnh vực đã đến level sản phẩm thị trường
+
+### Tổng kết
 
 ## Tài liệu tham khảo
 
