@@ -37,28 +37,22 @@
     div.chart {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
+    .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
 
-    .box {
-      font: 10px sans-serif;
-    }
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
 
-    .box line,
-    .box rect,
-    .box circle {
-      fill: #fff;
-      stroke: #000;
-      stroke-width: 1.5px;
-    }
-
-    .box .center {
-      stroke-dasharray: 3, 3;
-    }
-
-    .box .outlier {
-      fill: none;
-      stroke: #ccc;
-    }
+.grid path {
+  stroke-width: 0;
+}
   </style>
-  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="https://d3js.org/d3.v4.js"></script>
   <script src="http://bl.ocks.org/mbostock/raw/4061502/0a200ddf998aa75dfdb1ff32e16b680a15e5cb01/box.js"></script>
 </head>
