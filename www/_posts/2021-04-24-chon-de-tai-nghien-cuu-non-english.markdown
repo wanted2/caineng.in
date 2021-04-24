@@ -1,11 +1,14 @@
 ---
 layout: post
-title: "Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp?"
+title: "Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp trong ngành trí tuệ nhân tạo?"
 excerpt_separator: "<!--more-->"
 categories:
   - non-english
 tags:
   - research topic
+  - jobs
+  - cơ hội nghề nghiệp
+  - lời khuyên sự nghiệp
 toc: true
 ---
 
@@ -140,8 +143,8 @@ svg.append("g").selectAll("text")
 })
 
 </script>
-_**Ví dụ về sự phát triển của một lĩnh vực nghiên cứu trong vòng 5 năm (01/2016-01/2021) trên 1 bộ dữ liệu chuẩn công nghiệp. Có thể dễ dàng thấy trong 5 năm, trên bộ dữ liệu với số lượng đối tượng hàng triệu (do vậy đạt tiêu chuẩn công nghiệp), nhưng độ chính xác chỉ tăng 30%, từ 28.8% (SSD512) lên 58.7%(Swin-L). So với nhiều mảng khác mà model tốt nhất đã lên trên 99.9%, mảng này có nhiều khả năng mất đến 5 năm nữa để đến được level tương tự để ra sản phẩm thị trường.**_
+_**Ví dụ về sự phát triển của một lĩnh vực nghiên cứu trong vòng 5 năm (01/2016-01/2021) trên 1 bộ dữ liệu chuẩn công nghiệp [1]. Có thể dễ dàng thấy trong 5 năm, trên bộ dữ liệu với số lượng đối tượng hàng triệu (do vậy đạt tiêu chuẩn công nghiệp), nhưng độ chính xác chỉ tăng 30%, từ 28.8% (SSD512, [2]) lên 58.7%(Swin-L, [3]). So với nhiều mảng khác mà model tốt nhất đã lên trên 99.9% [4,5], mảng này có nhiều khả năng mất đến 5 năm nữa để đến được level tương tự để ra sản phẩm thị trường.**_
 <!--more-->
 ## Tài liệu tham khảo
 
-{% bibliography --file auth %}
+{% bibliography --file topic %}
