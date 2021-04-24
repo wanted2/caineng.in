@@ -145,6 +145,20 @@ svg.append("g").selectAll("text")
 </script>
 _**Ví dụ về sự phát triển của một lĩnh vực nghiên cứu trong vòng 5 năm (01/2016-01/2021) trên 1 bộ dữ liệu chuẩn công nghiệp [1]. Có thể dễ dàng thấy trong 5 năm, trên bộ dữ liệu với số lượng đối tượng hàng triệu (do vậy đạt tiêu chuẩn công nghiệp), nhưng độ chính xác chỉ tăng 30%, từ 28.8% (SSD512, [2]) lên 58.7%(Swin-L, [3]). So với nhiều mảng khác mà model tốt nhất đã lên trên 99.9% [4,5], mảng này có nhiều khả năng mất đến 5 năm nữa để đến được level tương tự để ra sản phẩm thị trường.**_
 <!--more-->
+
+## Giới thiệu
+Trí tuệ nhân tạo đang dần trở thành 1 lĩnh vực ứng dụng có ảnh hưởng lớn trong công nghiệp.
+Và đương nhiên thị trường việc làm cho mảng này đang dần dần mở ra.
+Vì vậy, nhiều bạn cả già lẫn trẻ đang dần có những lầm tưởng về cơ hội rộng mở trong lĩnh vực AI này.
+Việc đầu tiên trong định hướng lại nghề nghiệp của AI, chính là nhắm vào lực lượng lao động chủ chốt: các chuyên gia (sinh viên PhD, tech enthuisamist, giáo sư, giảng viên, chuyên gia công nghệ), các lập trình viên, ...
+Định hướng đầu tiên chính là __Chọn đề tài/bài toán nào để làm và ra có việc?__
+
+## Lựa chọn lĩnh vực và bài toán
+
+## Nhìn trước thị trường việc làm và cơ hội nghề nghiệp
+
+## Kết luận
+
 ## Tài liệu tham khảo
 
 {% bibliography --file topic %}
