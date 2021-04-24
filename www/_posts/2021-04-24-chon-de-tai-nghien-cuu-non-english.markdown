@@ -164,7 +164,25 @@ Công ty muốn ăn xổi ngay nên chỉ có những dự án ra thành phẩm 
 Lúc này State-of-the-art (SOTA) mới 55%!
 __(Sự kiện 4)__ A quay về ước tính, mảng này dù A có cống hiến hay không thì với tốc độ của 5 năm qua, chắc phải thêm 5 năm nữa, tức năm 2026 mới có việc!
 
-__Quan sát 4 sự kiện trên, bạn nghĩ A đã sai những điểm nào trong năm 2016?__
+__Quan sát 4 sự kiện trên, bạn nghĩ A đã sai những điểm nào trong năm 2016 và 2019?__
+
+* Đầu tiên, A đã sai khi chọn bài toán có xuất phát điểm quá thấp (28.8%). Một người làm AI có kinh nghiệm đều hiểu rằng với một lĩnh vực đang lên nào đi chăng nữa, 1 năm tiến được 10% là quá giỏi rồi. Thế nên với xuất phát điểm thấp như vậy, sau 3 năm, thì có thể dự đoán tiến bộ được 30% là may. Và vì vậy, việc rời lab mà công trình chỉ là 1 thứ không đủ tiêu chí lên sản phẩm là quá hiến nhiên.
+* Tiếp theo, là không nghe cảnh cáo của giáo sư. Giáo sư nói chuyện việc làm là có ý muốn nhắc A tìm hiểu thị trường đi.
+* Sai lầm cuối cùng, là "yếu thích ra gió". Làm một mảng mà tính sản phẩm yếu, nhưng lại xin việc 1 công ty thích "ăn xổi". Công ty thích ăn xổi thì đương nhiên thấy hồ sơ như vậy họ sẽ thấy là phải nuôi thêm 5 năm nữa đến mức lên sản phẩm, là họ sẽ muốn tránh. A nên tìm việc ở công ty có tầm nhìn xa, muốn làm chủ thị trường từ khi còn trứng nước.
+
+__Câu chuyện của B__
+
+Anh kỹ sư B làm giám đốc sản phẩm của 1 công ty hạng trung.
+Nhân trước lúc muốn chuyển việc, anh muốn làm 1 dự án sản phẩm để làm đẹp hồ sơ.
+Vì vậy, anh chọn ngay 1 bài toán mà model "xịn" nhất thị trường đã lên 99.0% về độ chính xác.
+Vì setup đã chỉn chu như vậy, quá trình triển khai diễn ra thuận lợi và hầu như tất cả chỉ là quy trình chuyển giao công nghệ sẵn có.
+Trong lúc chuẩn bị close dự án, B cũng lanh lẹ sắp xếp đi xin việc tại khời nghiệp D vốn đang chiêu mộ nhân tài với đãi ngộ hàng ngàn đô la.
+D sau khi xem xét kỹ càng thì từ chối vì hồ sơ tương tự B đang xếp hàng dài dằng dặc.
+
+__Quan sát các sự kiện trên, bạn nghĩ B đã sai những điểm nào?__
+
+* B đã chọn bài toán có xuất phát điểm quá cao (99.0%), và vì vậy thử thách để chứng tỏ năng lực bản thân là hầu như không có. Thậm chí, một dịch vụ tương tự như của B đã có sẵn cũng không lạ.
+* B xin vào 1 công ty có tầm nhìn xa, nhưng lại không có điểm gì để thể hiện mảng đang làm là còn chỗ khai thác. Công ty tầm nhìn xa khác Công ty ăn xổi là họ sẽ tìm kiếm cơ hội mới. Nhưng mảng những 99.0% thì bên trong có nhiều người làm tốt rồi. Họ chấp nhận tính sản phẩm không quá mạnh (và không quá yếu :D ) nhưng phải có cơ hội làm chủ thị trường.
 
 ## Lựa chọn lĩnh vực và bài toán
 
