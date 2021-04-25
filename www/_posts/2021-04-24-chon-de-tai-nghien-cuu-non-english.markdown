@@ -184,10 +184,146 @@ __Quan sát các sự kiện trên, bạn nghĩ B đã sai những điểm nào?
 * B đã chọn bài toán có xuất phát điểm quá cao (99.0%), và vì vậy thử thách để chứng tỏ năng lực bản thân là hầu như không có. Thậm chí, một dịch vụ tương tự như của B đã có sẵn cũng không lạ.
 * B xin vào 1 công ty có tầm nhìn xa, nhưng lại không có điểm gì để thể hiện mảng đang làm là còn chỗ khai thác. Công ty tầm nhìn xa khác Công ty ăn xổi là họ sẽ tìm kiếm cơ hội mới. Nhưng mảng những 99.0% thì bên trong có nhiều người làm tốt rồi. Họ chấp nhận tính sản phẩm không quá mạnh (và không quá yếu :D ) nhưng phải có cơ hội làm chủ thị trường.
 
+Cả A và B đã lựa chọn bài toán 1 cách không chuẩn xác ngay từ đầu. Và những quyết định tiếp theo cũng trong chuỗi hành động sai. Các yếu tố quan trọng để quyết định thành bại:
+
+* Đánh giá đúng thị trường, lựa chon bài toán vừa sức.
+* Kết nối tốt với cơ hội việc làm khi ra trường.
+
+Đi vào một số lĩnh vực cụ thể như luận án tiến sĩ, có thể có những hướng dẫn cụ thể khác [6,7]. Trong bài viết này, chúng ta sẽ tập trung vào vấn đề thị trường việc làm.
+
 ## Lựa chọn lĩnh vực và bài toán
 
 ### Đừng nghĩ các mảng cũng như nhau. Hãy đánh giá đúng tiềm năng thị trường.
+<div id="chart2"></div>
 
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 50},
+    width = 800 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg2 = d3.select("#chart2")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+var x2 = d3.scaleTime().range([0, width]);
+var y2 = d3.scaleLinear().range([height, 0]);
+var paddingForText = 10;
+  // gridlines in x axis function
+  function make_x_gridlines() {		
+      return d3.axisBottom(x2)
+          .ticks(3)
+  }
+
+  // gridlines in y axis function
+  function make_y_gridlines() {		
+      return d3.axisLeft(y2)
+          .ticks(5)
+  }
+//Read the data
+d3.csv("/assets/mot17_perf.csv",
+
+  // When reading the csv, I must format variables:
+  function(d){
+    return { year : d3.timeParse("%Y/%m/%d")(d.year), mota : d.MOTA, name: d.Tracker }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.year; }))
+      .range([ 0, width]);
+    svg2.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+    svg2.append("text")             
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("Released Year");
+       // text label for the y axis
+  svg2.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("MOTA [%]"); 
+    // add the X gridlines
+    svg2.append("g")			
+        .attr("class", "grid")
+        .attr("transform", "translate(0," + height + ")")
+        .call(make_x_gridlines()
+            .tickSize(-height)
+            .tickFormat("")
+        )
+
+    // add the Y gridlines
+    svg2.append("g")			
+        .attr("class", "grid")
+        .call(make_y_gridlines()
+            .tickSize(-width)
+            .tickFormat("")
+        )
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([55, 75])
+      .range([ height, 0]);
+    svg2.append("g")
+      .call(d3.axisLeft(y));
+    svg2.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "n")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.year) })
+        .y(function(d) { return y(d.mota) })
+        )
+
+    svg2.append("g").selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("r", 4)
+    .attr("cx", function(d) {
+        return x(d.year)
+    })
+    .attr("cy", function(d) {
+        return y(d.mota)
+    })
+    .attr("fill", "red")
+    .attr("stroke", "red")
+
+svg2.append("g").selectAll("text")
+    .data(data)
+    .enter()
+    .append("text")
+    .attr("x", function(d) {
+        return x(d.year) - paddingForText
+    })
+    .attr("y", function(d) {
+        return y(d.mota) - paddingForText
+    })
+    .attr("fill", "green")
+    .style("font-size", "12px")
+    .text(function(d) {
+        return d.name
+    });
+
+})
+
+</script>
+_**Top-20 thuật toán trên benchmark MOT17 [8] tại thời điểm bài viết. Có thể dễ thấy bắt đầu năm 2020, thuật toán tốt nhất là ISE [9] mới đạt MOTA 60.1% thì đến tháng 3 năm nay, tức là sau hơn 1 năm, phương pháp tốt nhất là MOTer [10] đã có MOTA là 71.9%. Tức là tiến bộ tầm 11.8%.**_
 ### Tiêu chí để được gọi là sản phẩm là gì?
 
 ### Tốc độ phát triển của lĩnh vực hẹp ra sao?
