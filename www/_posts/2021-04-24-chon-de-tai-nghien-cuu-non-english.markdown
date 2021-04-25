@@ -324,9 +324,36 @@ svg2.append("g").selectAll("text")
 
 </script>
 _**Top-20 thuật toán trên benchmark MOT17 [8] tại thời điểm bài viết. Có thể dễ thấy bắt đầu năm 2020, thuật toán tốt nhất là ISE [9] mới đạt MOTA 60.1% thì đến tháng 3 năm nay, tức là sau hơn 1 năm, phương pháp tốt nhất là MOTer [10] đã có MOTA là 71.9%. Tức là tiến bộ tầm 11.8%.**_
+
+So với mảng Object Detection mà chúng ta đã nói ở trên, mảng này hiện đã tiến tới 71.9% trên bộ dữ liệu có 250 ngàn đối tượng.
+Vì vậy, về mặt chuẩn công nghiệp là đã tiến khá gần mức chấp nhận lên sản phẩm.
+Tốc độ phát triển tầm 8-9%/năm.
+Tuy nhiên, mảng tracking này có những yêu cầu khắt khe hơn về xử lý real-time, các phương pháp đo, ...
+
 ### Tiêu chí để được gọi là sản phẩm là gì?
 
-### Tốc độ phát triển của lĩnh vực hẹp ra sao?
+Nhìn chung trong các bài toán AI mà có độ chính xác và sử dụng trong công nghiệp thì yêu cầu về độ chính xác là gần 100% nhất có thể.
+Thường sẽ là cuộc cạnh tranh giữa các cao thủ công nghệ về độ chính xác.
+Chuẩn chung sẽ là 99.999%.
+Tại sao thì là bạn hãy suy nghĩ xem, 1 thuật toán chỉ có độ chính xác 50% thì bạn sẽ phải tốn bao nhiêu công sức để đảm bảo rằng 50% trường hợp sai sẽ được xử lý.
+Ví dụ có 100 triệu người dùng, thì bạn sẽ phải suy nghĩ rằng sẽ có 50 triệu trường hợp sai.
+Nhưng nếu thuật toán chính xác tới 99.9% thì trong 100 triệu người dùng, sẽ chỉ có $$0.001\times 100,000,000=100,000$$ trường hợp sai.
+Nếu thuật toán chính xác tới 99.99% thì chỉ có 10 ngàn trường hợp sai.
+Và nếu chính xác tới 99.999% thì bạn sẽ phải ứng phó với chỉ 1000 trường hợp sai trên 100 triệu người dùng.
+
+_Vậy bây giờ bạn nhìn thấy giới thiệu 1 lĩnh vực mà thuật toán tốt nhất mới có được 50%, thì lên sản phẩm thế nào bây giờ?_
+
+Khi các thuật toán đạt tiêu chuẩn về độ chính xác trên tập lớn rồi thì sẽ có những tiêu chuẩn khác như tốc độ xử lý, tài nguyên, đạo đức khoa học và pháp luật [11].
+Khi thực hiện thí nghiệm trên dữ liệu của con người, có khá nhiều điểm về đạo đức, bảo vệ dữ liệu cá nhân, pháp luật mà tôi xin giới thiệu tham khảo thêm tại: [11].
+### Các chướng ngại tương lai
+
+Trong mọi dự án, foresee được các chướng ngại, nguy cơ là 1 việc phải làm.
+Ví dụ, khi chọn đối tượng là con người, các vướng mắc về an toàn dữ liệu cá nhân là bắt buộc phải nhìn ra.
+Phần lớn các dự án AI đều sẽ đòi hỏi kiểm chứng trên tập đối tượng lớn, và vì vậy nếu làm kém bảo vệ riêng tư người dùng sẽ gặp khá nhiều vấn đề với đạo đức và pháp luật, thậm chí có thể kiện cáo bồi thường hàng triệu đô la.
+
+Tốc độ phát triển của ngành nhanh hay chậm cũng ảnh hưởng tới kết quả đầu ra.
+Nếu 1 ngành ít được phát triển, thậm chí sau 1 năm có thể chẳng có tiến bộ gì về accuracy.
+Yên tâm là những mảng có phát triển đều đặn như object detection hay tracking thường có tốc độ phát triển tầm 7-8%/năm.
 
 ## Nhìn trước thị trường việc làm và cơ hội nghề nghiệp
 
