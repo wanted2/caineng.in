@@ -358,10 +358,27 @@ Yên tâm là những mảng có phát triển đều đặn như object detecti
 ## Nhìn trước thị trường việc làm và cơ hội nghề nghiệp
 
 ### Bạn định xin việc ở đâu? Công ty "ăn xổi" hay công ty "có tầm nhìn xa"?
+Sau khi có được danh sách những chủ đề và thời điểm công nghệ đó có thể lên sản phẩm, bạn phải nghĩ xem "à thế xin việc ở đâu bây giờ?"
+
+Bạn cần tìm hiểu xem các công ty công nghệ đang cần gì. Và bạn cần bỏ qua những công ty không phù hợp mà nộp và các công ty định hướng của bạn.
+Tất nhiên, đây là sau khi đã giới hạn hết chỉ còn các công ty thuộc mảng của bạn.
+
+Trước khi thảo luận về điều các công ty muốn, xin phép phân loại các công ty trong mảng AI thành
+
+* **Công ty thích "ăn xổi"**: Nhìn chung thì phần lớn các công ty có địa vị, danh tiếng, thậm chí các tập đoàn lớn thường muốn nhìn thấy sản phẩm ngay. Nhưng mà đâu phải muốn sản phẩm là có sản phẩm ngay. Lên được sản phẩm hay không là có tiêu chí rồi. Và hiện tại, ngành hẹp đang đạt được bao nhiêu là sự thực không thay đổi. Giả dụ ngành giừ các nghiên cứu tốt nhất ở Âu Mỹ mới có 60% và tốc độ phát triển chỉ 7-8% thì muốn lên sản phẩm thế nào?
+* **Công ty có tầm nhìn xa**: Thường là các công ty khởi nghiệp, công ty mới lập. Họ hiểu rằng, ăn xổi chì là nhất thời. Muốn dài lâu thì phải kiếm 1 mảng chưa đến 90% và nhảy vào làm chủ.
 
 ### Các công ty công nghệ đang cần gì?
+Công ty thích "ăn xổi" thì sẽ thường cần chuyên gia mang tới mảng có thể lên sản phẩm ngay. Vì vậy tốt nhất bạn nên có hồ sơ của những cái đã lên tới 99.999%, thậm chí có thể triển khai luôn càng tốt.
+
+Công ty có tầm nhìn xa thì lại cần những cái có thể không quá mạnh, nhưng cả thị trường đều đang yếu và cơ hội làm chủ thị trường là cao.
+
+Tốt nhất là 1 mảng mới tầm 70-80% thì sẽ hấp dẫn cả ăn xổi lần tầm nhìn xa.
 
 ### Offshore thì sao?
+Offshore thì là làm sản phẩm và mở ra thêm mảng AI nếu có nhu cầu.
+Vì vậy, có những offshore mà lại vừa có tính ăn xổi lần tính tầm nhìn xa khi tiếp cận AI.
+Bạn nên chú ý khi mang công nghệ AI tới các công ty offshore.
 
 ## Kết luận
 
