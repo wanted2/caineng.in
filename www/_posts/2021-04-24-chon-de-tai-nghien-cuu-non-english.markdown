@@ -383,8 +383,23 @@ Bạn nên chú ý khi mang công nghệ AI tới các công ty offshore.
 ## Kết luận
 
 ### Một số lĩnh vực đã đến level sản phẩm thị trường
+Cuối cùng là chúng ta cũng điểm xem các mảng nào đã đến level lên sản phẩm thị trường.
+Nên nhớ khi đã đến level lên sản phẩm, tức là cũng không có gì mới!
+
+* **Nhóm công nghệ nhận dạng (ứng dụng trong bio-metrics, eKYC, ...)**: Face Verification chẳng hạn là đã lên tới 99.9% trên tập 12 triệu đối tượng người thật [4,5].
+Các bài toán khác trong mảng này như Fingerprint hay Gait recognition cũng đạt hiệu suất trên 90% từ khá lâu.
+eKYC cũng được xây dựng trên các công nghệ cũ này và chủ yếu mang tính chuyển giao công nghệ.
+Cái quan trọng là gói công nghệ này đã lên gần 100% và các yêu cầu khác cũng khá chuẩn nên việc lên sản phẩm là không có nhiều cản trở.
+Tuy nhiên, như đã phân tích trong mục các công ty ăn xổi thì thị trường chỉ còn lại mảng ngách, hoặc chuyển giao công nghệ là chính.
+Việc làm chủ thị trường ở cấp thế giới và khu vực là khó, thậm chí trong thị trường ngách cũng sẽ là cạnh tranh khốc liệt vì là gói công nghệ đã tiêu chuẩn, nên ai cũng có thể nhanh chóng bắt nhịp.
+
+* **Nhóm công nghệ phát hiện bất thường và lên cảnh báo**: Cũng không lạ khi Amazon những năm gần đây dịch vụ hóa gói công nghệ này thành Amazon Fraud Detector (phát hiện lừa đảo, [12]) và Amazon Lookout for Equipment (phát hiện hỏng hóc trong máy móc, [13]). Dịch vụ có sẵn như vậy đương nhiên là vì độ khả thi kỹ thuật chính xác 99.99% trên tập dữ liệu lớn là đã có rồi. Tương lai gần có thể là các ứng dụng chứng khoán, với độ chính xác cũng đang gần 100%.
 
 ### Tổng kết
+
+Nhìn chung, các lời khuyên hữu ích cho việc tìm kiếm sự nghiệp trong mảng trí tuệ nhân tạo chính là xác định đúng thị trường, xác định đúng công ty muốn vào và thời điểm để đi xin việc.
+
+Có nhiều công nghệ vẫn under development, nhưng có nhiều công nghệ cũ như bio-metrics, eKYC, phát hiện bất thường đã đạt tiêu chuẩn lên sản phẩm và các công ty đã chờ chúng từ rất lâu. Nhưng cũng nên nhớ là các công ty đã làm chủ các công nghệ này từ lâu, từ khi chúng còn 70-80%, chưa đủ mức lên sản phẩm. Vậy tại sao công ty bạn không làm chủ một công nghệ mới 70-80% ngay từ bây giờ?
 
 ## Tài liệu tham khảo
 
