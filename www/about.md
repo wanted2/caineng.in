@@ -6,7 +6,11 @@ sidebar_link: true
 
 <img src='/assets/img/IMG_6283.JPG' width='128' alt='Tuan Nguyen-Anh' style="float: right;" >
 
-<h2>Tuan Nguyen-Anh</h2> Bridge System Engineer (BrSE)
+<h2>Tuan Nguyen-Anh</h2>
+
+Artificial Intelligence Engineer
+
+Bridge System Engineer (BrSE) / Project Manager (PM)
 
 <div id="webaddress">
 <a href="mailto:tuan.nguyenanh.brse@gmail.com">tuan.nguyenanh.brse@gmail.com</a>
@@ -14,6 +18,10 @@ sidebar_link: true
 <a href="{{ site.url }}"><i class="fas fa-blog"></i></a>
 <a href="https://www.facebook.com/profile.php?id=100054680134010"><i class="fab fa-facebook-square"></i></a>
 </div>
+
+# Curriculum Vitae
+
+[English](/assets/english.pdf)
 
 # Experience
 
