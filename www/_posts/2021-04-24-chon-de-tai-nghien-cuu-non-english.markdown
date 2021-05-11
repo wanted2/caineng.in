@@ -11,7 +11,24 @@ tags:
   - lời khuyên sự nghiệp
 toc: true
 ---
+<style> /* set the CSS */
 
+.tooltip {	
+    position: absolute;			
+    text-align: left;			
+    width: auto;					
+    height: 75px;					
+    padding: 2px;	
+    margin: 2px			
+    font: 10px sans-serif;		
+    background: green;
+    opacity: 0.6;	
+    border: 1px;		
+    border-radius: 5px;			
+    pointer-events: none;			
+}
+
+</style>
 <div id="chart"></div>
 
 <script>
@@ -20,7 +37,10 @@ toc: true
 var margin = {top: 10, right: 30, bottom: 30, left: 50},
     width = 800 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
-
+// Append tooltips
+var div = d3.select("body").append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
 // append the svg object to the body of the page
 var svg = d3.select("#chart")
   .append("svg")
@@ -123,6 +143,19 @@ d3.csv("/assets/coco_perf.csv",
     })
     .attr("fill", "red")
     .attr("stroke", "red")
+    .on("mouseover", function(d) {		
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            div	.html(d.name + "<br/>"  + d.map + "%")	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
+            })					
+        .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
 
 svg.append("g").selectAll("text")
     .data(data)
@@ -137,7 +170,7 @@ svg.append("g").selectAll("text")
     .attr("fill", "green")
     .style("font-size", "12px")
     .text(function(d) {
-        return d.name
+        return d.map
     });
 
 })
@@ -202,7 +235,10 @@ Cả A và B đã lựa chọn bài toán 1 cách không chuẩn xác ngay từ 
 var margin = {top: 10, right: 30, bottom: 30, left: 50},
     width = 800 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
-
+// Append tooltips
+var div2 = d3.select("#chart2").append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
 // append the svg object to the body of the page
 var svg2 = d3.select("#chart2")
   .append("svg")
@@ -303,6 +339,19 @@ d3.csv("/assets/mot17_perf.csv",
     })
     .attr("fill", "red")
     .attr("stroke", "red")
+    .on("mouseover", function(d) {		
+            div2.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            div2.html(d.name + "<br/>"  + d.mota + "%")	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
+            })					
+        .on("mouseout", function(d) {		
+            div2.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
 
 svg2.append("g").selectAll("text")
     .data(data)
@@ -317,7 +366,7 @@ svg2.append("g").selectAll("text")
     .attr("fill", "green")
     .style("font-size", "12px")
     .text(function(d) {
-        return d.name
+        return d.mota
     });
 
 })

@@ -1,5 +1,3 @@
-# coding: utf-8
-
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-theme-hydeout"
   spec.version       = "4.2.0"
