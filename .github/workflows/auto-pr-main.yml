@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.4
     - name: pull-request
-      uses: repo-sync/pull-request@v2
+      uses: repo-sync/pull-request@v2.6
       with:
         source_branch: ""                                 # If blank, default: triggered branch
         destination_branch: "main"                      # If blank, default: master
