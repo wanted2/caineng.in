@@ -8,7 +8,7 @@ jobs:
     steps:
     # The checkout step
     - uses: actions/checkout@v2.3.4
-    - uses: rojopolis/spellcheck-github-actions@0.13.0
+    - uses: rojopolis/spellcheck-github-actions@0.14.0
       name: Spellcheck
       with:
         config_path: spellcheck.yaml
