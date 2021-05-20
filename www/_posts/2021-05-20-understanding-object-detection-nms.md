@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Understanding Object Detection Algorithms: the Non-maximum-supression (NMS)"
+title: "Understanding Object Detection Algorithms: the Non-maximum-suppression (NMS)"
 excerpt_separator: "<!--more-->"
 categories:
   - cv
@@ -25,13 +25,13 @@ The process is repeated until all boxes are visited.
 ## Basic algorithms and speed-up
 
 Let the threshold be $\theta=0.33$ and start from the red box.
-Then we can remove the black and the blue ones because they have overlappings with the reference bigger than 0.33.
+Then we can remove the dark and the blue ones because they have overlappings with the reference larger than 0.33.
 Here, we chose the overlap is the rate between intersection and union of the boxes.
 It is illustrated as follows.
 
 ![](/assets/img/nms2.svg)
 
-As illustrated above, if the reference box (green one) has more than $t$ of the area of the target box (black box), then the target box is _overlapped_ with the reference and that the target should be removed.
+As illustrated above, if the reference box (green one) has more than $t$ of the area of the target box (dark box), then the target box is _overlapped_ with the reference and that the target should be removed.
 
 
 > **Algorithm parameters:** threshold  $\theta \in (0, 1]$    
@@ -63,7 +63,7 @@ I also used it in the [inference of YOLOv5](https://github.com/wanted2/yolov5-tf
 
 It is quite trivial, and often omitted issue in NMS.
 Let's see the first example we explained.
-What if we don't start from the red box but the black box?
+What if we don't start from the red box but the dark box?
 What happens is as follows.
 
 ![](/assets/img/nms3.svg)
