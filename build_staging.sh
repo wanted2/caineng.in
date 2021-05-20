@@ -1,6 +1,6 @@
 #!/bin/bash
-if [[ -d 'www' ]]; then
-    cd www;
+if [[ -d 'docs' ]]; then
+    cd docs;
     echo 'google_analytics: '${GA_STAGING_ID}'' >> _config.yml;
     JEKYLL_ENV=development bundle exec jekyll build;
     export GA=$(grep ${GA_STAGING_ID} _site/index.html)

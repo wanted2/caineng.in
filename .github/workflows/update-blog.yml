@@ -47,15 +47,15 @@ jobs:
       
       # Install dependencies
       - name: Bundling
-        run: cd www && bundle install
+        run: cd docs && bundle install
 
       # Add Google Analytics ID
       - name: Google Analytics
-        run: 'echo "google_analytics: ${{ secrets.GA_STAGING_ID }}" >> www/_config.yml'
+        run: 'echo "google_analytics: ${{ secrets.GA_STAGING_ID }}" >> docs/_config.yml'
 
       # build Jekyll website
       - name: Build Jekyll website
-        run: cd www && JEKYLL_ENV=staging bundle exec jekyll b
+        run: cd docs && JEKYLL_ENV=staging bundle exec jekyll b
 
       # S3 Sync
       - uses: jakejarvis/s3-sync-action@master
@@ -66,12 +66,12 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
-          SOURCE_DIR: 'www/_site'      # optional: defaults to entire repository
+          SOURCE_DIR: 'docs/_site'      # optional: defaults to entire repository
       
       # S3 Sync final blg
       - name: Replace urls
         if: ${{ github.ref == 'refs/heads/main' }}
-        run: cd www && mv _config.final.yml _config.yml && JEKYLL_ENV=final bundle exec jekyll b
+        run: cd docs && mv _config.final.yml _config.yml && JEKYLL_ENV=final bundle exec jekyll b
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete
@@ -81,5 +81,5 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
-          SOURCE_DIR: 'www/_site'      # optional: defaults to entire repository
+          SOURCE_DIR: 'docs/_site'      # optional: defaults to entire repository
       

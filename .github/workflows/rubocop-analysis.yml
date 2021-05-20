@@ -22,22 +22,22 @@ jobs:
 
     # This step is not necessary if you add the gem to your Gemfile
     - name: Install Code Scanning integration
-      run: cd www/ && bundle add code-scanning-rubocop --version 0.3.0 --skip-install
+      run: cd docs/ && bundle add code-scanning-rubocop --version 0.3.0 --skip-install
 
     - name: Install dependencies
-      run: cd www/ && bundle install
+      run: cd docs/ && bundle install
 
     - name: Rubocop run
       run: |
         bash -c "
-          cd www/ && bundle exec rubocop --require code_scanning --format CodeScanning::SarifFormatter -o rubocop.sarif
+          cd docs/ && bundle exec rubocop --require code_scanning --format CodeScanning::SarifFormatter -o rubocop.sarif
           [[ $? -ne 2 ]]
         "
 
     - name: Upload Sarif output
       uses: github/codeql-action/upload-sarif@v1
       with:
-        sarif_file: www/rubocop.sarif
+        sarif_file: docs/rubocop.sarif
     - name: Cache
       uses: actions/cache@v2.1.5
       with:

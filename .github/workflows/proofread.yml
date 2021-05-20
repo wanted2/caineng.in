@@ -11,4 +11,4 @@ jobs:
     - name: Orthograph-err
       uses: place-labs/orthograph-err@v1.2.0
       with:
-        path: www/_posts/*.md
+        path: docs/_posts/*.md

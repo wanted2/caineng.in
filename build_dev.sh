@@ -1,6 +1,6 @@
 #!/bin/bash
-if [[ -d 'www' ]]; then
-    cd www;
+if [[ -d 'docs' ]]; then
+    cd docs;
     export GA_DEV_ID=G-FAKEID;
     echo 'google_analytics: '${GA_DEV_ID}'' >> _config.yml;
     JEKYLL_ENV=development bundle exec jekyll build;

@@ -4,7 +4,7 @@ matrix:
     d: en_US
   dictionary:
     wordlists:
-    - www/en-custom.txt
+    - docs/en-custom.txt
     output: build/dictionary/python.dic
     encoding: utf-8
   pipeline:
