@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="https://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     AiFi &middot;
+    A freelancer blog 
+  </title>
+
+  
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface" />
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/favicon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/feed.xml"
+  />
+
+  <!-- Additional head bits without overriding original head -->
+  <style>
+    div.chart {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+  </style>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="http://bl.ocks.org/mbostock/raw/4061502/0a200ddf998aa75dfdb1ff32e16b680a15e5cb01/box.js"></script>
+</head>
+
+
+  <body class="index">
+
+    <div id="sidebar">
+  <header>
+    <h1 class="site-title">
+      <a href="/">
+        
+          <span class="back-arrow icon"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 0h24v24H0z" fill="none"/>
+  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+</svg></span>
+        
+        AiFi
+      </a>
+    </h1>
+    <p class="lead">The official AiFi</p>
+  </header>
+  <nav id="sidebar-nav-links">
+  
+    <a class="home-link "
+        href="/">Home</a>
+  
+  
+
+  
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/ai.html">Artificial Intelligence</a>
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/cv.html">Computer Vision</a>
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/non-english.html">Tiếng Việt, 日本語</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/sre.html">Site Reliability Engineering</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+
+
+  <!-- Optional additional links to insert in sidebar nav -->
+</nav>
+
+  <a href="/about.html">About</a>
+
+  
+
+  <nav id="sidebar-icon-links">
+  
+
+  <a id="subscribe-link"
+     class="icon" title="Subscribe" aria-label="Subscribe"
+     href="/feed.xml">
+    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <circle cx="6.18" cy="17.82" r="2.18"/>
+    <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
+</svg>
+  </a>
+
+  
+  
+  
+  
+
+  
+    <a id="tags-link"
+       class="icon"
+       title="Tags" aria-label="Tags"
+       href="/tags.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+    </a>
+  
+
+  
+    <a id="search-link"
+       class="icon"
+       title="Search" aria-label="Search"
+       href="/search.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+</svg>
+    </a>
+  
+
+  <!-- Optional additional links to insert for icons links -->
+</nav>
+
+  <p>
+  &copy; 2021.
+  <a href="/LICENSE.md">MIT License.</a>
+</p>
+
+</div>
+
+    <main class="container">
+      <div class="content">
+  
+<div class="pagination">
+  <a class="pagination-item newer"
+     href="/">
+    Newer
+  </a>
+</div>
+
+
+
+  
+
+  
+  <article class="post-body">
+    <h2 class="post-title">
+      <a href="/sre/2021/02/15/aws-vpc-aurora-postgresql-odoo-crm-deployment.html">
+        Deploy Odoo to AWS EC2 and Aurora with best practices
+      </a>
+    </h2>
+    <div class="post-meta">
+  <span class="post-date">15 Feb 2021</span>
+  <span class="post-categories">
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/sre.html">
+          Site Reliability Engineering
+        </a>
+      
+    
+  </span>
+  <span class="share-page">
+    &bull;
+    <a href="https://twitter.com/intent/tweet?text=Home&url=https://www.caineng.in/page2/&via=&related=" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://facebook.com/sharer.php?u=https://www.caineng.in/page2/" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square"></i></a>
+</span>
+
+</div>
+
+
+    
+      <p><img src="https://odoocdn.com/openerp_website/static/src/img/2020/home/market_position_update.svg" alt="Odoo perf" />
+<em>Source: <a href="https://odoocdn.com/openerp_website/static/src/img/2020/home/market_position_update.svg">Odoo website</a></em></p>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="what-is-odoo">What is Odoo?</h2>
+<p><a href="https://www.odoo.com/">Odoo</a> is an open-source software platform and eco-system for business apps that cover all your company needs: CRM, e-commerce, accounting, inventory, point-of-sale, project management, so on.
+The suite of open source apps is very easy-to-use and fully integrated: the customers deploy the base Odoo distribution in the Odoo cloud with few clicks or their on-premises server/cloud, and integration of the apps is without pains.
+Because every app needed for business as CRM and point-of-sale are available in the eco-system, installing can be done in some single steps.</p>
+
+
+    
+
+    
+      
+      
+      
+
+      
+        <a href="/sre/2021/02/15/aws-vpc-aurora-postgresql-odoo-crm-deployment.html">More &hellip;</a>
+      
+    
+  </article>
+  
+  <article class="post-body">
+    <h2 class="post-title">
+      <a href="/sre/2021/02/14/hybrid-cloud-vmware-on-aws.html">
+        On Hybrid Clouds: VMware Cloud on AWS
+      </a>
+    </h2>
+    <div class="post-meta">
+  <span class="post-date">14 Feb 2021</span>
+  <span class="post-categories">
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/sre.html">
+          Site Reliability Engineering
+        </a>
+      
+    
+  </span>
+  <span class="share-page">
+    &bull;
+    <a href="https://twitter.com/intent/tweet?text=Home&url=https://www.caineng.in/page2/&via=&related=" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://facebook.com/sharer.php?u=https://www.caineng.in/page2/" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square"></i></a>
+</span>
+
+</div>
+
+
+    
+      <p><em>Note: this post is about building Customer Data Center (CDC) for enterprise, not about applications for end-users.</em></p>
+
+<p><img src="/assets/img/vmcaws.png" alt="" /></p>
+
+<p>For many years, enterprise customers have been deployed their infrastructure into VMware cloud with powerful and secure virtualization technologies like <a href="https://www.vmware.com/products/vsphere.html">vSphere</a> for computing resources (VMs, .etc.), <a href="https://www.vmware.com/products/vsan.html">vSAN</a> (storage) and <a href="https://www.vmware.com/products/nsx.html">NSX</a> (networking). 
+While new and leading public cloud solutions like Amazon Web Services (AWS) offer lower cost tiers, with greater opportunities in building innovative solutions, transforming from the existing VMware cloud to AWS is a trade-off between reliability (on existing solutions) with better business offers.
+Building a hybrid cloud using <a href="https://cloud.vmware.com/vmc-aws">VMware Cloud on AWS</a> is a way to achieve both goals: maintaining customers’ trust while migrating to novel solutions.</p>
+
+    
+
+    
+      
+      
+      
+
+      
+        <a href="/sre/2021/02/14/hybrid-cloud-vmware-on-aws.html">More &hellip;</a>
+      
+    
+  </article>
+  
+  <article class="post-body">
+    <h2 class="post-title">
+      <a href="/sre/2021/02/12/oracle-cloud-infra.html">
+        About Oracle Cloud Infrastructure (OCI)
+      </a>
+    </h2>
+    <div class="post-meta">
+  <span class="post-date">12 Feb 2021</span>
+  <span class="post-categories">
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/sre.html">
+          Site Reliability Engineering
+        </a>
+      
+    
+  </span>
+  <span class="share-page">
+    &bull;
+    <a href="https://twitter.com/intent/tweet?text=Home&url=https://www.caineng.in/page2/&via=&related=" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://facebook.com/sharer.php?u=https://www.caineng.in/page2/" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square"></i></a>
+</span>
+
+</div>
+
+
+    
+      <p><img src="/assets/img/oci.png" alt="" /></p>
+
+    
+
+    
+      
+      
+      
+
+      
+        <a href="/sre/2021/02/12/oracle-cloud-infra.html">More &hellip;</a>
+      
+    
+  </article>
+  
+  <article class="post-body">
+    <h2 class="post-title">
+      <a href="/ai/2021/02/04/copynet.html">
+        Understanding CopyNet
+      </a>
+    </h2>
+    <div class="post-meta">
+  <span class="post-date">04 Feb 2021</span>
+  <span class="post-categories">
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/ai.html">
+          Artificial Intelligence
+        </a>
+      
+    
+  </span>
+  <span class="share-page">
+    &bull;
+    <a href="https://twitter.com/intent/tweet?text=Home&url=https://www.caineng.in/page2/&via=&related=" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://facebook.com/sharer.php?u=https://www.caineng.in/page2/" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square"></i></a>
+</span>
+
+</div>
+
+
+    
+      <p>CopyNet [1] is built upon the Seq2Seq framework [2] which improve accuracy by repeated patterns during conversations.
+First time hearing the name, I was confused because copying some parts of friend’s sentences is not technically interesting.
+However, I found that this <code class="language-plaintext highlighter-rouge">copying mechanism</code> is somewhat realistic: we are often copying each other even what other people are saying.
+For example, when your friend tell you that <code class="language-plaintext highlighter-rouge">Hi, my name is Jessy!</code>, then a popular response would be <code class="language-plaintext highlighter-rouge">Hi, Jessy!</code>. You should copy the name <code class="language-plaintext highlighter-rouge">Jessy</code> as a quite normal reaction.
+In contrast, if you are too imaginative and instead of <code class="language-plaintext highlighter-rouge">copying</code>, you <code class="language-plaintext highlighter-rouge">generate</code> a response like <code class="language-plaintext highlighter-rouge">Hi, Michael</code> to Jessy, this would be ridiculous.
+Then by incorporating the <code class="language-plaintext highlighter-rouge">copying behavior</code> into RNN Encoder-Decoder framework [2], it would make the question-answering goes smoothly.</p>
+
+
+    
+
+    
+      
+      
+      
+
+      
+        <a href="/ai/2021/02/04/copynet.html">More &hellip;</a>
+      
+    
+  </article>
+  
+  <article class="post-body">
+    <h2 class="post-title">
+      <a href="/ai/2021/02/03/neural-translation.html">
+        Statistical Machine Translation: Alignment methods
+      </a>
+    </h2>
+    <div class="post-meta">
+  <span class="post-date">03 Feb 2021</span>
+  <span class="post-categories">
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/ai.html">
+          Artificial Intelligence
+        </a>
+      
+    
+  </span>
+  <span class="share-page">
+    &bull;
+    <a href="https://twitter.com/intent/tweet?text=Home&url=https://www.caineng.in/page2/&via=&related=" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://facebook.com/sharer.php?u=https://www.caineng.in/page2/" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square"></i></a>
+</span>
+
+</div>
+
+
+    
+      
+
+    
+
+    
+      
+      
+      
+
+      
+        <a href="/ai/2021/02/03/neural-translation.html">More &hellip;</a>
+      
+    
+  </article>
+  
+
+  
+
+</div>
+    </main>
+
+    <!-- Optional footer content -->
+
+    <script src="https://kit.fontawesome.com/d0b91d895e.js" crossorigin="anonymous"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </body>
+</html>

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="https://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Bàn về thiết kế hệ thống có quản lý users: Cây nhà lá vườn hay ăn sẵn? &middot; AiFi 
+  </title>
+
+  
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface" />
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/favicon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/feed.xml"
+  />
+
+  <!-- Additional head bits without overriding original head -->
+  <style>
+    div.chart {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+  </style>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="http://bl.ocks.org/mbostock/raw/4061502/0a200ddf998aa75dfdb1ff32e16b680a15e5cb01/box.js"></script>
+</head>
+
+
+  <body class="post">
+
+    <div id="sidebar">
+  <header>
+    <div class="site-title">
+      <a href="/">
+        
+          <span class="back-arrow icon"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 0h24v24H0z" fill="none"/>
+  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+</svg></span>
+        
+        AiFi
+      </a>
+    </div>
+    <p class="lead">The official AiFi</p>
+  </header>
+  <nav id="sidebar-nav-links">
+  
+    <a class="home-link "
+        href="/">Home</a>
+  
+  
+
+  
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/ai.html">Artificial Intelligence</a>
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/cv.html">Computer Vision</a>
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/non-english.html">Tiếng Việt, 日本語</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/sre.html">Site Reliability Engineering</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <!-- Optional additional links to insert in sidebar nav -->
+</nav>
+
+  <a href="/about.html">About</a>
+
+  
+
+  <nav id="sidebar-icon-links">
+  
+
+  <a id="subscribe-link"
+     class="icon" title="Subscribe" aria-label="Subscribe"
+     href="/feed.xml">
+    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <circle cx="6.18" cy="17.82" r="2.18"/>
+    <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
+</svg>
+  </a>
+
+  
+  
+  
+  
+
+  
+    <a id="tags-link"
+       class="icon"
+       title="Tags" aria-label="Tags"
+       href="/tags.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+    </a>
+  
+
+  
+    <a id="search-link"
+       class="icon"
+       title="Search" aria-label="Search"
+       href="/search.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+</svg>
+    </a>
+  
+
+  <!-- Optional additional links to insert for icons links -->
+</nav>
+
+  <p>
+  &copy; 2021.
+  <a href="/LICENSE.md">MIT License.</a>
+</p>
+
+</div>
+
+    <main class="container">
+      <header>
+  <h1 class="post-title">Bàn về thiết kế hệ thống có quản lý users: Cây nhà lá vườn hay ăn sẵn?</h1>
+</header>
+<div class="content">
+  <div class="post-meta">
+  <span class="post-date">13 Mar 2021</span>
+  <span class="post-categories">
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/sre.html">
+          Site Reliability Engineering
+        </a>
+      
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/non-english.html">
+          Tiếng Việt, 日本語
+        </a>
+      
+    
+  </span>
+  <span class="share-page">
+    &bull;
+    <a href="https://twitter.com/intent/tweet?text=Bàn về thiết kế hệ thống có quản lý users: Cây nhà lá vườn hay ăn sẵn?&url=https://www.caineng.in/sre/non-english/2021/03/13/ban-ve-thiet-ke-he-thong-co-quan-ly-user-non-english.html&via=&related=" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://facebook.com/sharer.php?u=https://www.caineng.in/sre/non-english/2021/03/13/ban-ve-thiet-ke-he-thong-co-quan-ly-user-non-english.html" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square"></i></a>
+</span>
+
+<span title="Estimated read time">
+  
+  
+    16 mins
+  
+</span>
+
+</div>
+
+  <div id="table-of-contents">
+  <h2>Index</h2>
+    <ol id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#giới-thiệu">Giới thiệu</a></li>
+<li class="toc-entry toc-h2"><a href="#các-hình-thái-quản-lý-người-dùng">Các hình thái quản lý người dùng</a></li>
+<li class="toc-entry toc-h2"><a href="#của-nhà-trồng-được-và-đồ-ăn-sẵn">“Của nhà trồng được” và “Đồ ăn sẵn”</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#lợi-ích-của-các-giải-pháp-iam-bên-thứ-3-có-sẵn">Lợi ích của các giải pháp IAM bên thứ 3 (có sẵn)</a></li>
+<li class="toc-entry toc-h3"><a href="#các-giải-pháp-tự-build">Các giải pháp tự build</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h2"><a href="#các-yếu-tố-cần-xem-xét-khi-lựa-chọn-dịch-vụ-iam-và-các-dịch-vụ-iam-khuyên-dùng">Các yếu tố cần xem xét khi lựa chọn dịch vụ IAM và các dịch vụ IAM khuyên dùng</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#các-yếu-tố-nên-xem-xét">Các yếu tố nên xem xét</a></li>
+<li class="toc-entry toc-h3"><a href="#giới-thiệu-sơ-qua-về-các-dịch-vụ-định-danh-nổi-bật-trên-thị-trường">Giới thiệu sơ qua về các dịch vụ định danh nổi bật trên thị trường</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h2"><a href="#tổng-kết">Tổng kết</a></li>
+<li class="toc-entry toc-h2"><a href="#tài-liệu-tham-khảo">Tài liệu tham khảo</a></li>
+</ol>
+  </div>
+
+  <div class="post-body">
+    <p><img src="https://images.ctfassets.net/kbkgmx9upatd/6kbL4HCOIufohPQq4dLuUg/b703a314b88daa939d62d7b0bf3e54fc/User_Profiles__1_.png" alt="" /></p>
+
+<p><em>Nguồn: [1]</em></p>
+
+<p><strong>Quản lý người dùng (Identity and Access Management, IAM hay user management)</strong> luôn là một mục quan trọng trong mọi thiết kế hệ thống.
+Vấn đề bảo vệ dữ liệu riêng tư người dùng, quản lý phân quyền và quản lý truy cập, đều là các vấn đề có thể nói là đau đầu không khác gì “bệnh ung thư”.
+Tuy vậy, cần chú ý rằng việc quyết định lựa chọn giải pháp tự build lấy (tôi xin dùng thuật ngữ “cây nhà lá vườn” của hội nông dân để chỉ giải pháp này) và giải pháp sử dụng nhà cung cấp có sẵn, thì cái nào hơn?
+Câu trả lời là tùy thuộc vào bài toán business của bạn, nhưng theo ý kiến cá nhân thì nhìn chung, với các khởi nghiệp nhỏ và các business mà bạn muốn tập trung vào chuyên môn hơn là lo những vấn đề không phải chuyên môn mà lại dễ tạo ra “bệnh ung thư” trong cả tổ chức như quản lý người dùng, thì giải pháp sử dụng nhà cung cấp có sẵn đôi khi rất fair.
+Bạn vẫn quản lý được người dùng với quy trình chất lượng thỏa mãn các tiêu chuẩn của IETF (1 tổ chức kiểu ISO dành cho Internet và bảo mật) nhưng vẫn không phải tốn thời gian cho những thứ ngoài chuyên môn.</p>
+
+<!--more-->
+<h2 id="giới-thiệu">Giới thiệu</h2>
+
+<p><strong>Quản lý người dùng (Identity and Access Management, IAM hay user management)</strong> là 1 phần quan trọng trong mọi hệ thống quản trị thông tin.
+Về cơ bản, bạn vẫn thường thấy như khi tạo tài khoản cho 1 dịch vụ như Facebook, bạn sẽ được cung cấp 1 <strong>định danh duy nhất</strong> đi kèm với thông tin bạn đã cung cấp (email và địa chỉ, .v.v…), bạn sẽ được tạo 1 profile, được phép chỉ định thông tin nào hiển thị và không hiện thị công khai hay là <strong>giới hạn quyền truy cập</strong> vào thông tin cá nhân của bạn.
+Về phía nhà cung cấp dịch vụ Facebook, họ sẽ lưu trữ dữ liệu của bạn vào <strong>user store</strong> của họ và <strong>phân quyền truy cập</strong> (đọc, ghi đè, chỉnh sửa, xóa) lên dữ liệu của bạn.
+Bạn bắt buộc phải tạo tài khoản và đăng nhập để sử dụng dịch vụ.</p>
+
+<p>Rất nhiều tình huống kinh doanh đòi hỏi IAM và quản lý người dùng:</p>
+
+<ul>
+  <li><strong>B2B</strong>: Dịch vụ của bạn cho phép người dùng sử dụng định danh của riêng cty họ. Như Trello cho phép người dùng liên kết sử dụng tài khoản cty.</li>
+  <li><strong>B2C</strong>: Dịch vụ của bạn cho phép người dùng sử dụng định danh của 1 dịch vụ xã hội khác như Gmail, Facebook, Twitter, .v.v…</li>
+  <li><strong>B2E</strong>: Dịch vụ của bạn cho phép nhân viên đăng nhập 1 lần duy nhất.</li>
+</ul>
+
+<p>Hậu quả của việc quản lý người dùng kém chính là việc thông tin người dùng bị lọt ra ngoài và trong môi trường kinh doanh chuyên nghiệp, 1 SLA cơ bản của mọi dịch vụ chính là cam kết bảo vệ riêng tư người dùng.
+Tuy nhiên, có nhiều nguyên nhân dẫn đến những sự vụ lọt dữ liệu cá nhân riêng tư của người dùng như quản lý yếu kém, thực thi thiếu, .v.v…
+Để đảm bảo những yếu tố trên, bắt buộc bên thực thi chức năng hệ thống quản lý người dùng cần có làm bài bản và công phu.
+Tuy nhiên, với khá nhiều business cases, chủ yếu các công ty khởi nghiệp quy mô nhỏ hoặc các công ty viện nghiên cứu, nơi yếu tố tập trung vào chuyên môn, ý tưởng nghiệp vụ quan trọng hơn những vấn đề không phải chuyên môn của họ, việc sử dụng giải pháp của nhà cung cấp bên thứ 3 trở nên cấp thiết.
+Và bên thứ 3, bên cung cấp giải pháp có sẵn bắt buộc phải đáng tin cậy, với chất lượng thể hiện qua SLA phải thật cao. (<em>SLA sẽ quan trọng hơn SLO/SLI hay KPI rất nhiều, vì SLO/SLI hay KPI chỉ là các chỉ số nội bộ vô giá trị với người dùng, còn SLA mới là cái cam kết với người dùng là dịch vụ của bạn sẽ cung cấp những hạng mục này với chất lượng như thế này</em>).</p>
+
+<h2 id="các-hình-thái-quản-lý-người-dùng">Các hình thái quản lý người dùng</h2>
+
+<p><img src="/assets/img/iam.png" alt="" /></p>
+
+<p>Đầu tiên, chúng ta xem lại một vài khái niệm về định danh và quản lý người dùng.</p>
+
+<ul>
+  <li>
+    <p><strong>Định danh liên bang (Federated Identity)</strong>: dữ liệu định danh được di chuyển giữa các server (A và B) mà không vi phạm kiểm tra nguồn gốc (origin). Việc này được thực hiện bởi server IAM bên ngoài.
+Nhờ vào hình thái này, người dùng của dịch vụ A có thể đăng nhập và dịch vụ B mà chưa hề đăng ký ở B.</p>
+  </li>
+  <li>
+    <p><strong>Single Sign-On</strong>: đăng nhập 1 lần. Giả sử có 1 hệ sinh thái bao gồm nhiều dịch vụ khác nhau, thì đăng nhập 1 lần tức là người dùng của dịch vụ này chỉ cần đăng nhập và dịch vụ đã đăng ký là có thể tự do truy cập vào mội dịch vụ trong hệ sinh thái.
+Để thực hiện hình thái này, đòi hỏi trong hệ sinh thái có 1 dịch vụ IAM để thực hiện định dạng liên bang, tức là vận chuyển dữ liệu định danh của user giữa các dịch vụ.</p>
+  </li>
+  <li>
+    <p><strong>Định danh liên bang trong doanh nghiệp (Enterprise Federated)</strong>: Định danh liên bang được dùng với các kết nối dịch vụ trong doanh nghiệp như Active Directory, SAML, LDAP, Google Apps, .v.v…</p>
+  </li>
+</ul>
+
+<p>Các hình thức định danh kể trên giúp việc quản lý người dùng được đồng bộ trong toàn doanh nghiệp cũng như hệ sinh thái. Trong tiếng Nhật, gọi đó là 一元管理, tức là thay vì quản lý theo nhiều dịch vụ nhiều phương diện khác nhau, sự quản lý được đơn giản hóa thành quản lý 1 chiều thống nhất.</p>
+
+<p>Quản lý người dùng là lĩnh vực đang biến đổi với sự gia tăng nhanh chóng của các thiết bị nhỏ gọn như điện thoại di động.
+Do đó, các công nghệ mới trong toàn lĩnh vực này bao gồm <strong>Đăng nhập 1 lần (Single Sign-On)</strong>, <strong>Đăng nhập không mật khẩu (Passwordless)</strong> và <strong>Định danh đa hình thái (Multi-factor Authentication)</strong> đang trở nên nóng hổi.
+<em>Multifactor Authentication (MFA)</em> thực hiện định danh nhiều cửa để tăng tính bảo mật.
+<em>Passwordless</em> sử dụng các biện pháp định danh ngoài mật khẩu truyền thống như bio-metrics (vân tay, khuôn mặt, .v.v…).</p>
+
+<p>Thêm vào đó, các ứng dụng sử dụng dịch vụ đám mây như Amazon Web Services (AWS) hay Google Apps, cũng cần thực thi IAM do họ lưu trữ dữ liệu người dùng trên các server trên đám mây.
+Ngoài ra, <em>social authentication</em> cũng là một nhu cầu do các ứng dụng B2C đòi hỏi liên kết với các mạng xã hội để nâng cao hiệu quả quảng cáo, marketing, cũng như gia tăng trải nghiệm người dùng.
+Với các ứng dụng B2E thì ngược lại, họ không phải quan tâm đến quá nhiều phân quyền và nhiều cấp độ truy cập. Nhưng nhà quản lý (admin) sẽ phải chịu trách nhiệm tạo tài khoản khi có thành viên mới gia nhập và vô hiệu tài khoản khi thành viên rời đi.</p>
+
+<h2 id="của-nhà-trồng-được-và-đồ-ăn-sẵn">“Của nhà trồng được” và “Đồ ăn sẵn”</h2>
+<h3 id="lợi-ích-của-các-giải-pháp-iam-bên-thứ-3-có-sẵn">Lợi ích của các giải pháp IAM bên thứ 3 (có sẵn)</h3>
+
+<p>Như các bạn đã thấy ở trên, so với quản lý người dùng truyền thống (tự build và tự update khi bắt buộc), các giải pháp quản lý trong một hệ sinh thái lớn đòi hỏi nhiều phương thức định danh mới như định dang liên bang mà vì thế việc cân nhắc đưa một giải pháp IAM vào tổ chức là cần thiết cho mọi nhà quản lý hệ thống IT hiện nay.
+Chúng ta xem lại lợi ích của các giải pháp này:</p>
+
+<p>Đối với mọi hệ thống IT:</p>
+
+<ul>
+  <li>
+    <p><strong>Giảm chi phí kỹ thuật</strong>: Sử dụng giải pháp IAM bên thứ 3 tương đương với giảm thiểu chi phí kỹ thuật cho việc thực hiện các chức năng IAM bên trong tổ chức của bạn. Nói ngắn gọn, là bạn sẽ tập trung được vào các chức năng chuyên môn thay vì bận rộn lo thủ tục giấy tờ mà hay gọi là các công việc mang tính chất overhead. Như vậy đồ ăn sẵn nói một cách fair thì rẻ hơn nhiều so với của nhà trồng được. Nếu không tính chi phí phát sinh trong quá trình vận hành, sửa lỗi, quản lý chất lượng.</p>
+  </li>
+  <li>
+    <p><strong>Tăng độ tin cậy và bảo mật</strong>: Lưu trữ dữ liệu trên server của bên thứ 3 giúp dữ liệu của người dùng của bạn an toàn khỏi … chính bạn. Đơn cử như việc dùng lại mật khẩu để tránh phải nhớ nhiều mật khẩu dẫn đến quản lý dữ liệu yếu kém. Ủy thác công việc “đau đầu” này cho bên thứ 3 giúp bạn nhẹ tay khỏi những nghiệp vụ này, đồng thời an ninh được đảm bảo hơn nhờ những công nghệ xác thực mới như Passwordless hay MFA.</p>
+  </li>
+</ul>
+
+<p>Đối với nhóm hệ thống B2B:</p>
+
+<ul>
+  <li>
+    <p><strong>Gia tăng tốc độ hiện đại hóa doanh nghiệp</strong>: Với chức năng định danh doanh nghiệp (Enterprise Federation), người dùng được “chắp thêm cánh” với hàng loạt công nghệ bảo mật mới, đồng thời an toàn kết nối với hàng loạt dịch vụ tiện lợi như Active Directory, Google Apps, .v.v… Với SSO, người dùng thậm chí không cần nhớ username hay password, thậm chí dù bạn vẫn muốn user dùng mật khẩu, vẫn có những giải pháp IAM an toàn và ready-to-use.</p>
+  </li>
+  <li>
+    <p><strong>Tăng lợi nhuận</strong>: Bằng việc cung cấp dịch vụ IAM thuận tiện và an toàn, những dịch vụ bên thứ 3 khiến tăng tỷ lệ engagement của khách hàng khiến bạn có thêm khách hàng doanh nghiệp trung thành, đồng thời giảm thiệt hại cho việc khách hàng bỏ dùng dịch vụ giữa chừng.</p>
+  </li>
+  <li>
+    <p><strong>Rút ngắn quá trình sales và onboarding (huấn luyện nhân viên mới)</strong>: Các tiêu chuẩn bảo mật đã được ship sẵn trong gói dịch vụ bên thứ 3 như của Auth0 hay AWS Cognito khiến cho đội ngũ sales tập trung vào công việc chuyên môn, giúp ngắn thời gian xây dựng và triển khai giải pháp.
+Đối với khách hàng B2B có đội ngũ nhân viên mới lớn, giải pháp “ăn sẵn” của bên thứ 3 giúp nhân viên mới nhanh chóng nắm bắt và tuân thủ các quy định bảo mật, và đương nhiên nhanh chóng tiếp cận công việc chuyên môn chính.</p>
+  </li>
+</ul>
+
+<p>Đối với nhóm hệ thống B2C:</p>
+
+<ul>
+  <li><strong>Hút khách hàng</strong>: Bằng việc cung cấp giải pháp tiêu chuẩn, đồng bộ (form login, các quy trình xử lý), giải pháp IAM giúp khách hàng của doanh nghiệp nhanh chóng tiếp cận dịch vụ, bỏ bớt nhiều công đoạn mang tính thủ tục.</li>
+</ul>
+
+<p>Đối với nhóm hệ thống B2E:</p>
+
+<ul>
+  <li>
+    <p><strong>Rút ngắn thời gian tác vụ ngoài chuyên môn với SSO</strong>: Với SSO, người dùng có thể truy cập nhiều dịch vụ khác nhau chỉ thông qua 1-click.
+Kết nối tới các giải pháp ERP, CRM, Saleforces, Office 365, .v.v… đã đều ở trạng thái ready-to-use.</p>
+  </li>
+  <li>
+    <p><strong>Hỗ trợ phân quyền</strong>: Quản lý truy cập của người dùng mới và người dùng đã kết thúc được quy chuẩn hóa.</p>
+  </li>
+</ul>
+
+<h3 id="các-giải-pháp-tự-build">Các giải pháp tự build</h3>
+
+<p>Nếu tổ chức của bạn đã có sẵn một giải pháp “tự” quản lý, tôi hiểu rất khó để “chuyển đổi số”.
+Tuy vậy, bắt đầu chuyển đổi số nên bắt đầu từ những cấp quản lý, vì đây là nghiệp vụ mang tính overhead khá cao.
+So với giải pháp bên thứ 3 đang ngày càng phong phú, hầu như giải pháp tự build khó có ưu điểm nào vượt trội, đặc biệt trong các lĩnh vực mà có nhiều “cá mập” như security.
+Do đó nếu doanh nghiệp mới bắt đầu tìm cách thực thi giải pháp security, hầu như chúng tôi không tư vấn để thực hiện bằng build với code bao giờ, vì giá thành vừa cao mà dễ bị lỗi do nhân tố con người (human errors).</p>
+
+<h2 id="các-yếu-tố-cần-xem-xét-khi-lựa-chọn-dịch-vụ-iam-và-các-dịch-vụ-iam-khuyên-dùng">Các yếu tố cần xem xét khi lựa chọn dịch vụ IAM và các dịch vụ IAM khuyên dùng</h2>
+
+<h3 id="các-yếu-tố-nên-xem-xét">Các yếu tố nên xem xét</h3>
+
+<p>Như đã nói, thị trường security là đã “bão hòa” và lắm cá mập.
+Nhưng ngay cả việc chỉ việc lựa chọn trong đám cá mập để xài thì cũng có rất nhiều.
+Nên chúng tôi cung cấp dưới đây danh sách yếu tố nên quan tâm khi lựa chọn nhà cung cấp giải pháp.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>Yếu tố</strong></th>
+      <th><strong>Giải thích</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Hình thái triển khai</strong></td>
+      <td>Nên lựa chọn giải pháp có thể triển khai ở bất cứ đâu. Ví dụ, giải pháp có thể triển khai trên cloud của cty giải pháp, trên cloud của khách hàng, hoặc trên data center của chính khách hàng.</td>
+    </tr>
+    <tr>
+      <td><strong>Khả năng tích hợp</strong></td>
+      <td>Tìm kiếm giải pháp có SDKs tốt, tài liệu hướng dẫn chuẩn chỉnh, APIs mạnh, các tính năng hoàn chỉnh, phong phú và quan trọng nhất là dễ cấu hình cho nhân lực của cty bạn.</td>
+    </tr>
+    <tr>
+      <td><strong>Sự hỗ trợ với các nhà cung cấp dịch vụ định danh khác</strong></td>
+      <td>Microsoft Active Directory, ADFS, Office 365,Google Apps và SAML là những nhà cung cấp dịch vụ mà 1 giải pháp security tốt nên hỗ trợ. Bạn nên kiểm tra kỹ xem các nhà cung cấp dịch vụ định danh mà giải pháp của bạn hỗ trợ có phù hợp nhu cầu cuả cty bạn không.</td>
+    </tr>
+    <tr>
+      <td><strong>Khả năng mở rộng</strong></td>
+      <td>Giải pháp security bạn lựa chọn có dễ dàng cho bạn khi muốn customize quy trình đăng nhập và đăng ký không? Nếu business của bạn thường xuyên thay đổi theo nhu cầu người dùng, bạn nên cân nhắc giải pháp có hỗ trợ mạnh việc customize (như trong e-commerce, tôi vẫn khuyên anh em xài wordpress vì nó nhiều plugin, khả năng mở rộng mạnh mà ít phải code).</td>
+    </tr>
+    <tr>
+      <td><strong>Bộ tính năng</strong></td>
+      <td>Bạn nên chọn giải pháp có bộ tính năng tốt nhất trên thị trường.</td>
+    </tr>
+    <tr>
+      <td><strong>Khả năng dịch chuyển</strong></td>
+      <td>Khả năng dịch chuyển dữ liệu giữa các server, hoặc từ data centers của khách hàng lên cloud của giải pháp là những yếu tố nên có.</td>
+    </tr>
+    <tr>
+      <td><strong>Dịch vụ hỗ trợ</strong></td>
+      <td>Dịch vụ hỗ trợ tốt, nhanh, 24/7 là yếu tố nên có.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="giới-thiệu-sơ-qua-về-các-dịch-vụ-định-danh-nổi-bật-trên-thị-trường">Giới thiệu sơ qua về các dịch vụ định danh nổi bật trên thị trường</h3>
+
+<p>Nhìn chung mảng bảo mật và dịch vụ định danh khá là nhiều “cá mập”.
+Vì vậy, tôi nghĩ sẽ không khó để tìm được 1 dịch vụ có đầy đủ các yếu tố kể trên, cộng thêm reviews tốt nữa để nhấn nút đặt hàng.
+Nếu bạn đã triển khai dịch vụ của bạn trên cloud, đương nhiên tích hợp giải pháp định danh mà nhà cung cấp cloud có sẵn là cách đồng bộ nhất.
+Ví dụ bạn đang dùng AWS thì tốt nhất nên dùng Cognito.
+Còn nếu bạn đang triển khai trên data center của riêng cty bạn hoặc bạn vì lý do nào đó không thích giải pháp mà cloud offer, bạn có thể xem xét một số nhà cung cấp thứ 3 khác như Auth0.
+Ngoài ra, chú ý là Auth0 [1, 2] cũng hỗ trợ định danh đến từ Cognito [3], Microsoft Active Directory [4] hay Google Identity Platform [5].
+Còn 1 danh sách dài khác các ứng cử viên (cả cá mập, cá lớn lẫn cá bé) trong lĩnh vực security này, tôi xin phép đề cập khi có dịp.</p>
+
+<h2 id="tổng-kết">Tổng kết</h2>
+
+<p>Nhìn chung, sự ra đời của hàng loạt dịch vụ định danh và bảo mật tính theo chiều dài lịch sử của Internet từ bong bóng Dotcom những năm 2000 đã tạo nên cục diện ngày hôm nay.
+Hầu như các giải pháp bên thứ 3 đã cung cấp nền tảng đầy đủ tính năng và phong phú về ứng dụng cho người dùng trong mảng định danh và bảo mật.
+Vì có quá nhiều nên cuộc cạnh tranh đã khiến cho người dùng có thể thoải mái lựa chọn giải pháp phù hợp nhất cho nhu cầu của mình.
+Đứng về góc độ business, tôi tin tưởng tương lai chuyển đổi số sẽ đứng về phía các dịch vụ có sẵn.
+Dù xây thì thực chất bên dưới vẫn là các nền tảng có sẵn.
+Công việc của người làm quản lý sẽ được rút ngắn, tránh overhead cho những nghiệp vụ người dùng.
+Người quản lý sẽ tập trung vào chuyên môn của doanh nghiệp và phần thời gian cho nghiệp vụ người dùng sẽ ở mức độ thao tác trên giao diện web ở mức kéo thả và thao tác cơ bản.</p>
+
+<h2 id="tài-liệu-tham-khảo">Tài liệu tham khảo</h2>
+<ol class="bibliography"><li><span id="NeverCom29:online">Auth0. <i>Never Compromise on Identity</i>. https://auth0.com/user-management.</span></li>
+<li><span id="buildvsb19:online">Auth0 Whitepaper. <i>Build vs Buy: Guide to Identity Management</i>.</span></li>
+<li><span id="AmazonCo96:online">Services, A. W. <i>Amazon Cognito – Đăng nhập và đăng ký cho người dùng đơn giản và bảo mật | Amazon Web Services (AWS)</i>. https://aws.amazon.com/vi/cognito/.</span></li>
+<li><span id="Identity83:online">Microsoft. <i>Identity and Access documentation | Microsoft Docs</i>. https://docs.microsoft.com/en-us/windows-server/identity/identity-and-access.</span></li>
+<li><span id="Identity68:online">Cloud, G. <i>Identity Platform  |  ID プラットフォーム  |  Google Cloud</i>. https://cloud.google.com/identity-platform/.</span></li></ol>
+
+    
+
+
+
+<div class="post-tags">
+  
+    
+    <a href="/tags.html#thiết-kế-hệ-thống">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">thiết kế hệ thống</span>
+    </a>
+  
+    
+    <a href="/tags.html#kỹ-sư-sre">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">kỹ sư SRE</span>
+    </a>
+  
+    
+    <a href="/tags.html#sre">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">sre</span>
+    </a>
+  
+    
+    <a href="/tags.html#user-management">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">user management</span>
+    </a>
+  
+    
+    <a href="/tags.html#quản-lý-người-dùng">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">quản lý người dùng</span>
+    </a>
+  
+    
+    <a href="/tags.html#iam">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">iam</span>
+    </a>
+  
+    
+    <a href="/tags.html#identity-and-access-management">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">identity and access management</span>
+    </a>
+  
+</div>
+  </div>
+
+  
+  <section class="comments">
+    <h2>Comments</h2>
+    
+  <div id="disqus_thread">
+    <button class="disqus-load" onClick="loadDisqusComments()">
+      Load Comments
+    </button>
+  </div>
+  <script>
+
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW
+  *  TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT:s
+  *  https://disqus.com/admin/universalcode/#configuration-variables
+  */
+  var disqus_config = function () {
+    this.page.url = "https://www.caineng.in/sre/non-english/2021/03/13/ban-ve-thiet-ke-he-thong-co-quan-ly-user-non-english.html";
+    this.page.identifier = "" ||
+                           "https://www.caineng.in/sre/non-english/2021/03/13/ban-ve-thiet-ke-he-thong-co-quan-ly-user-non-english.html";
+  }
+  function loadDisqusComments() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//caineng.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  </script>
+  <noscript>
+    Please enable JavaScript to view the
+    <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.
+  </noscript>
+
+
+
+  </section>
+
+  <section class="related">
+  <h2>Related Posts</h2>
+  <ul class="posts-list">
+    
+      <li>
+        <h3>
+          <a href="/cv/ai/2021/05/20/understanding-object-detection-nms.html">
+            Understanding Object Detection Algorithms: the Non-maximum-suppression (NMS)
+            <small>20 May 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english.html">
+            Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp trong ngành trí tuệ nhân tạo?
+            <small>24 Apr 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt.html">
+            Implementing a complex system in AWS Lambda: Should or shouldn't?
+            <small>03 Apr 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</section>
+
+</div>
+
+    </main>
+
+    <!-- Optional footer content -->
+
+    <script src="https://kit.fontawesome.com/d0b91d895e.js" crossorigin="anonymous"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </body>
+</html>

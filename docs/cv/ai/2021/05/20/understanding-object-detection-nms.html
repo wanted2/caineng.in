@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="https://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Understanding Object Detection Algorithms: the Non-maximum-suppression (NMS) &middot; AiFi 
+  </title>
+
+  
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface" />
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/favicon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/feed.xml"
+  />
+
+  <!-- Additional head bits without overriding original head -->
+  <style>
+    div.chart {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+  </style>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="http://bl.ocks.org/mbostock/raw/4061502/0a200ddf998aa75dfdb1ff32e16b680a15e5cb01/box.js"></script>
+</head>
+
+
+  <body class="post">
+
+    <div id="sidebar">
+  <header>
+    <div class="site-title">
+      <a href="/">
+        
+          <span class="back-arrow icon"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 0h24v24H0z" fill="none"/>
+  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+</svg></span>
+        
+        AiFi
+      </a>
+    </div>
+    <p class="lead">The official AiFi</p>
+  </header>
+  <nav id="sidebar-nav-links">
+  
+    <a class="home-link "
+        href="/">Home</a>
+  
+  
+
+  
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/ai.html">Artificial Intelligence</a>
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/cv.html">Computer Vision</a>
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/non-english.html">Tiếng Việt, 日本語</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/sre.html">Site Reliability Engineering</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <!-- Optional additional links to insert in sidebar nav -->
+</nav>
+
+  <a href="/about.html">About</a>
+
+  
+
+  <nav id="sidebar-icon-links">
+  
+
+  <a id="subscribe-link"
+     class="icon" title="Subscribe" aria-label="Subscribe"
+     href="/feed.xml">
+    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <circle cx="6.18" cy="17.82" r="2.18"/>
+    <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
+</svg>
+  </a>
+
+  
+  
+  
+  
+
+  
+    <a id="tags-link"
+       class="icon"
+       title="Tags" aria-label="Tags"
+       href="/tags.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+    </a>
+  
+
+  
+    <a id="search-link"
+       class="icon"
+       title="Search" aria-label="Search"
+       href="/search.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+</svg>
+    </a>
+  
+
+  <!-- Optional additional links to insert for icons links -->
+</nav>
+
+  <p>
+  &copy; 2021.
+  <a href="/LICENSE.md">MIT License.</a>
+</p>
+
+</div>
+
+    <main class="container">
+      <header>
+  <h1 class="post-title">Understanding Object Detection Algorithms: the Non-maximum-suppression (NMS)</h1>
+</header>
+<div class="content">
+  <div class="post-meta">
+  <span class="post-date">20 May 2021</span>
+  <span class="post-categories">
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/cv.html">
+          Computer Vision
+        </a>
+      
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/ai.html">
+          Artificial Intelligence
+        </a>
+      
+    
+  </span>
+  <span class="share-page">
+    &bull;
+    <a href="https://twitter.com/intent/tweet?text=Understanding Object Detection Algorithms: the Non-maximum-suppression (NMS)&url=https://www.caineng.in/cv/ai/2021/05/20/understanding-object-detection-nms.html&via=&related=" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://facebook.com/sharer.php?u=https://www.caineng.in/cv/ai/2021/05/20/understanding-object-detection-nms.html" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square"></i></a>
+</span>
+
+<span title="Estimated read time">
+  
+  
+    3 mins
+  
+</span>
+
+</div>
+
+  <div id="table-of-contents">
+  <h2>Index</h2>
+    <ol id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#basic-algorithms-and-speed-up">Basic algorithms and speed-up</a></li>
+<li class="toc-entry toc-h2"><a href="#discussions">Discussions</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#why-sorting-the-boxes-before-running-nms">Why sorting the boxes before running nms?</a></li>
+<li class="toc-entry toc-h3"><a href="#should-we-prune-low-confidence-boxes-before-or-after-running-nms">Should we prune low-confidence boxes before or after running NMS?</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h2"><a href="#conclusion">Conclusion</a></li>
+<li class="toc-entry toc-h2"><a href="#references">References</a></li>
+</ol>
+  </div>
+
+  <div class="post-body">
+    <p><img src="/assets/img/nms1.svg" alt="" /></p>
+
+<p>The non-maximum-suppression (NMS) is one of the most common parts of object detection methods.
+The idea is to remove the overlapping bounding boxes and keep only the separated boxes in the detection result.
+Given a threshold and starting from a particular box, any other boxes which have the overlappings with the reference larger than the threshold will be opted out.
+The process is repeated until all boxes are visited.</p>
+
+<!--more-->
+
+<h2 id="basic-algorithms-and-speed-up">Basic algorithms and speed-up</h2>
+
+<p>Let the threshold be $\theta=0.33$ and start from the red box.
+Then we can remove the dark and the blue ones because they have overlappings with the reference larger than 0.33.
+Here, we chose the overlap is the rate between intersection and union of the boxes.
+It is illustrated as follows.</p>
+
+<p><img src="/assets/img/nms2.svg" alt="" /></p>
+
+<p>As illustrated above, if the reference box (green one) has more than $t$ of the area of the target box (dark box), then the target box is <em>overlapped</em> with the reference and that the target should be removed.</p>
+
+<blockquote>
+  <p><strong>Algorithm parameters:</strong> threshold  $\theta \in (0, 1]$  <br />
+A list of detected bounding boxes $L$.</p>
+
+  <p><strong>Procedure $NMS(L, \theta)$:</strong></p>
+
+  <p>$\quad$1. Sort the box $L$, for example, by the bottom right coordinate values. <br />
+$\quad$2. Initialize the picked boxes list $P\leftarrow \phi$ <br />
+$\quad$3. Loop until $L$ become empty:</p>
+
+  <p>$\qquad$3.1 Choose the last box in the sorted list, push the index to the picked indices $P$</p>
+
+  <p>$\qquad$3.2 Find all overlapping boxes with the reference (the last box in $L$), and remove all of them from the list $L$</p>
+
+  <p>$\qquad$3.3 Remove the reference box from $L$</p>
+</blockquote>
+
+<p>To implement an efficient (fast) NMS, it is best to avoid using nested <code class="language-plaintext highlighter-rouge">for</code> loops.
+For example, in some reference implementations, step <code class="language-plaintext highlighter-rouge">3.2</code> can be implemented as a <code class="language-plaintext highlighter-rouge">for</code> loop.
+However, if we use <code class="language-plaintext highlighter-rouge">numpy</code> matrix operations such as <code class="language-plaintext highlighter-rouge">numpy.where</code> or <code class="language-plaintext highlighter-rouge">numpy.multiply</code>, we can perform faster the NMS.
+An example is from <a href="https://www.pyimagesearch.com/2015/02/16/faster-non-maximum-suppression-python/">Adrian Rosebrock’s implementation</a> which resulted in a 100x faster NMS.</p>
+
+<p>A careful implementation of NMS is ready to use is the <a href="https://www.tensorflow.org/api_docs/python/tf/image/non_max_suppression"><code class="language-plaintext highlighter-rouge">tf.image.non_max_suppression</code></a>.
+I also used it in the <a href="https://github.com/wanted2/yolov5-tf-inference/blob/main/src/yolotf/utils.py#L226">inference of YOLOv5</a>.</p>
+
+<h2 id="discussions">Discussions</h2>
+
+<h3 id="why-sorting-the-boxes-before-running-nms">Why sorting the boxes before running nms?</h3>
+
+<p>It is quite trivial, and often omitted issue in NMS.
+Let’s see the first example we explained.
+What if we don’t start from the red box but the dark box?
+What happens is as follows.</p>
+
+<p><img src="/assets/img/nms3.svg" alt="" /></p>
+
+<p><strong>The result has changed, according to the changes in the choice of the reference</strong>.
+Therefore, we need to sort the box list before running NMS.</p>
+
+<h3 id="should-we-prune-low-confidence-boxes-before-or-after-running-nms">Should we prune low-confidence boxes before or after running NMS?</h3>
+
+<p>In my implementation of <a href="https://github.com/wanted2/yolov5-tf-inference/blob/main/src/yolotf/utils.py#L226">inference of YOLOv5</a>, I prune low-confidence boxes before NMS.
+Because NMS takes time, pruning low-probability candidates beforehand is preferred.
+After NMS, if the candidates is still too many, then we can merge boxes again using another overlapping measurements such as the IoU.</p>
+
+<p>In this implementation, the NMS often takes about 10-20 ms to opt out some hundreds boxes.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>We discussed about the vital part of object detection to remove redundancies in detected results: the non-maximum-suppression algorithm.
+To enhance the accuracy with NMS, some improvements such as the <em>Soft NMS</em> [1] should be the idea.</p>
+
+<h2 id="references">References</h2>
+
+<ol class="bibliography"><li><span id="DBLP:journals/corr/BodlaSCD17">Bodla, N., Singh, B., Chellappa, R., &amp; Davis, L. S. (2017). Improving Object Detection With One Line of Code. <i>CoRR</i>, <i>abs/1704.04503</i>. http://arxiv.org/abs/1704.04503</span></li></ol>
+
+    
+
+
+
+<div class="post-tags">
+  
+    
+    <a href="/tags.html#computer-vision">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">computer vision</span>
+    </a>
+  
+    
+    <a href="/tags.html#object-detection">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">object detection</span>
+    </a>
+  
+    
+    <a href="/tags.html#nms">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">nms</span>
+    </a>
+  
+    
+    <a href="/tags.html#non-maximum-suppression">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">non-maximum-suppression</span>
+    </a>
+  
+</div>
+  </div>
+
+  
+  <section class="comments">
+    <h2>Comments</h2>
+    
+  <div id="disqus_thread">
+    <button class="disqus-load" onClick="loadDisqusComments()">
+      Load Comments
+    </button>
+  </div>
+  <script>
+
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW
+  *  TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT:s
+  *  https://disqus.com/admin/universalcode/#configuration-variables
+  */
+  var disqus_config = function () {
+    this.page.url = "https://www.caineng.in/cv/ai/2021/05/20/understanding-object-detection-nms.html";
+    this.page.identifier = "" ||
+                           "https://www.caineng.in/cv/ai/2021/05/20/understanding-object-detection-nms.html";
+  }
+  function loadDisqusComments() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//caineng.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  </script>
+  <noscript>
+    Please enable JavaScript to view the
+    <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.
+  </noscript>
+
+
+
+  </section>
+
+  <section class="related">
+  <h2>Related Posts</h2>
+  <ul class="posts-list">
+    
+      <li>
+        <h3>
+          <a href="/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english.html">
+            Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp trong ngành trí tuệ nhân tạo?
+            <small>24 Apr 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt.html">
+            Implementing a complex system in AWS Lambda: Should or shouldn't?
+            <small>03 Apr 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/sre/non-english/2021/03/13/ban-ve-thiet-ke-he-thong-co-quan-ly-user-non-english.html">
+            Bàn về thiết kế hệ thống có quản lý users: Cây nhà lá vườn hay ăn sẵn?
+            <small>13 Mar 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</section>
+
+</div>
+
+    </main>
+
+    <!-- Optional footer content -->
+
+    <script src="https://kit.fontawesome.com/d0b91d895e.js" crossorigin="anonymous"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </body>
+</html>

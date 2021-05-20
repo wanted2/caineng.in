@@ -1,0 +1,1743 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://www.caineng.in/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.caineng.in/" rel="alternate" type="text/html" /><updated>2021-05-20T23:26:47+07:00</updated><id>https://www.caineng.in/feed.xml</id><title type="html">AiFi</title><subtitle>The official AiFi</subtitle><author><name>Tuan Nguyen-Anh</name></author><entry><title type="html">Understanding Object Detection Algorithms: the Non-maximum-suppression (NMS)</title><link href="https://www.caineng.in/cv/ai/2021/05/20/understanding-object-detection-nms.html" rel="alternate" type="text/html" title="Understanding Object Detection Algorithms: the Non-maximum-suppression (NMS)" /><published>2021-05-20T00:00:00+07:00</published><updated>2021-05-20T00:00:00+07:00</updated><id>https://www.caineng.in/cv/ai/2021/05/20/understanding-object-detection-nms</id><content type="html" xml:base="https://www.caineng.in/cv/ai/2021/05/20/understanding-object-detection-nms.html">&lt;p&gt;&lt;img src=&quot;/assets/img/nms1.svg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The non-maximum-suppression (NMS) is one of the most common parts of object detection methods.
+The idea is to remove the overlapping bounding boxes and keep only the separated boxes in the detection result.
+Given a threshold and starting from a particular box, any other boxes which have the overlappings with the reference larger than the threshold will be opted out.
+The process is repeated until all boxes are visited.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;basic-algorithms-and-speed-up&quot;&gt;Basic algorithms and speed-up&lt;/h2&gt;
+
+&lt;p&gt;Let the threshold be $\theta=0.33$ and start from the red box.
+Then we can remove the dark and the blue ones because they have overlappings with the reference larger than 0.33.
+Here, we chose the overlap is the rate between intersection and union of the boxes.
+It is illustrated as follows.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/nms2.svg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As illustrated above, if the reference box (green one) has more than $t$ of the area of the target box (dark box), then the target box is &lt;em&gt;overlapped&lt;/em&gt; with the reference and that the target should be removed.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Algorithm parameters:&lt;/strong&gt; threshold  $\theta \in (0, 1]$  &lt;br /&gt;
+A list of detected bounding boxes $L$.&lt;/p&gt;
+
+  &lt;p&gt;&lt;strong&gt;Procedure $NMS(L, \theta)$:&lt;/strong&gt;&lt;/p&gt;
+
+  &lt;p&gt;$\quad$1. Sort the box $L$, for example, by the bottom right coordinate values. &lt;br /&gt;
+$\quad$2. Initialize the picked boxes list $P\leftarrow \phi$ &lt;br /&gt;
+$\quad$3. Loop until $L$ become empty:&lt;/p&gt;
+
+  &lt;p&gt;$\qquad$3.1 Choose the last box in the sorted list, push the index to the picked indices $P$&lt;/p&gt;
+
+  &lt;p&gt;$\qquad$3.2 Find all overlapping boxes with the reference (the last box in $L$), and remove all of them from the list $L$&lt;/p&gt;
+
+  &lt;p&gt;$\qquad$3.3 Remove the reference box from $L$&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;To implement an efficient (fast) NMS, it is best to avoid using nested &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;for&lt;/code&gt; loops.
+For example, in some reference implementations, step &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3.2&lt;/code&gt; can be implemented as a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;for&lt;/code&gt; loop.
+However, if we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;numpy&lt;/code&gt; matrix operations such as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;numpy.where&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;numpy.multiply&lt;/code&gt;, we can perform faster the NMS.
+An example is from &lt;a href=&quot;https://www.pyimagesearch.com/2015/02/16/faster-non-maximum-suppression-python/&quot;&gt;Adrian Rosebrock’s implementation&lt;/a&gt; which resulted in a 100x faster NMS.&lt;/p&gt;
+
+&lt;p&gt;A careful implementation of NMS is ready to use is the &lt;a href=&quot;https://www.tensorflow.org/api_docs/python/tf/image/non_max_suppression&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tf.image.non_max_suppression&lt;/code&gt;&lt;/a&gt;.
+I also used it in the &lt;a href=&quot;https://github.com/wanted2/yolov5-tf-inference/blob/main/src/yolotf/utils.py#L226&quot;&gt;inference of YOLOv5&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;discussions&quot;&gt;Discussions&lt;/h2&gt;
+
+&lt;h3 id=&quot;why-sorting-the-boxes-before-running-nms&quot;&gt;Why sorting the boxes before running nms?&lt;/h3&gt;
+
+&lt;p&gt;It is quite trivial, and often omitted issue in NMS.
+Let’s see the first example we explained.
+What if we don’t start from the red box but the dark box?
+What happens is as follows.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/nms3.svg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The result has changed, according to the changes in the choice of the reference&lt;/strong&gt;.
+Therefore, we need to sort the box list before running NMS.&lt;/p&gt;
+
+&lt;h3 id=&quot;should-we-prune-low-confidence-boxes-before-or-after-running-nms&quot;&gt;Should we prune low-confidence boxes before or after running NMS?&lt;/h3&gt;
+
+&lt;p&gt;In my implementation of &lt;a href=&quot;https://github.com/wanted2/yolov5-tf-inference/blob/main/src/yolotf/utils.py#L226&quot;&gt;inference of YOLOv5&lt;/a&gt;, I prune low-confidence boxes before NMS.
+Because NMS takes time, pruning low-probability candidates beforehand is preferred.
+After NMS, if the candidates is still too many, then we can merge boxes again using another overlapping measurements such as the IoU.&lt;/p&gt;
+
+&lt;p&gt;In this implementation, the NMS often takes about 10-20 ms to opt out some hundreds boxes.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;We discussed about the vital part of object detection to remove redundancies in detected results: the non-maximum-suppression algorithm.
+To enhance the accuracy with NMS, some improvements such as the &lt;em&gt;Soft NMS&lt;/em&gt; [1] should be the idea.&lt;/p&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;ol class=&quot;bibliography&quot;&gt;&lt;li&gt;&lt;span id=&quot;DBLP:journals/corr/BodlaSCD17&quot;&gt;Bodla, N., Singh, B., Chellappa, R., &amp;amp; Davis, L. S. (2017). Improving Object Detection With One Line of Code. &lt;i&gt;CoRR&lt;/i&gt;, &lt;i&gt;abs/1704.04503&lt;/i&gt;. http://arxiv.org/abs/1704.04503&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</content><author><name>Tuan Nguyen-Anh</name></author><category term="cv" /><category term="ai" /><category term="computer vision" /><category term="object detection" /><category term="nms" /><category term="non-maximum-suppression" /><summary type="html">The non-maximum-suppression (NMS) is one of the most common parts of object detection methods. The idea is to remove the overlapping bounding boxes and keep only the separated boxes in the detection result. Given a threshold and starting from a particular box, any other boxes which have the overlappings with the reference larger than the threshold will be opted out. The process is repeated until all boxes are visited.</summary></entry><entry><title type="html">Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp trong ngành trí tuệ nhân tạo?</title><link href="https://www.caineng.in/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english.html" rel="alternate" type="text/html" title="Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp trong ngành trí tuệ nhân tạo?" /><published>2021-04-24T00:00:00+07:00</published><updated>2021-04-24T00:00:00+07:00</updated><id>https://www.caineng.in/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english</id><content type="html" xml:base="https://www.caineng.in/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english.html">&lt;style&gt; /* set the CSS */
+
+.tooltip {	
+    position: absolute;			
+    text-align: left;			
+    width: auto;					
+    height: 75px;					
+    padding: 2px;	
+    margin: 2px			
+    font: 10px sans-serif;		
+    background: green;
+    opacity: 0.6;	
+    border: 1px;		
+    border-radius: 5px;			
+    pointer-events: none;			
+}
+
+&lt;/style&gt;
+
+&lt;div id=&quot;chart&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 50},
+    width = 800 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+// Append tooltips
+var div = d3.select(&quot;body&quot;).append(&quot;div&quot;)	
+    .attr(&quot;class&quot;, &quot;tooltip&quot;)				
+    .style(&quot;opacity&quot;, 0);
+// append the svg object to the body of the page
+var svg = d3.select(&quot;#chart&quot;)
+  .append(&quot;svg&quot;)
+    .attr(&quot;width&quot;, width + margin.left + margin.right)
+    .attr(&quot;height&quot;, height + margin.top + margin.bottom)
+  .append(&quot;g&quot;)
+    .attr(&quot;transform&quot;,
+          &quot;translate(&quot; + margin.left + &quot;,&quot; + margin.top + &quot;)&quot;);
+var x = d3.scaleTime().range([0, width]);
+var y = d3.scaleLinear().range([height, 0]);
+var paddingForText = 10;
+  // gridlines in x axis function
+  function make_x_gridlines() {		
+      return d3.axisBottom(x)
+          .ticks(3)
+  }
+
+  // gridlines in y axis function
+  function make_y_gridlines() {		
+      return d3.axisLeft(y)
+          .ticks(5)
+  }
+//Read the data
+d3.csv(&quot;/assets/coco_perf.csv&quot;,
+
+  // When reading the csv, I must format variables:
+  function(d){
+    return { year : d3.timeParse(&quot;%Y-%m-%d&quot;)(d.year), map : d.map, name: d.name }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+
+    // Add X axis --&gt; it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.year; }))
+      .range([ 0, width]);
+    svg.append(&quot;g&quot;)
+      .attr(&quot;transform&quot;, &quot;translate(0,&quot; + height + &quot;)&quot;)
+      .call(d3.axisBottom(x));
+    svg.append(&quot;text&quot;)             
+      .attr(&quot;transform&quot;,
+            &quot;translate(&quot; + (width/2) + &quot; ,&quot; + 
+                           (height + margin.top + 20) + &quot;)&quot;)
+      .style(&quot;text-anchor&quot;, &quot;middle&quot;)
+      .text(&quot;Released Year&quot;);
+       // text label for the y axis
+  svg.append(&quot;text&quot;)
+      .attr(&quot;transform&quot;, &quot;rotate(-90)&quot;)
+      .attr(&quot;y&quot;, 0 - margin.left)
+      .attr(&quot;x&quot;,0 - (height / 2))
+      .attr(&quot;dy&quot;, &quot;1em&quot;)
+      .style(&quot;text-anchor&quot;, &quot;middle&quot;)
+      .text(&quot;Box mAP [%]&quot;); 
+    // add the X gridlines
+    svg.append(&quot;g&quot;)			
+        .attr(&quot;class&quot;, &quot;grid&quot;)
+        .attr(&quot;transform&quot;, &quot;translate(0,&quot; + height + &quot;)&quot;)
+        .call(make_x_gridlines()
+            .tickSize(-height)
+            .tickFormat(&quot;&quot;)
+        )
+
+    // add the Y gridlines
+    svg.append(&quot;g&quot;)			
+        .attr(&quot;class&quot;, &quot;grid&quot;)
+        .call(make_y_gridlines()
+            .tickSize(-width)
+            .tickFormat(&quot;&quot;)
+        )
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([25, 60])
+      .range([ height, 0]);
+    svg.append(&quot;g&quot;)
+      .call(d3.axisLeft(y));
+
+    // Add the line
+    svg.append(&quot;path&quot;)
+      .datum(data)
+      .attr(&quot;fill&quot;, &quot;none&quot;)
+      .attr(&quot;stroke&quot;, &quot;green&quot;)
+      .attr(&quot;stroke-width&quot;, 1.5)
+      .attr(&quot;d&quot;, d3.line()
+        .x(function(d) { return x(d.year) })
+        .y(function(d) { return y(d.map) })
+        )
+
+    svg.append(&quot;g&quot;).selectAll(&quot;circle&quot;)
+    .data(data)
+    .enter()
+    .append(&quot;circle&quot;)
+    .attr(&quot;r&quot;, 4)
+    .attr(&quot;cx&quot;, function(d) {
+        return x(d.year)
+    })
+    .attr(&quot;cy&quot;, function(d) {
+        return y(d.map)
+    })
+    .attr(&quot;fill&quot;, &quot;red&quot;)
+    .attr(&quot;stroke&quot;, &quot;red&quot;)
+    .on(&quot;mouseover&quot;, function(d) {		
+            div.transition()		
+                .duration(200)		
+                .style(&quot;opacity&quot;, .9);		
+            div	.html(d.name + &quot;&lt;br/&gt;&quot;  + d.map + &quot;%&quot;)	
+                .style(&quot;left&quot;, (d3.event.pageX) + &quot;px&quot;)		
+                .style(&quot;top&quot;, (d3.event.pageY - 28) + &quot;px&quot;);	
+            })					
+        .on(&quot;mouseout&quot;, function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style(&quot;opacity&quot;, 0);	
+        });
+
+svg.append(&quot;g&quot;).selectAll(&quot;text&quot;)
+    .data(data)
+    .enter()
+    .append(&quot;text&quot;)
+    .attr(&quot;x&quot;, function(d) {
+        return x(d.year) - paddingForText
+    })
+    .attr(&quot;y&quot;, function(d) {
+        return y(d.map) - paddingForText
+    })
+    .attr(&quot;fill&quot;, &quot;green&quot;)
+    .style(&quot;font-size&quot;, &quot;12px&quot;)
+    .text(function(d) {
+        return d.map
+    });
+
+})
+
+&lt;/script&gt;
+
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Ví dụ về sự phát triển của một lĩnh vực nghiên cứu trong vòng 5 năm (01/2016-01/2021) trên 1 bộ dữ liệu chuẩn công nghiệp [1]. Có thể dễ dàng thấy trong 5 năm, trên bộ dữ liệu với số lượng đối tượng hàng triệu (do vậy đạt tiêu chuẩn công nghiệp), nhưng độ chính xác chỉ tăng 30%, từ 28.8% (SSD512, [2]) lên 58.7% (Swin-L, [3]). So với nhiều mảng khác mà model tốt nhất đã lên trên 99.9% [4,5], mảng này có nhiều khả năng mất đến 5 năm nữa để đến được level tương tự để ra sản phẩm thị trường.&lt;/strong&gt;&lt;/em&gt;
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;giới-thiệu&quot;&gt;Giới thiệu&lt;/h2&gt;
+&lt;p&gt;Trí tuệ nhân tạo đang dần trở thành 1 lĩnh vực ứng dụng có ảnh hưởng lớn trong công nghiệp.
+Và đương nhiên thị trường việc làm cho mảng này đang dần dần mở ra.
+Vì vậy, nhiều bạn cả già lẫn trẻ đang dần có những lầm tưởng về cơ hội rộng mở trong lĩnh vực AI này.
+Việc đầu tiên trong định hướng lại nghề nghiệp của AI, chính là nhắm vào lực lượng lao động chủ chốt: các chuyên gia (sinh viên PhD, tech enthusiast, giáo sư, giảng viên, chuyên gia công nghệ), các lập trình viên, …
+Định hướng đầu tiên chính là &lt;strong&gt;Chọn đề tài/bài toán nào để làm và ra có việc?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Câu chuyện của A&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;(Sự kiện 1)&lt;/strong&gt; Năm 2016, A bắt đầu thực hiện dự án nghiên cứu với đề tài là mảng được mô tả trong hình vẽ ở trên. 
+Lúc đó, mảng này mô hình tốt nhất chỉ đạt được độ chính xác là 28.8%.
+&lt;strong&gt;(Sự kiện 2)&lt;/strong&gt; Giáo sư hướng dẫn chỉ yêu cầu A rằng, phải tìm được việc mới cho rời lab.
+3 năm trôi qua, năm 2019, A nóng lòng muốn kết thúc, tìm đến doanh nghiệp C xin việc.
+&lt;strong&gt;(Sự kiện 3)&lt;/strong&gt; Sau khi tìm hiểu kỹ càng về mảng nghiên cứu này, C đáp rằng khi nào mảng này tiến đến 99.9% hiệu suất trên tập dữ liệu lớn vài chục triệu đối tượng thì mới đủ tiêu chí lên sản phẩm.
+Công ty muốn ăn xổi ngay nên chỉ có những dự án ra thành phẩm ngay mới có nhu cầu tuyển dụng.
+Lúc này State-of-the-art (SOTA) mới 55%!
+&lt;strong&gt;(Sự kiện 4)&lt;/strong&gt; A quay về ước tính, mảng này dù A có cống hiến hay không thì với tốc độ của 5 năm qua, chắc phải thêm 5 năm nữa, tức năm 2026 mới có việc!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Quan sát 4 sự kiện trên, bạn nghĩ A đã sai những điểm nào trong năm 2016 và 2019?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Đầu tiên, A đã sai khi chọn bài toán có xuất phát điểm quá thấp (28.8%). Một người làm AI có kinh nghiệm đều hiểu rằng với một lĩnh vực đang lên nào đi chăng nữa, 1 năm tiến được 10% là quá giỏi rồi. Thế nên với xuất phát điểm thấp như vậy, sau 3 năm, thì có thể dự đoán tiến bộ được 30% là may. Và vì vậy, việc rời lab mà công trình chỉ là 1 thứ không đủ tiêu chí lên sản phẩm là quá hiến nhiên.&lt;/li&gt;
+  &lt;li&gt;Tiếp theo, là không nghe cảnh cáo của giáo sư. Giáo sư nói chuyện việc làm là có ý muốn nhắc A tìm hiểu thị trường đi.&lt;/li&gt;
+  &lt;li&gt;Sai lầm cuối cùng, là “yếu thích ra gió”. Làm một mảng mà tính sản phẩm yếu, nhưng lại xin việc 1 công ty thích “ăn xổi”. Công ty thích ăn xổi thì đương nhiên thấy hồ sơ như vậy họ sẽ thấy là phải nuôi thêm 5 năm nữa đến mức lên sản phẩm, là họ sẽ muốn tránh. A nên tìm việc ở công ty có tầm nhìn xa, muốn làm chủ thị trường từ khi còn trứng nước.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Câu chuyện của B&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Anh kỹ sư B làm giám đốc sản phẩm của 1 công ty hạng trung.
+Nhân trước lúc muốn chuyển việc, anh muốn làm 1 dự án sản phẩm để làm đẹp hồ sơ.
+Vì vậy, anh chọn ngay 1 bài toán mà model “xịn” nhất thị trường đã lên 99.0% về độ chính xác.
+Vì setup đã chỉn chu như vậy, quá trình triển khai diễn ra thuận lợi và hầu như tất cả chỉ là quy trình chuyển giao công nghệ sẵn có.
+Trong lúc chuẩn bị close dự án, B cũng lanh lẹ sắp xếp đi xin việc tại khời nghiệp D vốn đang chiêu mộ nhân tài với đãi ngộ hàng ngàn đô la.
+D sau khi xem xét kỹ càng thì từ chối vì hồ sơ tương tự B đang xếp hàng dài dằng dặc.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Quan sát các sự kiện trên, bạn nghĩ B đã sai những điểm nào?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;B đã chọn bài toán có xuất phát điểm quá cao (99.0%), và vì vậy thử thách để chứng tỏ năng lực bản thân là hầu như không có. Thậm chí, một dịch vụ tương tự như của B đã có sẵn cũng không lạ.&lt;/li&gt;
+  &lt;li&gt;B xin vào 1 công ty có tầm nhìn xa, nhưng lại không có điểm gì để thể hiện mảng đang làm là còn chỗ khai thác. Công ty tầm nhìn xa khác Công ty ăn xổi là họ sẽ tìm kiếm cơ hội mới. Nhưng mảng những 99.0% thì bên trong có nhiều người làm tốt rồi. Họ chấp nhận tính sản phẩm không quá mạnh (và không quá yếu :D ) nhưng phải có cơ hội làm chủ thị trường.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Cả A và B đã lựa chọn bài toán 1 cách không chuẩn xác ngay từ đầu. Và những quyết định tiếp theo cũng trong chuỗi hành động sai. Các yếu tố quan trọng để quyết định thành bại:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Đánh giá đúng thị trường, lựa chon bài toán vừa sức.&lt;/li&gt;
+  &lt;li&gt;Kết nối tốt với cơ hội việc làm khi ra trường.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Đi vào một số lĩnh vực cụ thể như luận án tiến sĩ, có thể có những hướng dẫn cụ thể khác [6,7]. Trong bài viết này, chúng ta sẽ tập trung vào vấn đề thị trường việc làm.&lt;/p&gt;
+
+&lt;h2 id=&quot;lựa-chọn-lĩnh-vực-và-bài-toán&quot;&gt;Lựa chọn lĩnh vực và bài toán&lt;/h2&gt;
+
+&lt;h3 id=&quot;đừng-nghĩ-các-mảng-cũng-như-nhau-hãy-đánh-giá-đúng-tiềm-năng-thị-trường&quot;&gt;Đừng nghĩ các mảng cũng như nhau. Hãy đánh giá đúng tiềm năng thị trường.&lt;/h3&gt;
+&lt;div id=&quot;chart2&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 50},
+    width = 800 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+// Append tooltips
+var div2 = d3.select(&quot;#chart2&quot;).append(&quot;div&quot;)	
+    .attr(&quot;class&quot;, &quot;tooltip&quot;)				
+    .style(&quot;opacity&quot;, 0);
+// append the svg object to the body of the page
+var svg2 = d3.select(&quot;#chart2&quot;)
+  .append(&quot;svg&quot;)
+    .attr(&quot;width&quot;, width + margin.left + margin.right)
+    .attr(&quot;height&quot;, height + margin.top + margin.bottom)
+  .append(&quot;g&quot;)
+    .attr(&quot;transform&quot;,
+          &quot;translate(&quot; + margin.left + &quot;,&quot; + margin.top + &quot;)&quot;);
+var x2 = d3.scaleTime().range([0, width]);
+var y2 = d3.scaleLinear().range([height, 0]);
+var paddingForText = 10;
+  // gridlines in x axis function
+  function make_x_gridlines() {		
+      return d3.axisBottom(x2)
+          .ticks(3)
+  }
+
+  // gridlines in y axis function
+  function make_y_gridlines() {		
+      return d3.axisLeft(y2)
+          .ticks(5)
+  }
+//Read the data
+d3.csv(&quot;/assets/mot17_perf.csv&quot;,
+
+  // When reading the csv, I must format variables:
+  function(d){
+    return { year : d3.timeParse(&quot;%Y/%m/%d&quot;)(d.year), mota : d.MOTA, name: d.Tracker }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+
+    // Add X axis --&gt; it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.year; }))
+      .range([ 0, width]);
+    svg2.append(&quot;g&quot;)
+      .attr(&quot;transform&quot;, &quot;translate(0,&quot; + height + &quot;)&quot;)
+      .call(d3.axisBottom(x));
+    svg2.append(&quot;text&quot;)             
+      .attr(&quot;transform&quot;,
+            &quot;translate(&quot; + (width/2) + &quot; ,&quot; + 
+                           (height + margin.top + 20) + &quot;)&quot;)
+      .style(&quot;text-anchor&quot;, &quot;middle&quot;)
+      .text(&quot;Released Year&quot;);
+       // text label for the y axis
+  svg2.append(&quot;text&quot;)
+      .attr(&quot;transform&quot;, &quot;rotate(-90)&quot;)
+      .attr(&quot;y&quot;, 0 - margin.left)
+      .attr(&quot;x&quot;,0 - (height / 2))
+      .attr(&quot;dy&quot;, &quot;1em&quot;)
+      .style(&quot;text-anchor&quot;, &quot;middle&quot;)
+      .text(&quot;MOTA [%]&quot;); 
+    // add the X gridlines
+    svg2.append(&quot;g&quot;)			
+        .attr(&quot;class&quot;, &quot;grid&quot;)
+        .attr(&quot;transform&quot;, &quot;translate(0,&quot; + height + &quot;)&quot;)
+        .call(make_x_gridlines()
+            .tickSize(-height)
+            .tickFormat(&quot;&quot;)
+        )
+
+    // add the Y gridlines
+    svg2.append(&quot;g&quot;)			
+        .attr(&quot;class&quot;, &quot;grid&quot;)
+        .call(make_y_gridlines()
+            .tickSize(-width)
+            .tickFormat(&quot;&quot;)
+        )
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([55, 75])
+      .range([ height, 0]);
+    svg2.append(&quot;g&quot;)
+      .call(d3.axisLeft(y));
+    svg2.append(&quot;path&quot;)
+      .datum(data)
+      .attr(&quot;fill&quot;, &quot;none&quot;)
+      .attr(&quot;stroke&quot;, &quot;n&quot;)
+      .attr(&quot;stroke-width&quot;, 1.5)
+      .attr(&quot;d&quot;, d3.line()
+        .x(function(d) { return x(d.year) })
+        .y(function(d) { return y(d.mota) })
+        )
+
+    svg2.append(&quot;g&quot;).selectAll(&quot;circle&quot;)
+    .data(data)
+    .enter()
+    .append(&quot;circle&quot;)
+    .attr(&quot;r&quot;, 4)
+    .attr(&quot;cx&quot;, function(d) {
+        return x(d.year)
+    })
+    .attr(&quot;cy&quot;, function(d) {
+        return y(d.mota)
+    })
+    .attr(&quot;fill&quot;, &quot;red&quot;)
+    .attr(&quot;stroke&quot;, &quot;red&quot;)
+    .on(&quot;mouseover&quot;, function(d) {		
+            div2.transition()		
+                .duration(200)		
+                .style(&quot;opacity&quot;, .9);		
+            div2.html(d.name + &quot;&lt;br/&gt;&quot;  + d.mota + &quot;%&quot;)	
+                .style(&quot;left&quot;, (d3.event.pageX) + &quot;px&quot;)		
+                .style(&quot;top&quot;, (d3.event.pageY - 28) + &quot;px&quot;);	
+            })					
+        .on(&quot;mouseout&quot;, function(d) {		
+            div2.transition()		
+                .duration(500)		
+                .style(&quot;opacity&quot;, 0);	
+        });
+
+svg2.append(&quot;g&quot;).selectAll(&quot;text&quot;)
+    .data(data)
+    .enter()
+    .append(&quot;text&quot;)
+    .attr(&quot;x&quot;, function(d) {
+        return x(d.year) - paddingForText
+    })
+    .attr(&quot;y&quot;, function(d) {
+        return y(d.mota) - paddingForText
+    })
+    .attr(&quot;fill&quot;, &quot;green&quot;)
+    .style(&quot;font-size&quot;, &quot;12px&quot;)
+    .text(function(d) {
+        return d.mota
+    });
+
+})
+
+&lt;/script&gt;
+
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Top-20 thuật toán trên benchmark MOT17 [8] tại thời điểm bài viết. Có thể dễ thấy bắt đầu năm 2020, thuật toán tốt nhất là ISE [9] mới đạt MOTA 60.1% thì đến tháng 3 năm nay, tức là sau hơn 1 năm, phương pháp tốt nhất là MOTer [10] đã có MOTA là 71.9%. Tức là tiến bộ tầm 11.8%.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;So với mảng Object Detection mà chúng ta đã nói ở trên, mảng này hiện đã tiến tới 71.9% trên bộ dữ liệu có 250 ngàn đối tượng.
+Vì vậy, về mặt chuẩn công nghiệp là đã tiến khá gần mức chấp nhận lên sản phẩm.
+Tốc độ phát triển tầm 8-9%/năm.
+Tuy nhiên, mảng tracking này có những yêu cầu khắt khe hơn về xử lý real-time, các phương pháp đo, …&lt;/p&gt;
+
+&lt;h3 id=&quot;tiêu-chí-để-được-gọi-là-sản-phẩm-là-gì&quot;&gt;Tiêu chí để được gọi là sản phẩm là gì?&lt;/h3&gt;
+
+&lt;p&gt;Nhìn chung trong các bài toán AI mà có độ chính xác và sử dụng trong công nghiệp thì yêu cầu về độ chính xác là gần 100% nhất có thể.
+Thường sẽ là cuộc cạnh tranh giữa các cao thủ công nghệ về độ chính xác.
+Chuẩn chung sẽ là 99.999%.
+Tại sao thì là bạn hãy suy nghĩ xem, 1 thuật toán chỉ có độ chính xác 50% thì bạn sẽ phải tốn bao nhiêu công sức để đảm bảo rằng 50% trường hợp sai sẽ được xử lý.
+Ví dụ có 100 triệu người dùng, thì bạn sẽ phải suy nghĩ rằng sẽ có 50 triệu trường hợp sai.
+Nhưng nếu thuật toán chính xác tới 99.9% thì trong 100 triệu người dùng, sẽ chỉ có \(0.001\times 100,000,000=100,000\) trường hợp sai.
+Nếu thuật toán chính xác tới 99.99% thì chỉ có 10 ngàn trường hợp sai.
+Và nếu chính xác tới 99.999% thì bạn sẽ phải ứng phó với chỉ 1000 trường hợp sai trên 100 triệu người dùng.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Vậy bây giờ bạn nhìn thấy giới thiệu 1 lĩnh vực mà thuật toán tốt nhất mới có được 50%, thì lên sản phẩm thế nào bây giờ?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Khi các thuật toán đạt tiêu chuẩn về độ chính xác trên tập lớn rồi thì sẽ có những tiêu chuẩn khác như tốc độ xử lý, tài nguyên, đạo đức khoa học và pháp luật [11].
+Khi thực hiện thí nghiệm trên dữ liệu của con người, có khá nhiều điểm về đạo đức, bảo vệ dữ liệu cá nhân, pháp luật mà tôi xin giới thiệu tham khảo thêm tại: [11].&lt;/p&gt;
+&lt;h3 id=&quot;các-chướng-ngại-tương-lai&quot;&gt;Các chướng ngại tương lai&lt;/h3&gt;
+
+&lt;p&gt;Trong mọi dự án, foresee được các chướng ngại, nguy cơ là 1 việc phải làm.
+Ví dụ, khi chọn đối tượng là con người, các vướng mắc về an toàn dữ liệu cá nhân là bắt buộc phải nhìn ra.
+Phần lớn các dự án AI đều sẽ đòi hỏi kiểm chứng trên tập đối tượng lớn, và vì vậy nếu làm kém bảo vệ riêng tư người dùng sẽ gặp khá nhiều vấn đề với đạo đức và pháp luật, thậm chí có thể kiện cáo bồi thường hàng triệu đô la.&lt;/p&gt;
+
+&lt;p&gt;Tốc độ phát triển của ngành nhanh hay chậm cũng ảnh hưởng tới kết quả đầu ra.
+Nếu 1 ngành ít được phát triển, thậm chí sau 1 năm có thể chẳng có tiến bộ gì về accuracy.
+Yên tâm là những mảng có phát triển đều đặn như object detection hay tracking thường có tốc độ phát triển tầm 7-8%/năm.&lt;/p&gt;
+
+&lt;h2 id=&quot;nhìn-trước-thị-trường-việc-làm-và-cơ-hội-nghề-nghiệp&quot;&gt;Nhìn trước thị trường việc làm và cơ hội nghề nghiệp&lt;/h2&gt;
+
+&lt;h3 id=&quot;bạn-định-xin-việc-ở-đâu-công-ty-ăn-xổi-hay-công-ty-có-tầm-nhìn-xa&quot;&gt;Bạn định xin việc ở đâu? Công ty “ăn xổi” hay công ty “có tầm nhìn xa”?&lt;/h3&gt;
+&lt;p&gt;Sau khi có được danh sách những chủ đề và thời điểm công nghệ đó có thể lên sản phẩm, bạn phải nghĩ xem “à thế xin việc ở đâu bây giờ?”&lt;/p&gt;
+
+&lt;p&gt;Bạn cần tìm hiểu xem các công ty công nghệ đang cần gì. Và bạn cần bỏ qua những công ty không phù hợp mà nộp và các công ty định hướng của bạn.
+Tất nhiên, đây là sau khi đã giới hạn hết chỉ còn các công ty thuộc mảng của bạn.&lt;/p&gt;
+
+&lt;p&gt;Trước khi thảo luận về điều các công ty muốn, xin phép phân loại các công ty trong mảng AI thành&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Công ty thích “ăn xổi”&lt;/strong&gt;: Nhìn chung thì phần lớn các công ty có địa vị, danh tiếng, thậm chí các tập đoàn lớn thường muốn nhìn thấy sản phẩm ngay. Nhưng mà đâu phải muốn sản phẩm là có sản phẩm ngay. Lên được sản phẩm hay không là có tiêu chí rồi. Và hiện tại, ngành hẹp đang đạt được bao nhiêu là sự thực không thay đổi. Giả dụ ngành giừ các nghiên cứu tốt nhất ở Âu Mỹ mới có 60% và tốc độ phát triển chỉ 7-8% thì muốn lên sản phẩm thế nào?&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Công ty có tầm nhìn xa&lt;/strong&gt;: Thường là các công ty khởi nghiệp, công ty mới lập. Họ hiểu rằng, ăn xổi chì là nhất thời. Muốn dài lâu thì phải kiếm 1 mảng chưa đến 90% và nhảy vào làm chủ.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;các-công-ty-công-nghệ-đang-cần-gì&quot;&gt;Các công ty công nghệ đang cần gì?&lt;/h3&gt;
+&lt;p&gt;Công ty thích “ăn xổi” thì sẽ thường cần chuyên gia mang tới mảng có thể lên sản phẩm ngay. Vì vậy tốt nhất bạn nên có hồ sơ của những cái đã lên tới 99.999%, thậm chí có thể triển khai luôn càng tốt.&lt;/p&gt;
+
+&lt;p&gt;Công ty có tầm nhìn xa thì lại cần những cái có thể không quá mạnh, nhưng cả thị trường đều đang yếu và cơ hội làm chủ thị trường là cao.&lt;/p&gt;
+
+&lt;p&gt;Tốt nhất là 1 mảng mới tầm 70-80% thì sẽ hấp dẫn cả ăn xổi lần tầm nhìn xa.&lt;/p&gt;
+
+&lt;h3 id=&quot;offshore-thì-sao&quot;&gt;Offshore thì sao?&lt;/h3&gt;
+&lt;p&gt;Offshore thì là làm sản phẩm và mở ra thêm mảng AI nếu có nhu cầu.
+Vì vậy, có những offshore mà lại vừa có tính ăn xổi lần tính tầm nhìn xa khi tiếp cận AI.
+Bạn nên chú ý khi mang công nghệ AI tới các công ty offshore.&lt;/p&gt;
+
+&lt;h2 id=&quot;kết-luận&quot;&gt;Kết luận&lt;/h2&gt;
+
+&lt;h3 id=&quot;một-số-lĩnh-vực-đã-đến-level-sản-phẩm-thị-trường&quot;&gt;Một số lĩnh vực đã đến level sản phẩm thị trường&lt;/h3&gt;
+&lt;p&gt;Cuối cùng là chúng ta cũng điểm xem các mảng nào đã đến level lên sản phẩm thị trường.
+Nên nhớ khi đã đến level lên sản phẩm, tức là cũng không có gì mới!&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Nhóm công nghệ nhận dạng (ứng dụng trong bio-metrics, eKYC, …)&lt;/strong&gt;: Face Verification chẳng hạn là đã lên tới 99.9% trên tập 12 triệu đối tượng người thật [4,5].
+Các bài toán khác trong mảng này như Fingerprint hay Gait recognition cũng đạt hiệu suất trên 90% từ khá lâu.
+eKYC cũng được xây dựng trên các công nghệ cũ này và chủ yếu mang tính chuyển giao công nghệ.
+Cái quan trọng là gói công nghệ này đã lên gần 100% và các yêu cầu khác cũng khá chuẩn nên việc lên sản phẩm là không có nhiều cản trở.
+Tuy nhiên, như đã phân tích trong mục các công ty ăn xổi thì thị trường chỉ còn lại mảng ngách, hoặc chuyển giao công nghệ là chính.
+Việc làm chủ thị trường ở cấp thế giới và khu vực là khó, thậm chí trong thị trường ngách cũng sẽ là cạnh tranh khốc liệt vì là gói công nghệ đã tiêu chuẩn, nên ai cũng có thể nhanh chóng bắt nhịp.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Nhóm công nghệ phát hiện bất thường và lên cảnh báo&lt;/strong&gt;: Cũng không lạ khi Amazon những năm gần đây dịch vụ hóa gói công nghệ này thành Amazon Fraud Detector (phát hiện lừa đảo, [12]) và Amazon Lookout for Equipment (phát hiện hỏng hóc trong máy móc, [13]). Dịch vụ có sẵn như vậy đương nhiên là vì độ khả thi kỹ thuật chính xác 99.99% trên tập dữ liệu lớn là đã có rồi. Tương lai gần có thể là các ứng dụng chứng khoán, với độ chính xác cũng đang gần 100%.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;tổng-kết&quot;&gt;Tổng kết&lt;/h3&gt;
+
+&lt;p&gt;Nhìn chung, các lời khuyên hữu ích cho việc tìm kiếm sự nghiệp trong mảng trí tuệ nhân tạo chính là xác định đúng thị trường, xác định đúng công ty muốn vào và thời điểm để đi xin việc.&lt;/p&gt;
+
+&lt;p&gt;Có nhiều công nghệ vẫn under development, nhưng có nhiều công nghệ cũ như bio-metrics, eKYC, phát hiện bất thường đã đạt tiêu chuẩn lên sản phẩm và các công ty đã chờ chúng từ rất lâu. Nhưng cũng nên nhớ là các công ty đã làm chủ các công nghệ này từ lâu, từ khi chúng còn 70-80%, chưa đủ mức lên sản phẩm. Vậy tại sao công ty bạn không làm chủ một công nghệ mới 70-80% ngay từ bây giờ?&lt;/p&gt;
+
+&lt;h2 id=&quot;tài-liệu-tham-khảo&quot;&gt;Tài liệu tham khảo&lt;/h2&gt;
+
+&lt;ol class=&quot;bibliography&quot;&gt;&lt;li&gt;&lt;span id=&quot;COCOtest31&quot;&gt;&lt;i&gt;COCO test-dev Benchmark (Object Detection) | Papers With Code&lt;/i&gt;. https://paperswithcode.com/sota/object-detection-on-coco.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;conf/eccv/LiuAESRFB16&quot;&gt;Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S. E., Fu, C.-Y., &amp;amp; Berg, A. C. (2016). SSD: Single Shot MultiBox Detector. In B. Leibe, J. Matas, N. Sebe, &amp;amp; M. Welling (Eds.), &lt;i&gt;ECCV (1)&lt;/i&gt; (Vol. 9905, pp. 21–37). Springer.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;liu2021Swin&quot;&gt;Liu, Z., Lin, Y., Cao, Y., Hu, H., Wei, Y., Zhang, Z., Lin, S., &amp;amp; Guo, B. (2021). Swin Transformer: Hierarchical Vision Transformer using Shifted Windows. &lt;i&gt;ArXiv Preprint ArXiv:2103.14030&lt;/i&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;NECfacia36:online&quot;&gt;&lt;i&gt;NEC facial recognition system offers 99.9% accuracy with mask on - Nikkei Asia&lt;/i&gt;. https://asia.nikkei.com/Spotlight/Coronavirus/NEC-facial-recognition-system-offers-99.9-accuracy-with-mask-on.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;FaceReco74:online&quot;&gt;&lt;i&gt;Face Recognition Vendor Test (FRVT) | NIST&lt;/i&gt;. https://www.nist.gov/programs-projects/face-recognition-vendor-test-frvt.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;HowtoCho11:online&quot;&gt;&lt;i&gt;How to Choose a PhD Research Topic | DiscoverPhDs&lt;/i&gt;. https://www.discoverphds.com/advice/finding/phd-research-topic.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;FoolProo45:online&quot;&gt;&lt;i&gt;Fool Proof Tips for Finding PhD Research Topics - PhDPortal.com&lt;/i&gt;. https://www.phdportal.com/articles/996/fool-proof-tips-for-finding-phd-research-topics.html.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;MOTChall87:online&quot;&gt;&lt;i&gt;MOT Challenge - Results&lt;/i&gt;. https://motchallenge.net/results/MOT17/.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;MOTChall87:online2&quot;&gt;&lt;i&gt;MOT Challenge&lt;/i&gt;. https://motchallenge.net/method/MOT=2927&amp;amp;chl=10.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;xu2021transcenter&quot;&gt;Xu, Y., Ban, Y., Delorme, G., Gan, C., Rus, D., &amp;amp; Alameda-Pineda, X. (2021). &lt;i&gt;TransCenter: Transformers with Dense Queries for Multiple-Object Tracking&lt;/i&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;ỨngdụngC61:online&quot;&gt;&lt;i&gt;Ứng dụng Computer Vision trong thời đại COVID-19 (3): Quy trình tiêu chuẩn cho việc thu thập dữ liệu liên quan tới đối tượng là con người – NEOS VietNam AIoT&lt;/i&gt;. https://neosaiiot.wordpress.com/2021/04/23/ung-dung-computer-vision-trong-thoi-dai-covid-19-3-quy-trinh-tieu-chuan-cho-viec-thu-thap-du-lieu-lien-quan-toi-doi-tuong-la-con-nguoi/.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;AmazonFr13:online&quot;&gt;&lt;i&gt;Amazon Fraud Detector – Amazon Web Services&lt;/i&gt;. https://aws.amazon.com/vi/fraud-detector/.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;AmazonLo45:online&quot;&gt;&lt;i&gt;Amazon Lookout for Equipment - Amazon Web Services&lt;/i&gt;. https://aws.amazon.com/lookout-for-equipment/.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</content><author><name>Tuan Nguyen-Anh</name></author><category term="non-english" /><category term="research topic" /><category term="jobs" /><category term="cơ hội nghề nghiệp" /><category term="lời khuyên sự nghiệp" /><summary type="html">Ví dụ về sự phát triển của một lĩnh vực nghiên cứu trong vòng 5 năm (01/2016-01/2021) trên 1 bộ dữ liệu chuẩn công nghiệp [1]. Có thể dễ dàng thấy trong 5 năm, trên bộ dữ liệu với số lượng đối tượng hàng triệu (do vậy đạt tiêu chuẩn công nghiệp), nhưng độ chính xác chỉ tăng 30%, từ 28.8% (SSD512, [2]) lên 58.7% (Swin-L, [3]). So với nhiều mảng khác mà model tốt nhất đã lên trên 99.9% [4,5], mảng này có nhiều khả năng mất đến 5 năm nữa để đến được level tương tự để ra sản phẩm thị trường.</summary></entry><entry><title type="html">Implementing a complex system in AWS Lambda: Should or shouldn’t?</title><link href="https://www.caineng.in/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt.html" rel="alternate" type="text/html" title="Implementing a complex system in AWS Lambda: Should or shouldn’t?" /><published>2021-04-03T00:00:00+07:00</published><updated>2021-04-03T00:00:00+07:00</updated><id>https://www.caineng.in/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt</id><content type="html" xml:base="https://www.caineng.in/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt.html">&lt;p&gt;&lt;img src=&quot;/assets/img/mxnet.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Amazon Web Services Lambda [1] is a convenient serverless building block, can have hidden power.
+Surprisingly, it seems like that there is no official document explaining what should be a good Lambda function for a programming language.
+The size of an uncompressed Lambda function does not exceed 5 megabytes, and the size for all custom Lambda layers should not exceed 250 megabytes.
+Furthermore, parallelism can be limited with some supports to AVX2 [2] and multiprocessing [3].
+Although anything can be implemented in Lambda, should we try to put a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cumbersome&lt;/code&gt; architecture on it?
+It is an open question, and this post is to explore a possible answer.
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;h3 id=&quot;purpose-finding-a-new-design&quot;&gt;Purpose: Finding a new design&lt;/h3&gt;
+
+&lt;p&gt;Managed services like Amazon Sagemaker [4] provides a consistent and powerful platform to train and deploy machine learning models.
+Another managed service is AWS Lambda [1] can serve as the integration to API Gateway, which handles and responds to requests upon connections to other services.
+It seems that it is a natural way to put a simplistic function in Lambda’s handler bodies.
+But it also seems like there is no such enforcement for the complexity of the bodies.
+In other words, we can put anything in them and pay-as-we-go.&lt;/p&gt;
+
+&lt;p&gt;Then, (training ML models can take time, and we do not put them in AWS), but can we put a cumbersome ML inference system in Lambda and serving requests?
+In other words, we have 2 different usages for Lambda:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Design 1&lt;/strong&gt;: using Lambda as a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;reception&lt;/code&gt; and call SageMaker or Textract, Comprehend for inference.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Design 2&lt;/strong&gt;: using Lambda custom layers to put the whole ML inference system in it and don’t call to other services for inference. The inference is in Lambda only.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Then we knew that Design 1 is usual.
+Is Design 2 a recommended way?&lt;/p&gt;
+
+&lt;h3 id=&quot;setting-up-a-script&quot;&gt;Setting up a script&lt;/h3&gt;
+
+&lt;p&gt;We already had a purpose, and we need a script to implement.
+The script is simplistic: we choose a cumbersome system in a machine learning task, deploy it to AWS Lambda and measure the gain.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The ML tasks&lt;/strong&gt; are Named Entity Recognition (NER, [5,6]) and Context-based Question Answering (QA).
+We choose them because they are complex enough and pre-trained models are ready.
+NER is a problem in information extraction that looks at identifying atomic elements (entities) in text and classifying them into predefined classes such as person names, organizations, locations, dates, .etc.
+Approaches can be using lexicons, sliding windows, and sequential models (Hidden Markov Models and Conditional Random Fields).
+The input text is segmented into pieces of words (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tokens&lt;/code&gt;), then a custom model classifies these token into predefined classes.
+Tokenizers can be whitespace-based tokenizers or a language-independent data-driven approach like SentencePiece [7,8,9].
+SentencePiece [7] implements subword regularization [8, 9].
+Context-based Question Answering is the task of answering a question based on a context text.
+The answer must be a part of the context.
+Therefore, the answer can be returned as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[start_position, length]&lt;/code&gt;.
+A typical benchmark is the Standford SquAD dataset [10].
+However, we don’t train models but do use state-of-the-art model ALBERT [11] for inference.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The cumbersome systems/models&lt;/strong&gt; are spaCy [12] and mxnet [13,14] based BERT models [11,15,16].
+spaCy is a ready-to-use Python library for linguistics tasks like NER, PoS tagging.
+Pipelines are units in spaCy to chain several different components such as tokenizers, ner, pos taggers, .etc.
+Apache mxnet is a flexible and efficient library for Deep Learning.
+Hence, the size of each library is about 250 megabytes.
+Because the total size is about 500 megabytes, we need to separate it into 2 Lambdas.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Serverless Architecture Model (SAM, [17])&lt;/strong&gt; is used to deploy to Lambda.
+We test and measure, monitor the gain directly in the AWS Lambda Web interface.&lt;/p&gt;
+
+&lt;h2 id=&quot;implementations&quot;&gt;Implementations&lt;/h2&gt;
+
+&lt;h3 id=&quot;ner-in-lambda&quot;&gt;NER in Lambda&lt;/h3&gt;
+
+&lt;h4 id=&quot;the-handler&quot;&gt;The handler&lt;/h4&gt;
+&lt;p&gt;We run a spaCy pipeline in Lambda to respond to a batch of sentences.
+Pipelines in spaCy are reliable and stable processing units.
+The default pipeline is as follows:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://spacy.io/pipeline-fde48da9b43661abcdf62ab70a546d71.svg&quot; alt=&quot;&quot; /&gt;
+&lt;em&gt;Figure 1. spaCy’s default pipeline (source: &lt;a href=&quot;https://spacy.io/usage/processing-pipelines&quot;&gt;spaCy&lt;/a&gt;)&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Besides the entity information, it also returns PoS tags in the output &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Doc&lt;/code&gt;.
+We can use the pipeline in Python:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;spacy&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Load default pipeline for linguistic task
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nlp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;spacy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'en_core_web_sm'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And the handler function is:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lambda_handler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Lambda function to process linguistic tasks
+
+    Parameters
+    ----------
+    event: dict, required
+        API Gateway Lambda Proxy Input Format
+
+        Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+
+    context: object, required
+        Lambda Context runtime methods and attributes
+
+        Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
+
+    Returns
+    ------
+    API Gateway Lambda Proxy Output Format: dict
+
+        Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
+    &quot;&quot;&quot;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;assert&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;body&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Event is not coming from API Gateway&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loads&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;body&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;JSONDecodeError&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;respond&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;JSON data problem&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;BaseException&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;respond&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;JSON data problem&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;batch_data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'batch'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;KeyError&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;respond&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;You must submit a batch data&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;isinstance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;batch_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;respond&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Batch data must be a list&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;nb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;batch_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;300&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;respond&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Batch size should be between 100 and 300 for trade-off between efficiency and waiting time&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Processing a batch of {} sentences&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;docs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;failed_sentences&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sentence&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;batch_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nlp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;docs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;BaseException&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;failed_sentences&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;debug&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;failed_sentences&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;respond&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;success_sentences&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;docs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;failed_sentences&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;failed_sentences&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;We remark the economy of Lambda business.
+Concurrency [18] can provide up to 10000 Lambda processes running at a time, and Amazon makes money by charging on this use by requests and by GB-seconds.
+Each time a concurrent Lambda runs, the bootstrap runs again.
+For example, the line &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nlp = spacy.load('en_core_web_sm')&lt;/code&gt; runs every time invoking a concurrent Lambda.
+Therefore, using a large batch size, we gain the time of reloading the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nlp&lt;/code&gt; indeed.
+However, a too large batch size (over 300 sentences) can lead to long service time.
+It reduces the quality of the service and user experiences.
+We choose a batch size between 100 and 300.&lt;/p&gt;
+
+&lt;h4 id=&quot;custom-lambda-layers&quot;&gt;Custom Lambda Layers&lt;/h4&gt;
+
+&lt;p&gt;spaCy is not installed in AWS Lambda runtime environments.
+Therefore, we need to add a custom Lambda layer with the spaCy library.
+Currently, AWS Lamda runtime uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;python3.7&lt;/code&gt;.
+We must use Docker to build spaCy in an Amazon Linux container and zip the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;site-packages&lt;/code&gt; folder.
+A sample Dockerfile:&lt;/p&gt;
+
+&lt;div class=&quot;language-dockerfile highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; amazonlinux:2.0.20210219.0&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;yum update &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;yum &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; python3-devel python3-setuptools python3-wheel git gcc gcc-c++ libatlas-devel
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; /packages/python/lib/python3.7/site-packages
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;pip3 &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; numpy Cython
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;pip3 &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; numpy Cython &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; /packages/python/lib/python3.7/site-packages
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;pip3 &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; cymem
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;pip3 &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; cymem &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; /packages/python/lib/python3.7/site-packages
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;pip3 &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; murmurhash preshed
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;pip3 &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; murmurhash preshed &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; /packages/python/lib/python3.7/site-packages
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BLIS_REALLY_COMPILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1 &lt;span class=&quot;nv&quot;&gt;BLIS_ARCH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;generic pip3 &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; blis
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BLIS_REALLY_COMPILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1 &lt;span class=&quot;nv&quot;&gt;BLIS_ARCH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;generic pip3 &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; blis &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; /packages/python/lib/python3.7/site-packages
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;pip3 &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; thinc
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;pip3 &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; thinc &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; /packages/python/lib/python3.7/site-packages
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;pip3 &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; spacy
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;pip3 &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; spacy &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; /packages/python/lib/python3.7/site-packages
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;python3 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; spacy download en_core_web_sm
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;python3 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; spacy download ja_core_news_sm
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;pip3 &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; /packages/python/lib/python3.7/site-packages/
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; /packages2/python/lib/python3.7/site-packages
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;pip3 &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;https://github.com/explosion/spacy-models/releases/download/ja_core_news_sm-3.0.0/ja_core_news_sm-3.0.0.tar.gz &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; /packages2/python/lib/python3.7/site-packages/
+
+&lt;span class=&quot;k&quot;&gt;WORKDIR&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; /packages&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;zip &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; spacy-py37.zip python
+
+&lt;span class=&quot;k&quot;&gt;WORKDIR&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; /packages2&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;zip &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; spacy-ja-py37.zip python
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Note, only &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;spacy-py37.zip&lt;/code&gt; has nearly 250 megabytes when uncompressed.&lt;/p&gt;
+
+&lt;h3 id=&quot;qa-in-lambda&quot;&gt;QA in Lambda&lt;/h3&gt;
+
+&lt;h4 id=&quot;task-qa&quot;&gt;Task QA&lt;/h4&gt;
+&lt;p&gt;Given the context, the machine looks for a part of the given context which answers the question.
+A sample triplet is as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-text highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Context:
+The Norman dynasty had a major political, cultural and military impact on medieval Europe and even the Near East. The Normans were famed for their martial spirit and eventually for their Christian piety, becoming exponents of the Catholic orthodoxy into which they assimilated. They adopted the Gallo-Romance language of the Frankish land they settled, their dialect becoming known as Norman, Normaund or Norman French, an important literary language. The Duchy of Normandy, which they formed by treaty with the French crown, was a great fief of medieval France, and under Richard I of Normandy was forged into a cohesive and formidable principality in feudal tenure. The Normans are noted both for their culture, such as their unique Romanesque architecture and musical traditions, and for their significant military accomplishments and innovations. Norman adventurers founded the Kingdom of Sicily under Roger II after conquering southern Italy on the Saracens and Byzantines, and an expedition on behalf of their duke, William the Conqueror, led to the Norman conquest of England at the Battle of Hastings in 1066. Norman cultural and military influence spread from these new European centres to the Crusader states of the Near East, where their prince Bohemond I founded the Principality of Antioch in the Levant, to Scotland and Wales in Great Britain, to Ireland, and to the coasts of north Africa and the Canary Islands.
+
+Question: Who was the duke in the battle of Hastings?
+Answer: William the Conqueror
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;the-handler-1&quot;&gt;The handler&lt;/h4&gt;
+&lt;p&gt;We pay attention to the BERT Transformer architecture [15,16].
+BERT representations have been trained in several pretext tasks [19].&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/bert.svg&quot; alt=&quot;&quot; /&gt;
+&lt;em&gt;Figure 2. BERT architecture&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;The input of BERT models is a pair of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(question, context)&lt;/code&gt; with a series of 0s and 1s representing the token types(question or context?), and the output is a triplet $(S,E,A)$.
+We formulate the probability of finding a triplet output given the contextual embedding as
+\(P(S, E, A | C) = P(S | C)\times P(E | S,C)\times P(A | C)\)
+where $C$ is the contextual embedding vector, $S$ is the start position of the answer in the context, $E$ is the end position, and $A$ is the answerable decision to the question.
+In the inference, $P(S|C)$ is modeled as the log-softmax of contextual embedding logits.
+$P(E|S,C)$ is the log-softmax of concatenated features between contextual embeddings and start features.
+$P(A|C)$ is computed using a feed-forward neural network and log-softmax.
+The beam search is then applied in the computed score $P(S,E,A|C)$ to find the best candidates for an answer.
+ALBERT [11] is a lightweight successor of BERT.
+The inference code is almost similar.&lt;/p&gt;
+
+&lt;h4 id=&quot;custom-lambda-layer&quot;&gt;Custom Lambda Layer&lt;/h4&gt;
+
+&lt;p&gt;While mxnet library itself is small and takes nearly 250 megabytes, adding Gluon-NLP makes the size is over the limit.
+Therefore, while building mxnet in a custom layer, we put &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gluon-nlp&lt;/code&gt; code into a Lambda function.&lt;/p&gt;
+
+&lt;h3 id=&quot;sam-template&quot;&gt;SAM template&lt;/h3&gt;
+
+&lt;p&gt;The template for the Lambdas can be found at &lt;a href=&quot;https://github.com/wanted2/aws-sam-spacy-mxnet-bert-puppy-talk-example&quot;&gt;https://github.com/wanted2/aws-sam-spacy-mxnet-bert-puppy-talk-example&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;discussion&quot;&gt;Discussion&lt;/h2&gt;
+
+&lt;h3 id=&quot;runtime&quot;&gt;Runtime&lt;/h3&gt;
+&lt;p&gt;We tested in Lambda and observed that&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Spacy function&lt;/strong&gt;: for a batch of 100 sentences, it took 5.7 seconds. For a batch of 500 sentences, it took 28.7 seconds. Therefore, we set the timeout to 30 seconds and recommend users to send batches with less than 300 items.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Multiprocessing&lt;/strong&gt;:
+There is a good guideline about multiprocessing in AWS Lambda:
+https://aws.amazon.com/jp/blogs/compute/parallel-processing-in-python-with-aws-lambda/
+I created the code (following the above article) to see if multiprocessing can help.
+&lt;strong&gt;Unfortunately, multiprocessing does not help ;)&lt;/strong&gt;
+For a batch of 100 sentences, it took 15.5s, 3x slower than sequential processing.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;memory&quot;&gt;Memory&lt;/h3&gt;
+&lt;p&gt;A memory budget 256MB was enough for spaCy.
+The budget for mxnet inference is 4GB.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Some lessons we learned from this implementation:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Simplicity is the best design&lt;/strong&gt;: adding custom Lambda layers requires going through the hurdle of building too many unexpected things such as custom library distributions for specific architecture and operating systems (amazon linux), adjusting the size to match the policy of Lambda, .etc.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Don’t think you can do whatever you want with Lambda&lt;/strong&gt;. By bypassing the size restrictions of Lambda code, indeed, we are &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hacking&lt;/code&gt; AWS in some senses. Then this is a bad design! The company made the restriction and the design of Lambda to protect their business models (maybe), and we are hacking them for more performance! :D That’s the whole picture of what we were doing.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Design 2 is for hackers, then Design 1 is for usual developers&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In this post, we only considered two designs with all components are in the AWS Cloud.
+In practice, the systems may have components not in the cloud, and that makes the game is far interesting.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;ol class=&quot;bibliography&quot;&gt;&lt;li&gt;&lt;span id=&quot;AWSLambd88:online&quot;&gt;&lt;i&gt;AWS Lambda – Serverless Compute - Amazon Web Services&lt;/i&gt;. https://aws.amazon.com/lambda/.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;Creating27:online&quot;&gt;&lt;i&gt;Creating faster AWS Lambda functions with AVX2 | AWS Compute Blog&lt;/i&gt;. https://aws.amazon.com/blogs/compute/creating-faster-aws-lambda-functions-with-avx2/.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;Parallel52:online&quot;&gt;&lt;i&gt;Parallel Processing in Python with AWS Lambda | AWS Compute Blog&lt;/i&gt;. https://aws.amazon.com/blogs/compute/parallel-processing-in-python-with-aws-lambda/.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;AmazonSa17:online&quot;&gt;&lt;i&gt;Amazon SageMaker – Machine Learning – Amazon Web Services&lt;/i&gt;. https://aws.amazon.com/sagemaker/.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;NamedEnt13:online&quot;&gt;&lt;i&gt;Named Entity Recognition · Prodigy · An annotation tool for AI, Machine Learning &amp;amp; NLP&lt;/i&gt;. https://prodi.gy/docs/named-entity-recognition.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;NamedEnt0:online&quot;&gt;&lt;i&gt;Named Entity Recognition - Cohen Courses&lt;/i&gt;. http://curtis.ml.cmu.edu/w/courses/index.php/Named_Entity_Recognition.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;googlese65:online&quot;&gt;&lt;i&gt;google/sentencepiece: Unsupervised text tokenizer for Neural Network-based text generation.&lt;/i&gt; https://github.com/google/sentencepiece.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;sennrich-etal-2016-neural&quot;&gt;Sennrich, R., Haddow, B., &amp;amp; Birch, A. (2016). Neural Machine Translation of Rare Words with Subword Units. &lt;i&gt;Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)&lt;/i&gt;, 1715–1725. https://doi.org/10.18653/v1/P16-1162&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;DBLP:journals/corr/abs-1804-10959&quot;&gt;Kudo, T. (2018). Subword Regularization: Improving Neural Network Translation Models
+               with Multiple Subword Candidates. &lt;i&gt;CoRR&lt;/i&gt;, &lt;i&gt;abs/1804.10959&lt;/i&gt;. http://arxiv.org/abs/1804.10959&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;TheStanf29:online&quot;&gt;&lt;i&gt;The Stanford Question Answering Dataset&lt;/i&gt;. https://rajpurkar.github.io/SQuAD-explorer/.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;DBLP:journals/corr/abs-1909-11942&quot;&gt;Lan, Z., Chen, M., Goodman, S., Gimpel, K., Sharma, P., &amp;amp; Soricut, R. (2019). ALBERT: A Lite BERT for Self-supervised Learning of Language
+               Representations. &lt;i&gt;CoRR&lt;/i&gt;, &lt;i&gt;abs/1909.11942&lt;/i&gt;. http://arxiv.org/abs/1909.11942&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;spaCyIn92:online&quot;&gt;&lt;i&gt;spaCy: Industrial-strength Natural Language Processing in Python&lt;/i&gt;. https://spacy.io/.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;ApacheMX35:online&quot;&gt;&lt;i&gt;Apache MXNet on AWS&lt;/i&gt;. https://aws.amazon.com/mxnet/.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;ApacheMX2:online&quot;&gt;&lt;i&gt;Apache MXNet | A flexible and efficient library for deep learning.&lt;/i&gt; https://mxnet.apache.org/versions/1.8.0/.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;DBLP:journals/corr/abs-1810-04805&quot;&gt;Devlin, J., Chang, M.-W., Lee, K., &amp;amp; Toutanova, K. (2018). BERT: Pre-training of Deep Bidirectional Transformers for Language
+               Understanding. &lt;i&gt;CoRR&lt;/i&gt;, &lt;i&gt;abs/1810.04805&lt;/i&gt;. http://arxiv.org/abs/1810.04805&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;GluonNLP52:online&quot;&gt;&lt;i&gt;GluonNLP: NLP made easy — gluonnlp 0.10.0 documentation&lt;/i&gt;. https://nlp.gluon.ai/index.html.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;Whatisth14:online&quot;&gt;&lt;i&gt;What is the AWS Serverless Application Model (AWS SAM)? - AWS Serverless Application Model&lt;/i&gt;. https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;Managing69:online&quot;&gt;&lt;i&gt;Managing concurrency for a Lambda function - AWS Lambda&lt;/i&gt;. https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;SelfSupe2:online&quot;&gt;&lt;i&gt;Self Supervised Representation Learning in NLP&lt;/i&gt;. https://amitness.com/2020/05/self-supervised-learning-nlp/.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</content><author><name>Tuan Nguyen-Anh</name></author><category term="sre" /><category term="ai" /><category term="nlp" /><category term="natural language processing" /><category term="site reliability engineering" /><category term="spacy" /><category term="mxnet" /><category term="albert" /><category term="bert" /><category term="gluon" /><category term="gluon-nlp" /><summary type="html">Amazon Web Services Lambda [1] is a convenient serverless building block, can have hidden power. Surprisingly, it seems like that there is no official document explaining what should be a good Lambda function for a programming language. The size of an uncompressed Lambda function does not exceed 5 megabytes, and the size for all custom Lambda layers should not exceed 250 megabytes. Furthermore, parallelism can be limited with some supports to AVX2 [2] and multiprocessing [3]. Although anything can be implemented in Lambda, should we try to put a cumbersome architecture on it? It is an open question, and this post is to explore a possible answer.</summary></entry><entry><title type="html">Bàn về thiết kế hệ thống có quản lý users: Cây nhà lá vườn hay ăn sẵn?</title><link href="https://www.caineng.in/sre/non-english/2021/03/13/ban-ve-thiet-ke-he-thong-co-quan-ly-user-non-english.html" rel="alternate" type="text/html" title="Bàn về thiết kế hệ thống có quản lý users: Cây nhà lá vườn hay ăn sẵn?" /><published>2021-03-13T00:00:00+07:00</published><updated>2021-03-13T00:00:00+07:00</updated><id>https://www.caineng.in/sre/non-english/2021/03/13/ban-ve-thiet-ke-he-thong-co-quan-ly-user-non-english</id><content type="html" xml:base="https://www.caineng.in/sre/non-english/2021/03/13/ban-ve-thiet-ke-he-thong-co-quan-ly-user-non-english.html">&lt;p&gt;&lt;img src=&quot;https://images.ctfassets.net/kbkgmx9upatd/6kbL4HCOIufohPQq4dLuUg/b703a314b88daa939d62d7b0bf3e54fc/User_Profiles__1_.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Nguồn: [1]&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Quản lý người dùng (Identity and Access Management, IAM hay user management)&lt;/strong&gt; luôn là một mục quan trọng trong mọi thiết kế hệ thống.
+Vấn đề bảo vệ dữ liệu riêng tư người dùng, quản lý phân quyền và quản lý truy cập, đều là các vấn đề có thể nói là đau đầu không khác gì “bệnh ung thư”.
+Tuy vậy, cần chú ý rằng việc quyết định lựa chọn giải pháp tự build lấy (tôi xin dùng thuật ngữ “cây nhà lá vườn” của hội nông dân để chỉ giải pháp này) và giải pháp sử dụng nhà cung cấp có sẵn, thì cái nào hơn?
+Câu trả lời là tùy thuộc vào bài toán business của bạn, nhưng theo ý kiến cá nhân thì nhìn chung, với các khởi nghiệp nhỏ và các business mà bạn muốn tập trung vào chuyên môn hơn là lo những vấn đề không phải chuyên môn mà lại dễ tạo ra “bệnh ung thư” trong cả tổ chức như quản lý người dùng, thì giải pháp sử dụng nhà cung cấp có sẵn đôi khi rất fair.
+Bạn vẫn quản lý được người dùng với quy trình chất lượng thỏa mãn các tiêu chuẩn của IETF (1 tổ chức kiểu ISO dành cho Internet và bảo mật) nhưng vẫn không phải tốn thời gian cho những thứ ngoài chuyên môn.&lt;/p&gt;
+
+&lt;!--more--&gt;
+&lt;h2 id=&quot;giới-thiệu&quot;&gt;Giới thiệu&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Quản lý người dùng (Identity and Access Management, IAM hay user management)&lt;/strong&gt; là 1 phần quan trọng trong mọi hệ thống quản trị thông tin.
+Về cơ bản, bạn vẫn thường thấy như khi tạo tài khoản cho 1 dịch vụ như Facebook, bạn sẽ được cung cấp 1 &lt;strong&gt;định danh duy nhất&lt;/strong&gt; đi kèm với thông tin bạn đã cung cấp (email và địa chỉ, .v.v…), bạn sẽ được tạo 1 profile, được phép chỉ định thông tin nào hiển thị và không hiện thị công khai hay là &lt;strong&gt;giới hạn quyền truy cập&lt;/strong&gt; vào thông tin cá nhân của bạn.
+Về phía nhà cung cấp dịch vụ Facebook, họ sẽ lưu trữ dữ liệu của bạn vào &lt;strong&gt;user store&lt;/strong&gt; của họ và &lt;strong&gt;phân quyền truy cập&lt;/strong&gt; (đọc, ghi đè, chỉnh sửa, xóa) lên dữ liệu của bạn.
+Bạn bắt buộc phải tạo tài khoản và đăng nhập để sử dụng dịch vụ.&lt;/p&gt;
+
+&lt;p&gt;Rất nhiều tình huống kinh doanh đòi hỏi IAM và quản lý người dùng:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;B2B&lt;/strong&gt;: Dịch vụ của bạn cho phép người dùng sử dụng định danh của riêng cty họ. Như Trello cho phép người dùng liên kết sử dụng tài khoản cty.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;B2C&lt;/strong&gt;: Dịch vụ của bạn cho phép người dùng sử dụng định danh của 1 dịch vụ xã hội khác như Gmail, Facebook, Twitter, .v.v…&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;B2E&lt;/strong&gt;: Dịch vụ của bạn cho phép nhân viên đăng nhập 1 lần duy nhất.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Hậu quả của việc quản lý người dùng kém chính là việc thông tin người dùng bị lọt ra ngoài và trong môi trường kinh doanh chuyên nghiệp, 1 SLA cơ bản của mọi dịch vụ chính là cam kết bảo vệ riêng tư người dùng.
+Tuy nhiên, có nhiều nguyên nhân dẫn đến những sự vụ lọt dữ liệu cá nhân riêng tư của người dùng như quản lý yếu kém, thực thi thiếu, .v.v…
+Để đảm bảo những yếu tố trên, bắt buộc bên thực thi chức năng hệ thống quản lý người dùng cần có làm bài bản và công phu.
+Tuy nhiên, với khá nhiều business cases, chủ yếu các công ty khởi nghiệp quy mô nhỏ hoặc các công ty viện nghiên cứu, nơi yếu tố tập trung vào chuyên môn, ý tưởng nghiệp vụ quan trọng hơn những vấn đề không phải chuyên môn của họ, việc sử dụng giải pháp của nhà cung cấp bên thứ 3 trở nên cấp thiết.
+Và bên thứ 3, bên cung cấp giải pháp có sẵn bắt buộc phải đáng tin cậy, với chất lượng thể hiện qua SLA phải thật cao. (&lt;em&gt;SLA sẽ quan trọng hơn SLO/SLI hay KPI rất nhiều, vì SLO/SLI hay KPI chỉ là các chỉ số nội bộ vô giá trị với người dùng, còn SLA mới là cái cam kết với người dùng là dịch vụ của bạn sẽ cung cấp những hạng mục này với chất lượng như thế này&lt;/em&gt;).&lt;/p&gt;
+
+&lt;h2 id=&quot;các-hình-thái-quản-lý-người-dùng&quot;&gt;Các hình thái quản lý người dùng&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/iam.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Đầu tiên, chúng ta xem lại một vài khái niệm về định danh và quản lý người dùng.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Định danh liên bang (Federated Identity)&lt;/strong&gt;: dữ liệu định danh được di chuyển giữa các server (A và B) mà không vi phạm kiểm tra nguồn gốc (origin). Việc này được thực hiện bởi server IAM bên ngoài.
+Nhờ vào hình thái này, người dùng của dịch vụ A có thể đăng nhập và dịch vụ B mà chưa hề đăng ký ở B.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Single Sign-On&lt;/strong&gt;: đăng nhập 1 lần. Giả sử có 1 hệ sinh thái bao gồm nhiều dịch vụ khác nhau, thì đăng nhập 1 lần tức là người dùng của dịch vụ này chỉ cần đăng nhập và dịch vụ đã đăng ký là có thể tự do truy cập vào mội dịch vụ trong hệ sinh thái.
+Để thực hiện hình thái này, đòi hỏi trong hệ sinh thái có 1 dịch vụ IAM để thực hiện định dạng liên bang, tức là vận chuyển dữ liệu định danh của user giữa các dịch vụ.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Định danh liên bang trong doanh nghiệp (Enterprise Federated)&lt;/strong&gt;: Định danh liên bang được dùng với các kết nối dịch vụ trong doanh nghiệp như Active Directory, SAML, LDAP, Google Apps, .v.v…&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Các hình thức định danh kể trên giúp việc quản lý người dùng được đồng bộ trong toàn doanh nghiệp cũng như hệ sinh thái. Trong tiếng Nhật, gọi đó là 一元管理, tức là thay vì quản lý theo nhiều dịch vụ nhiều phương diện khác nhau, sự quản lý được đơn giản hóa thành quản lý 1 chiều thống nhất.&lt;/p&gt;
+
+&lt;p&gt;Quản lý người dùng là lĩnh vực đang biến đổi với sự gia tăng nhanh chóng của các thiết bị nhỏ gọn như điện thoại di động.
+Do đó, các công nghệ mới trong toàn lĩnh vực này bao gồm &lt;strong&gt;Đăng nhập 1 lần (Single Sign-On)&lt;/strong&gt;, &lt;strong&gt;Đăng nhập không mật khẩu (Passwordless)&lt;/strong&gt; và &lt;strong&gt;Định danh đa hình thái (Multi-factor Authentication)&lt;/strong&gt; đang trở nên nóng hổi.
+&lt;em&gt;Multifactor Authentication (MFA)&lt;/em&gt; thực hiện định danh nhiều cửa để tăng tính bảo mật.
+&lt;em&gt;Passwordless&lt;/em&gt; sử dụng các biện pháp định danh ngoài mật khẩu truyền thống như bio-metrics (vân tay, khuôn mặt, .v.v…).&lt;/p&gt;
+
+&lt;p&gt;Thêm vào đó, các ứng dụng sử dụng dịch vụ đám mây như Amazon Web Services (AWS) hay Google Apps, cũng cần thực thi IAM do họ lưu trữ dữ liệu người dùng trên các server trên đám mây.
+Ngoài ra, &lt;em&gt;social authentication&lt;/em&gt; cũng là một nhu cầu do các ứng dụng B2C đòi hỏi liên kết với các mạng xã hội để nâng cao hiệu quả quảng cáo, marketing, cũng như gia tăng trải nghiệm người dùng.
+Với các ứng dụng B2E thì ngược lại, họ không phải quan tâm đến quá nhiều phân quyền và nhiều cấp độ truy cập. Nhưng nhà quản lý (admin) sẽ phải chịu trách nhiệm tạo tài khoản khi có thành viên mới gia nhập và vô hiệu tài khoản khi thành viên rời đi.&lt;/p&gt;
+
+&lt;h2 id=&quot;của-nhà-trồng-được-và-đồ-ăn-sẵn&quot;&gt;“Của nhà trồng được” và “Đồ ăn sẵn”&lt;/h2&gt;
+&lt;h3 id=&quot;lợi-ích-của-các-giải-pháp-iam-bên-thứ-3-có-sẵn&quot;&gt;Lợi ích của các giải pháp IAM bên thứ 3 (có sẵn)&lt;/h3&gt;
+
+&lt;p&gt;Như các bạn đã thấy ở trên, so với quản lý người dùng truyền thống (tự build và tự update khi bắt buộc), các giải pháp quản lý trong một hệ sinh thái lớn đòi hỏi nhiều phương thức định danh mới như định dang liên bang mà vì thế việc cân nhắc đưa một giải pháp IAM vào tổ chức là cần thiết cho mọi nhà quản lý hệ thống IT hiện nay.
+Chúng ta xem lại lợi ích của các giải pháp này:&lt;/p&gt;
+
+&lt;p&gt;Đối với mọi hệ thống IT:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Giảm chi phí kỹ thuật&lt;/strong&gt;: Sử dụng giải pháp IAM bên thứ 3 tương đương với giảm thiểu chi phí kỹ thuật cho việc thực hiện các chức năng IAM bên trong tổ chức của bạn. Nói ngắn gọn, là bạn sẽ tập trung được vào các chức năng chuyên môn thay vì bận rộn lo thủ tục giấy tờ mà hay gọi là các công việc mang tính chất overhead. Như vậy đồ ăn sẵn nói một cách fair thì rẻ hơn nhiều so với của nhà trồng được. Nếu không tính chi phí phát sinh trong quá trình vận hành, sửa lỗi, quản lý chất lượng.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Tăng độ tin cậy và bảo mật&lt;/strong&gt;: Lưu trữ dữ liệu trên server của bên thứ 3 giúp dữ liệu của người dùng của bạn an toàn khỏi … chính bạn. Đơn cử như việc dùng lại mật khẩu để tránh phải nhớ nhiều mật khẩu dẫn đến quản lý dữ liệu yếu kém. Ủy thác công việc “đau đầu” này cho bên thứ 3 giúp bạn nhẹ tay khỏi những nghiệp vụ này, đồng thời an ninh được đảm bảo hơn nhờ những công nghệ xác thực mới như Passwordless hay MFA.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Đối với nhóm hệ thống B2B:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Gia tăng tốc độ hiện đại hóa doanh nghiệp&lt;/strong&gt;: Với chức năng định danh doanh nghiệp (Enterprise Federation), người dùng được “chắp thêm cánh” với hàng loạt công nghệ bảo mật mới, đồng thời an toàn kết nối với hàng loạt dịch vụ tiện lợi như Active Directory, Google Apps, .v.v… Với SSO, người dùng thậm chí không cần nhớ username hay password, thậm chí dù bạn vẫn muốn user dùng mật khẩu, vẫn có những giải pháp IAM an toàn và ready-to-use.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Tăng lợi nhuận&lt;/strong&gt;: Bằng việc cung cấp dịch vụ IAM thuận tiện và an toàn, những dịch vụ bên thứ 3 khiến tăng tỷ lệ engagement của khách hàng khiến bạn có thêm khách hàng doanh nghiệp trung thành, đồng thời giảm thiệt hại cho việc khách hàng bỏ dùng dịch vụ giữa chừng.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Rút ngắn quá trình sales và onboarding (huấn luyện nhân viên mới)&lt;/strong&gt;: Các tiêu chuẩn bảo mật đã được ship sẵn trong gói dịch vụ bên thứ 3 như của Auth0 hay AWS Cognito khiến cho đội ngũ sales tập trung vào công việc chuyên môn, giúp ngắn thời gian xây dựng và triển khai giải pháp.
+Đối với khách hàng B2B có đội ngũ nhân viên mới lớn, giải pháp “ăn sẵn” của bên thứ 3 giúp nhân viên mới nhanh chóng nắm bắt và tuân thủ các quy định bảo mật, và đương nhiên nhanh chóng tiếp cận công việc chuyên môn chính.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Đối với nhóm hệ thống B2C:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Hút khách hàng&lt;/strong&gt;: Bằng việc cung cấp giải pháp tiêu chuẩn, đồng bộ (form login, các quy trình xử lý), giải pháp IAM giúp khách hàng của doanh nghiệp nhanh chóng tiếp cận dịch vụ, bỏ bớt nhiều công đoạn mang tính thủ tục.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Đối với nhóm hệ thống B2E:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Rút ngắn thời gian tác vụ ngoài chuyên môn với SSO&lt;/strong&gt;: Với SSO, người dùng có thể truy cập nhiều dịch vụ khác nhau chỉ thông qua 1-click.
+Kết nối tới các giải pháp ERP, CRM, Saleforces, Office 365, .v.v… đã đều ở trạng thái ready-to-use.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Hỗ trợ phân quyền&lt;/strong&gt;: Quản lý truy cập của người dùng mới và người dùng đã kết thúc được quy chuẩn hóa.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;các-giải-pháp-tự-build&quot;&gt;Các giải pháp tự build&lt;/h3&gt;
+
+&lt;p&gt;Nếu tổ chức của bạn đã có sẵn một giải pháp “tự” quản lý, tôi hiểu rất khó để “chuyển đổi số”.
+Tuy vậy, bắt đầu chuyển đổi số nên bắt đầu từ những cấp quản lý, vì đây là nghiệp vụ mang tính overhead khá cao.
+So với giải pháp bên thứ 3 đang ngày càng phong phú, hầu như giải pháp tự build khó có ưu điểm nào vượt trội, đặc biệt trong các lĩnh vực mà có nhiều “cá mập” như security.
+Do đó nếu doanh nghiệp mới bắt đầu tìm cách thực thi giải pháp security, hầu như chúng tôi không tư vấn để thực hiện bằng build với code bao giờ, vì giá thành vừa cao mà dễ bị lỗi do nhân tố con người (human errors).&lt;/p&gt;
+
+&lt;h2 id=&quot;các-yếu-tố-cần-xem-xét-khi-lựa-chọn-dịch-vụ-iam-và-các-dịch-vụ-iam-khuyên-dùng&quot;&gt;Các yếu tố cần xem xét khi lựa chọn dịch vụ IAM và các dịch vụ IAM khuyên dùng&lt;/h2&gt;
+
+&lt;h3 id=&quot;các-yếu-tố-nên-xem-xét&quot;&gt;Các yếu tố nên xem xét&lt;/h3&gt;
+
+&lt;p&gt;Như đã nói, thị trường security là đã “bão hòa” và lắm cá mập.
+Nhưng ngay cả việc chỉ việc lựa chọn trong đám cá mập để xài thì cũng có rất nhiều.
+Nên chúng tôi cung cấp dưới đây danh sách yếu tố nên quan tâm khi lựa chọn nhà cung cấp giải pháp.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;strong&gt;Yếu tố&lt;/strong&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;strong&gt;Giải thích&lt;/strong&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Hình thái triển khai&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;Nên lựa chọn giải pháp có thể triển khai ở bất cứ đâu. Ví dụ, giải pháp có thể triển khai trên cloud của cty giải pháp, trên cloud của khách hàng, hoặc trên data center của chính khách hàng.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Khả năng tích hợp&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;Tìm kiếm giải pháp có SDKs tốt, tài liệu hướng dẫn chuẩn chỉnh, APIs mạnh, các tính năng hoàn chỉnh, phong phú và quan trọng nhất là dễ cấu hình cho nhân lực của cty bạn.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Sự hỗ trợ với các nhà cung cấp dịch vụ định danh khác&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;Microsoft Active Directory, ADFS, Office 365,Google Apps và SAML là những nhà cung cấp dịch vụ mà 1 giải pháp security tốt nên hỗ trợ. Bạn nên kiểm tra kỹ xem các nhà cung cấp dịch vụ định danh mà giải pháp của bạn hỗ trợ có phù hợp nhu cầu cuả cty bạn không.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Khả năng mở rộng&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;Giải pháp security bạn lựa chọn có dễ dàng cho bạn khi muốn customize quy trình đăng nhập và đăng ký không? Nếu business của bạn thường xuyên thay đổi theo nhu cầu người dùng, bạn nên cân nhắc giải pháp có hỗ trợ mạnh việc customize (như trong e-commerce, tôi vẫn khuyên anh em xài wordpress vì nó nhiều plugin, khả năng mở rộng mạnh mà ít phải code).&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Bộ tính năng&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;Bạn nên chọn giải pháp có bộ tính năng tốt nhất trên thị trường.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Khả năng dịch chuyển&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;Khả năng dịch chuyển dữ liệu giữa các server, hoặc từ data centers của khách hàng lên cloud của giải pháp là những yếu tố nên có.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Dịch vụ hỗ trợ&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;Dịch vụ hỗ trợ tốt, nhanh, 24/7 là yếu tố nên có.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;giới-thiệu-sơ-qua-về-các-dịch-vụ-định-danh-nổi-bật-trên-thị-trường&quot;&gt;Giới thiệu sơ qua về các dịch vụ định danh nổi bật trên thị trường&lt;/h3&gt;
+
+&lt;p&gt;Nhìn chung mảng bảo mật và dịch vụ định danh khá là nhiều “cá mập”.
+Vì vậy, tôi nghĩ sẽ không khó để tìm được 1 dịch vụ có đầy đủ các yếu tố kể trên, cộng thêm reviews tốt nữa để nhấn nút đặt hàng.
+Nếu bạn đã triển khai dịch vụ của bạn trên cloud, đương nhiên tích hợp giải pháp định danh mà nhà cung cấp cloud có sẵn là cách đồng bộ nhất.
+Ví dụ bạn đang dùng AWS thì tốt nhất nên dùng Cognito.
+Còn nếu bạn đang triển khai trên data center của riêng cty bạn hoặc bạn vì lý do nào đó không thích giải pháp mà cloud offer, bạn có thể xem xét một số nhà cung cấp thứ 3 khác như Auth0.
+Ngoài ra, chú ý là Auth0 [1, 2] cũng hỗ trợ định danh đến từ Cognito [3], Microsoft Active Directory [4] hay Google Identity Platform [5].
+Còn 1 danh sách dài khác các ứng cử viên (cả cá mập, cá lớn lẫn cá bé) trong lĩnh vực security này, tôi xin phép đề cập khi có dịp.&lt;/p&gt;
+
+&lt;h2 id=&quot;tổng-kết&quot;&gt;Tổng kết&lt;/h2&gt;
+
+&lt;p&gt;Nhìn chung, sự ra đời của hàng loạt dịch vụ định danh và bảo mật tính theo chiều dài lịch sử của Internet từ bong bóng Dotcom những năm 2000 đã tạo nên cục diện ngày hôm nay.
+Hầu như các giải pháp bên thứ 3 đã cung cấp nền tảng đầy đủ tính năng và phong phú về ứng dụng cho người dùng trong mảng định danh và bảo mật.
+Vì có quá nhiều nên cuộc cạnh tranh đã khiến cho người dùng có thể thoải mái lựa chọn giải pháp phù hợp nhất cho nhu cầu của mình.
+Đứng về góc độ business, tôi tin tưởng tương lai chuyển đổi số sẽ đứng về phía các dịch vụ có sẵn.
+Dù xây thì thực chất bên dưới vẫn là các nền tảng có sẵn.
+Công việc của người làm quản lý sẽ được rút ngắn, tránh overhead cho những nghiệp vụ người dùng.
+Người quản lý sẽ tập trung vào chuyên môn của doanh nghiệp và phần thời gian cho nghiệp vụ người dùng sẽ ở mức độ thao tác trên giao diện web ở mức kéo thả và thao tác cơ bản.&lt;/p&gt;
+
+&lt;h2 id=&quot;tài-liệu-tham-khảo&quot;&gt;Tài liệu tham khảo&lt;/h2&gt;
+&lt;ol class=&quot;bibliography&quot;&gt;&lt;li&gt;&lt;span id=&quot;NeverCom29:online&quot;&gt;Auth0. &lt;i&gt;Never Compromise on Identity&lt;/i&gt;. https://auth0.com/user-management.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;buildvsb19:online&quot;&gt;Auth0 Whitepaper. &lt;i&gt;Build vs Buy: Guide to Identity Management&lt;/i&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;AmazonCo96:online&quot;&gt;Services, A. W. &lt;i&gt;Amazon Cognito – Đăng nhập và đăng ký cho người dùng đơn giản và bảo mật | Amazon Web Services (AWS)&lt;/i&gt;. https://aws.amazon.com/vi/cognito/.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;Identity83:online&quot;&gt;Microsoft. &lt;i&gt;Identity and Access documentation | Microsoft Docs&lt;/i&gt;. https://docs.microsoft.com/en-us/windows-server/identity/identity-and-access.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;Identity68:online&quot;&gt;Cloud, G. &lt;i&gt;Identity Platform  |  ID プラットフォーム  |  Google Cloud&lt;/i&gt;. https://cloud.google.com/identity-platform/.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</content><author><name>Tuan Nguyen-Anh</name></author><category term="sre" /><category term="non-english" /><category term="thiết kế hệ thống" /><category term="kỹ sư SRE" /><category term="sre" /><category term="user management" /><category term="quản lý người dùng" /><category term="iam" /><category term="identity and access management" /><summary type="html">Nguồn: [1] Quản lý người dùng (Identity and Access Management, IAM hay user management) luôn là một mục quan trọng trong mọi thiết kế hệ thống. Vấn đề bảo vệ dữ liệu riêng tư người dùng, quản lý phân quyền và quản lý truy cập, đều là các vấn đề có thể nói là đau đầu không khác gì “bệnh ung thư”. Tuy vậy, cần chú ý rằng việc quyết định lựa chọn giải pháp tự build lấy (tôi xin dùng thuật ngữ “cây nhà lá vườn” của hội nông dân để chỉ giải pháp này) và giải pháp sử dụng nhà cung cấp có sẵn, thì cái nào hơn? Câu trả lời là tùy thuộc vào bài toán business của bạn, nhưng theo ý kiến cá nhân thì nhìn chung, với các khởi nghiệp nhỏ và các business mà bạn muốn tập trung vào chuyên môn hơn là lo những vấn đề không phải chuyên môn mà lại dễ tạo ra “bệnh ung thư” trong cả tổ chức như quản lý người dùng, thì giải pháp sử dụng nhà cung cấp có sẵn đôi khi rất fair. Bạn vẫn quản lý được người dùng với quy trình chất lượng thỏa mãn các tiêu chuẩn của IETF (1 tổ chức kiểu ISO dành cho Internet và bảo mật) nhưng vẫn không phải tốn thời gian cho những thứ ngoài chuyên môn.</summary></entry><entry><title type="html">Animal Vision Part 1: Course Introduction</title><link href="https://www.caineng.in/cv/ai/2021/03/06/animal-vision-series-part-1.html" rel="alternate" type="text/html" title="Animal Vision Part 1: Course Introduction" /><published>2021-03-06T00:00:00+07:00</published><updated>2021-03-06T00:00:00+07:00</updated><id>https://www.caineng.in/cv/ai/2021/03/06/animal-vision-series-part-1</id><content type="html" xml:base="https://www.caineng.in/cv/ai/2021/03/06/animal-vision-series-part-1.html">&lt;p&gt;&lt;img src=&quot;/assets/img/dogs.PNG&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The purpose of this &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;learning-by-doing&lt;/code&gt; course is to get familiar with a cross-discipline topic: Computer Vision for Agriculture.
+Specifically, we introduce Animal Vision (AniV), targeting canine animals.
+Learners get through several useful applications of Computer Vision (CV) into Animal Farming:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Object Recognition, Detection and Segmentation (including class, instance and panoptic segmentation [1])&lt;/li&gt;
+  &lt;li&gt;Methods to adapt to new domains in farming such as Transfer Learning and Domain Adaptation.&lt;/li&gt;
+  &lt;li&gt;Image enhancement methods such as de-raining, super-resolution, .etc.&lt;/li&gt;
+  &lt;li&gt;Applications such as Dog counting, animal crowd density estimation, anomaly detection.
+The objective of this course is to build a proper Animal Vision system below.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Automation&lt;/strong&gt; is changing the world with growing conventional technologies such as Information Tech, Software, Hardware, and frontier domains such as Artificial Intelligence (AI), Machine Learning (ML), Deep Learning (DL), Internet of Things (IoT), Computational Linguistics (CL), and Computer Vision (CV).
+Cloud platforms like Amazon Web Services (AWS) provides convenient solutions to handle many industrial problems at hand, such as Equipment Defect Detection using &lt;em&gt;AWS Lookout for Equipment [2]&lt;/em&gt;.
+For Agriculture Automation, the uses of CV are also growing [3, 4] in two sectors in agriculture: crops and farming.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Applications&lt;/th&gt;
+      &lt;th&gt;Sub-tasks&lt;/th&gt;
+      &lt;th&gt;Description&lt;/th&gt;
+      &lt;th&gt;Technologies&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Crop Management&lt;/td&gt;
+      &lt;td&gt;Crop Monitoring&lt;/td&gt;
+      &lt;td&gt;AI engine mounted into a UAV can detect crops and monitor their growth for human diagnostic. Human experts and farmers can perform further investigations and change the plan of feeding crops.&lt;/td&gt;
+      &lt;td&gt;UAV/Drones, object detection/classification/segmentation&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Yield Prediction&lt;/td&gt;
+      &lt;td&gt;Using deep learning with satellite imagery, we can gather various information like soil conditions, nitrogen levels, moisture, seasonal weather, historical yield information of crops for precise farming.&lt;/td&gt;
+      &lt;td&gt;Time series forecasting, fruit object counting&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Food Safety&lt;/td&gt;
+      &lt;td&gt;Environment Management&lt;/td&gt;
+      &lt;td&gt;From historical information of crop environment, such as soil conditions, nitrogen levels, moisture, seasonal weather, spotting the outliers to judge the quality of the crops and fruits.&lt;/td&gt;
+      &lt;td&gt;Time series anomaly detection&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Spraying pesticides&lt;/td&gt;
+      &lt;td&gt;We use AI-enabled drones to monitor the infected crops and spray the pesticides to prevent crops from insects and pests. The computer vision allows drones to precisely detect the infected crops and spray the pesticides accordingly.&lt;/td&gt;
+      &lt;td&gt;Image anomaly detection, UAV/Drones, object detection/classification/segmentation&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Automatic quality grading and sorting&lt;/td&gt;
+      &lt;td&gt;Using the deep learning techniques, we calculate the percentage of infection. The grading and sorting of the fruit image helping farmers to reduce the crop damages due to storage.&lt;/td&gt;
+      &lt;td&gt;Image classification, image anomaly detection, object detection/classification/segmentation&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Weight estimation&lt;/td&gt;
+      &lt;td&gt;CV enables automatic weight detection to ensure that animals grow well before being sent to the slaughterhouse.&lt;/td&gt;
+      &lt;td&gt;Image weight estimation, UAV/Drones, object detection/classification/segmentation&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Farming Management&lt;/td&gt;
+      &lt;td&gt;Livestock Management&lt;/td&gt;
+      &lt;td&gt;Automatic counting of animals in the farms helps the farmers better manage their hounds. When an individual has a sickness, the AI-enabled system can alert the farmers to separate that individual from the rest.&lt;/td&gt;
+      &lt;td&gt;Animal counting, density estimation, image anomaly detection, UAV/Drones, object detection/classification/segmentation&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;The applications in this field include Forestry Management, which is similar to Crop Management but has some other issues such as burning prevention.
+Our targets include Farming Management (and weight estimation).&lt;/p&gt;
+
+&lt;h2 id=&quot;system&quot;&gt;System&lt;/h2&gt;
+
+&lt;h3 id=&quot;a-system-for-farming-management&quot;&gt;A system for farming management&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/farm.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;A camera captures an image and sends it to the server. In the server, a &lt;strong&gt;Global Anomaly Detector (GAD)&lt;/strong&gt; detects whether if there is a non-targeted class in the image. For example, if the monitor scenario only accepts dogs and sheep, the system must raise an alert (5) when a wolf or a human thief appears.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;If GAD detects only accepted classes, (4) a &lt;strong&gt;1-class detector/segmentation model&lt;/strong&gt; (or &lt;strong&gt;limited-domain model, LDM&lt;/strong&gt;) detects the (7) &lt;strong&gt;annotations (bounding boxes and polygons)&lt;/strong&gt;. Here, we find other benefits of GAD: it reduces the &lt;strong&gt;load and mistakes of LDM&lt;/strong&gt;. &lt;strong&gt;Why?&lt;/strong&gt; Because in the course, we see that 1-class models and 1-vs-rest learning mechanisms often result in &lt;strong&gt;over-confidence problem&lt;/strong&gt;: the 1-class model makes many false-positives (FPs) on the rest classes. Therefore, using a GAD reduces the chance of such over-confidence by &lt;strong&gt;early detection of intrusions&lt;/strong&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;For each detection of LDM, it is passed to a &lt;strong&gt;wide-domain classifier (WDC)&lt;/strong&gt; such as an ImageNet pre-trained model. GAD does early intrusion detection, WDC performs late detection of intrusions. Because a 1-class model can give many FPs, GAD is insufficient. Since WDC learned in 1000 classes, a larger knowledge base than LDM, it is less over-confident.
+WDC firmly prevents non-target classes from being intruded into the Analytics Database.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;If the detection surpasses RAD, it has less chance to be a false alarm. 
+We want to obtain further analytics information: 
+(10) &lt;strong&gt;Regional Anomaly Detector (RAD)&lt;/strong&gt; which finds if the instance region has sickness or not; 
+(11) &lt;strong&gt;Fine-Grained Classifier (FGC)&lt;/strong&gt; returns the detailed classes such as breed names of the instances (an Egyptian dog rather than a dog); and 
+(12) &lt;strong&gt;Weight Estimation Model (WEM)&lt;/strong&gt; returns the instance weight for further diagnostics.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The above information is inserted by timestamp to the Analytics Database to display in the Dashboard to the farm owners.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In this course, we learn the CV and ML technologies to implement this system.&lt;/p&gt;
+
+&lt;h3 id=&quot;technologies&quot;&gt;Technologies&lt;/h3&gt;
+
+&lt;h4 id=&quot;image-classification&quot;&gt;Image classification&lt;/h4&gt;
+
+&lt;p&gt;As said before, Global Anomaly Detector (GAD) for early intrusion detection, as well as the Wide-Domain Classifier for late intrusion detection, are implemented by Wide-domain models such as pre-trained ImageNet models. This technology is well known today, especially after 2012 with the boost of the Deep Learning era.&lt;/p&gt;
+
+&lt;h4 id=&quot;object-detection-and-segmentation&quot;&gt;Object detection and segmentation&lt;/h4&gt;
+&lt;p&gt;We apply these classes of technology to 1-class models and RAD models above.&lt;/p&gt;
+
+&lt;h4 id=&quot;image-anomaly-detection&quot;&gt;Image Anomaly Detection&lt;/h4&gt;
+&lt;p&gt;This technology aims at delivering the infected instances in an image.
+The deliverables can be bounding boxes, polygons, or binary labels (sickness/noon-sickness).
+GAD and RAD use this technology. &lt;strong&gt;Gathering training data&lt;/strong&gt; can be a problem due to the frequency of rare events.&lt;/p&gt;
+
+&lt;h4 id=&quot;machine-learning&quot;&gt;Machine Learning&lt;/h4&gt;
+
+&lt;p&gt;Data augmentation, balancing training data, domain adaptation, and transfer learning can be the core set of ML technologies we need to learn.&lt;/p&gt;
+
+&lt;h4 id=&quot;image-processing&quot;&gt;Image Processing&lt;/h4&gt;
+
+&lt;p&gt;Some worst cases in practice require further care about image quality:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Bad weather&lt;/strong&gt; such as raining and snowing can result in low detection quality. De-raining models can be useful.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Camera movement&lt;/strong&gt; can be complement by calibration.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Low-resolution imagery&lt;/strong&gt; requires up-scaling or super-resolution.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The models can be run on the input images before fed to GAD.&lt;/p&gt;
+
+&lt;h4 id=&quot;attribute-detection&quot;&gt;Attribute Detection&lt;/h4&gt;
+
+&lt;p&gt;For farming, they feed most animal breeds for meat.
+Therefore, attributes which affect the quality of food are inevitable.
+They are animal health conditions such as weight and sickness.&lt;/p&gt;
+
+&lt;h4 id=&quot;fine-grained-categorization&quot;&gt;Fine-Grained Categorization&lt;/h4&gt;
+
+&lt;p&gt;FGC helps to identify the breeds and origins of the animals.
+This technology contributes to quality insurance to keep traceability of food origin.&lt;/p&gt;
+
+&lt;h2 id=&quot;about-this-course&quot;&gt;About this course&lt;/h2&gt;
+
+&lt;p&gt;In this course, we implement the Animal Vision System (AVS) using frontier technologies.&lt;/p&gt;
+
+&lt;h3 id=&quot;tools&quot;&gt;Tools&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Language&lt;/td&gt;
+      &lt;td&gt;English&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;OS&lt;/td&gt;
+      &lt;td&gt;Ubuntu, macOS, Windows x64&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Programming Language&lt;/td&gt;
+      &lt;td&gt;Python (C/C++)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Deep Learning frameworks&lt;/td&gt;
+      &lt;td&gt;PyTorch&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Computer Vision and Machine Learning libraries&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;opencv-contrib-python, scikit-learn, scipy, scikit-image&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;posts&quot;&gt;Posts&lt;/h3&gt;
+
+&lt;ol class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;&lt;strong&gt;Introduction (this post)&lt;/strong&gt;&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;&lt;strong&gt;Introduction about Computer Vision (using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scikit-image&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;opencv&lt;/code&gt;)&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Image filters, edge detection, calibration, artifact removals, .etc.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;&lt;strong&gt;Object detection, classification and segmentation&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Image features&lt;/li&gt;
+      &lt;li&gt;Conventional object detection methods like the Viola-Jones cascade method.&lt;/li&gt;
+      &lt;li&gt;Convolutional neural networks, convolutional/pooling/upscaling/dilated operations, etc.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;&lt;strong&gt;Advanced problems in image enhancement (1)&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Generative Adversarial Networks, Auto-Encoders&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;&lt;strong&gt;Advanced problems in image enhancement (2)&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Haze removal, artifact removal, reconstruction&lt;/li&gt;
+      &lt;li&gt;Super-resolution, de-raining methods.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;&lt;strong&gt;Machine learning (1)&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;The role of data augmentation&lt;/li&gt;
+      &lt;li&gt;Common learning problems: over-fitting/under-fitting&lt;/li&gt;
+      &lt;li&gt;Over-confidence problems: Open-world recognition&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;&lt;strong&gt;Machine learning (2)&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Learning in new domains&lt;/li&gt;
+      &lt;li&gt;Transfer learning vs. Domain Adaptation&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;&lt;strong&gt;Machine learning (3)&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;One-vs-rest learning&lt;/li&gt;
+      &lt;li&gt;Limited-domain learners (experts) vs. Wide-domain learners (generalists) and over-confidence problems.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;&lt;strong&gt;Machine learning (4)&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Anomaly Detection&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;&lt;strong&gt;Animal Vision (1)&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Object counting&lt;/li&gt;
+      &lt;li&gt;Density Estimation&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;&lt;strong&gt;Animal Vision (2)&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Attribute detection: weight estimation and anomalous individual detection&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;&lt;strong&gt;Conclusion&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;The whole system&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;ol class=&quot;bibliography&quot;&gt;&lt;li&gt;&lt;span id=&quot;Kirillov_2019_CVPR&quot;&gt;Kirillov, A., He, K., Girshick, R., Rother, C., &amp;amp; Dollar, P. (2019, June). Panoptic Segmentation. &lt;i&gt;Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)&lt;/i&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;AmazonLo59:online&quot;&gt;&lt;i&gt;Amazon Lookout for Equipment - Amazon Web Services&lt;/i&gt;. https://aws.amazon.com/jp/lookout-for-equipment/&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;Applicat67:online&quot;&gt;&lt;i&gt;Application of Computer Vision in Precision Agriculture &amp;amp; Farming | by Vikram Singh Bisen | VSINGHBISEN | Medium&lt;/i&gt;. https://webcache.googleusercontent.com/search?q=cache:vzxIOTUqiOEJ:https://medium.com/vsinghbisen/application-of-computer-vision-in-precision-agriculture-farming-79b0600d5a5d+&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;TIAN20201&quot;&gt;Tian, H., Wang, T., Liu, Y., Qiao, X., &amp;amp; Li, Y. (2020). Computer vision technology in agricultural automation —A review. &lt;i&gt;Information Processing in Agriculture&lt;/i&gt;, &lt;i&gt;7&lt;/i&gt;(1), 1–19. https://doi.org/10.1016/j.inpa.2019.09.006&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</content><author><name>Tuan Nguyen-Anh</name></author><category term="cv" /><category term="ai" /><category term="ai" /><category term="animal vision" /><category term="computer vision" /><category term="artificial intelligence" /><category term="image processing" /><summary type="html">The purpose of this learning-by-doing course is to get familiar with a cross-discipline topic: Computer Vision for Agriculture. Specifically, we introduce Animal Vision (AniV), targeting canine animals. Learners get through several useful applications of Computer Vision (CV) into Animal Farming: Object Recognition, Detection and Segmentation (including class, instance and panoptic segmentation [1]) Methods to adapt to new domains in farming such as Transfer Learning and Domain Adaptation. Image enhancement methods such as de-raining, super-resolution, .etc. Applications such as Dog counting, animal crowd density estimation, anomaly detection. The objective of this course is to build a proper Animal Vision system below.</summary></entry><entry><title type="html">Deploy Odoo to AWS EC2 and Aurora with best practices</title><link href="https://www.caineng.in/sre/2021/02/15/aws-vpc-aurora-postgresql-odoo-crm-deployment.html" rel="alternate" type="text/html" title="Deploy Odoo to AWS EC2 and Aurora with best practices" /><published>2021-02-15T00:00:00+07:00</published><updated>2021-02-15T00:00:00+07:00</updated><id>https://www.caineng.in/sre/2021/02/15/aws-vpc-aurora-postgresql-odoo-crm-deployment</id><content type="html" xml:base="https://www.caineng.in/sre/2021/02/15/aws-vpc-aurora-postgresql-odoo-crm-deployment.html">&lt;p&gt;&lt;img src=&quot;https://odoocdn.com/openerp_website/static/src/img/2020/home/market_position_update.svg&quot; alt=&quot;Odoo perf&quot; /&gt;
+&lt;em&gt;Source: &lt;a href=&quot;https://odoocdn.com/openerp_website/static/src/img/2020/home/market_position_update.svg&quot;&gt;Odoo website&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
+
+&lt;h2 id=&quot;what-is-odoo&quot;&gt;What is Odoo?&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.odoo.com/&quot;&gt;Odoo&lt;/a&gt; is an open-source software platform and eco-system for business apps that cover all your company needs: CRM, e-commerce, accounting, inventory, point-of-sale, project management, so on.
+The suite of open source apps is very easy-to-use and fully integrated: the customers deploy the base Odoo distribution in the Odoo cloud with few clicks or their on-premises server/cloud, and integration of the apps is without pains.
+Because every app needed for business as CRM and point-of-sale are available in the eco-system, installing can be done in some single steps.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;which-odoo-edition-should-i-use&quot;&gt;Which Odoo edition should I use?&lt;/h2&gt;
+
+&lt;h3 id=&quot;comparisons&quot;&gt;Comparisons&lt;/h3&gt;
+&lt;p&gt;Odoo has two different editions: &lt;a href=&quot;https://www.odoo.com/page/editions&quot;&gt;Odoo Enterprise and Community&lt;/a&gt;.
+The enterprise edition provides better support and a richer set of features.
+With community edition, the company pays less for a usable solution but with lack of some useful features:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;No mobile app.&lt;/li&gt;
+  &lt;li&gt;No integration to commercial platforms like Amazon and eBay.&lt;/li&gt;
+  &lt;li&gt;No digital sign, subscription, gift programs, VoIP supports.&lt;/li&gt;
+  &lt;li&gt;No custom supports such as field services, AI/IoT solutions, payroll OCR, scheduling, maintenance.&lt;/li&gt;
+  &lt;li&gt;No social and marketing automation.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;odoo-enterprise&quot;&gt;Odoo Enterprise&lt;/h3&gt;
+&lt;p&gt;There are several aspects to care about the pricing of Odoo Enterprise to your organization:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;The number of users&lt;/em&gt;: Odoo license is applied to the number of employees. Note, employees who report their timesheets are counted as users. New customers obtain a 15% discount for each user at the time of this post.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;The number of apps&lt;/em&gt;: Only CRM app is coming with the base Odoo Enterprise. The price of each additional app ranges from 4 to 8 dollars.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Where do you host Odoo?&lt;/em&gt;: There are 3 hosting types: Cloud hosting, on-premises, and &lt;a href=&quot;https://www.odoo.sh/&quot;&gt;Odoo.sh platform&lt;/a&gt;. The first two options add no extra costs. You pay by yourself to the Cloud provider (AWS, IBM Cloud) or server costs. For the third option, the &lt;a href=&quot;https://www.odoo.sh/&quot;&gt;Odoo.sh platform&lt;/a&gt;, you can find a simulation below with a 50-employee company, using 50GB of data every month, 1 staging environment, and they pay about 207.20 dollars monthly.
+I follow the rule-of-thumb as discussed &lt;a href=&quot;https://www.odoo.com/forum/help-1/how-many-workers-do-i-need-with-odoo-sh-145771&quot;&gt;here&lt;/a&gt;.
+1 worker would be equal to 25 users.
+Therefore with 50 employees, we would like to have 3 workers.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/odo.sh-pricing.png&quot; alt=&quot;&quot; /&gt;
+&lt;em&gt;Source: &lt;a href=&quot;https://www.odoo.sh/pricing&quot;&gt;https://www.odoo.sh/pricing&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;How do you implement Odoo?&lt;/em&gt;: After purchasing the license to Odoo Enterprise, you can implement it in 3 ways: by yourself, using &lt;a href=&quot;https://www.odoo.com/pricing-packs&quot;&gt;Odoo Success Packs&lt;/a&gt;, or by asking help from a partner company. The first option charges you nothing. The second one is available only if Odoo has some branches in your neighborhood. It charges at least 975 dollars (after a 15% discount for new customers). The final option is to check the list of Odoo partner companies in your region and asking them for installation and maintenance supports. 
+Every option to install and maintain a distribution of Odoo Enterprise requires at least 1000$/year, except the first one. 
+If you put Odoo Enterprise in your server, Odoo Success Packs are not applied.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let’s get some example of pricing model for Odoo Enterprise in a medium-sized company:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Example 1&lt;/em&gt;: Company A has 50 employees with only 15 users (Human Resource teams, accountants, sales) use Odoo.
+They use 37 apps (excluding CRM) and &lt;a href=&quot;https://www.odoo.sh/&quot;&gt;Odoo.sh platform&lt;/a&gt; with &lt;a href=&quot;https://www.odoo.com/pricing-packs&quot;&gt;Odoo Success Packs&lt;/a&gt; Standard.
+It requires 1 Odoo Cloud Worker, with 100GB data storage and 1 staging environment.
+This plan costs A 92 dollars per month.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Item&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;Quantity&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;Price&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;Cost ($)&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Employees usage&lt;/td&gt;
+      &lt;td&gt;15&lt;/td&gt;
+      &lt;td&gt;8$/user&lt;/td&gt;
+      &lt;td&gt;120&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Discount on employees usage&lt;/td&gt;
+      &lt;td&gt;12&lt;/td&gt;
+      &lt;td&gt;-2$/user&lt;/td&gt;
+      &lt;td&gt;-30&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;App usage&lt;/td&gt;
+      &lt;td&gt;37 apps&lt;/td&gt;
+      &lt;td&gt;8.22$/app&lt;/td&gt;
+      &lt;td&gt;304&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Hosting (Odoo.sh)&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;92&lt;/td&gt;
+      &lt;td&gt;92&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Implementation (Success Packs Standard)&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;333.33&lt;/td&gt;
+      &lt;td&gt;333.33&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Discount on Success Packs Standard&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;-50&lt;/td&gt;
+      &lt;td&gt;-50&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+  &lt;tfoot&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Total&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;769.33/month&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tfoot&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/odo.sh-pricing-2.png&quot; alt=&quot;&quot; /&gt;
+&lt;em&gt;Source: &lt;a href=&quot;https://www.odoo.sh/pricing&quot;&gt;https://www.odoo.sh/pricing&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Example 2:&lt;/em&gt; Company B has 50 employees with only 15 users (Human Resource teams, accountants, sales) use Odoo.
+They use 37 apps (excluding CRM). 
+They choose to buy the Enterprise pack but buy no Odoo.sh or Success Packs.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Item&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;Quantity&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;Price&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;Cost ($)&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Employees usage&lt;/td&gt;
+      &lt;td&gt;15&lt;/td&gt;
+      &lt;td&gt;8$/user&lt;/td&gt;
+      &lt;td&gt;120&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Discount on employees usage&lt;/td&gt;
+      &lt;td&gt;15&lt;/td&gt;
+      &lt;td&gt;-2$/user&lt;/td&gt;
+      &lt;td&gt;-30&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;App usage&lt;/td&gt;
+      &lt;td&gt;37 apps&lt;/td&gt;
+      &lt;td&gt;8.22$/app&lt;/td&gt;
+      &lt;td&gt;304&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Hosting (Odoo.sh)&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;207.20&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Implementation (Success Packs)&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;333.33&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Discount on Success Packs&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;-50&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Customer hosting service&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;200&lt;/td&gt;
+      &lt;td&gt;200&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Development and maintenance&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;200&lt;/td&gt;
+      &lt;td&gt;200&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+  &lt;tfoot&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Total&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;794.00/month&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tfoot&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/odo.sh-pricing-3.png&quot; alt=&quot;&quot; /&gt;
+&lt;em&gt;Source: &lt;a href=&quot;https://www.odoo.sh/pricing&quot;&gt;https://www.odoo.sh/pricing&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;The development and maintenance which company B pay for is to the developers who implement and maintain the Odoo distribution in the company.
+In usual cases, there are one or two people in charge of this stuff.
+Note, this is the lowest price the author found.
+Comparing to example 1, company B pays a little bit in total, and the processes rely more on human workers and are more &lt;strong&gt;prone to human errors&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Huh, a ready-to-use solution is cheaper than a self-service solution, right?&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;odoo-community&quot;&gt;&lt;a href=&quot;https://www.odoo.com/page/community&quot;&gt;Odoo Community&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;The pricing model becomes affordable, but you have to implement and find hosting services yourself.
+Then, a sufficient background on the Odoo Community edition and deployments are required.
+&lt;strong&gt;You only pay for hosting services and people who implement Odoo on your business.&lt;/strong&gt;
+Note that, although the community edition does not come with some custom apps, there is a third-party community with many alternatives for free and paid: &lt;a href=&quot;https://apps.odoo.com/&quot;&gt;https://apps.odoo.com/&lt;/a&gt;.
+Furthermore, when the app you need in the given third-party community, you can start adding an idea to the community since the development of Odoo is fully open-source. (However, it might be better to have ready-to-use solutions).
+&lt;strong&gt;The process is highly dependent on human and is prone to human errors.&lt;/strong&gt;
+Compared to the second example, this solution costs less, but the customer hosting price and Development/Maintenance costs might not be changed.
+So will similar quality, it only reduces about 60% for Odoo apps.
+And because you need specialized personnel to implement custom Odoo apps, the cost for Development/Maintenance can increase.&lt;/p&gt;
+
+&lt;h1 id=&quot;deploying-odoo-to-amazon-web-service-aws&quot;&gt;Deploying Odoo to Amazon Web Service (AWS)&lt;/h1&gt;
+
+&lt;p&gt;After understanding the pricing model and the merits and demerits of each edition, we go to the deployment with &lt;a href=&quot;https://www.odoo.com/page/community&quot;&gt;Odoo Community&lt;/a&gt; to AWS EC2, Aurora for better understanding.&lt;/p&gt;
+
+&lt;h2 id=&quot;setup-vpc-in-a-defense-in-depth-style&quot;&gt;Setup VPC in a defense-in-depth style&lt;/h2&gt;
+
+&lt;h2 id=&quot;setup-ssh-bastion-server-for-further-investigation&quot;&gt;Setup SSH Bastion server for further investigation&lt;/h2&gt;
+
+&lt;h2 id=&quot;setup-aurora-instance&quot;&gt;Setup Aurora instance&lt;/h2&gt;
+
+&lt;h2 id=&quot;deploy-odoo-140&quot;&gt;Deploy Odoo 14.0&lt;/h2&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;In the first section, we compare available solutions for deployments of Odoo (both paid and free editions).
+Surprisingly, we found that paid solution, the &lt;strong&gt;Odoo Enterprise can be cheaper than using the free solutions if we count all development and maintenance fees&lt;/strong&gt;.
+And because this is a reliable and stable solution, &lt;strong&gt;Odoo Enterprise with full support from Odoo Cloud Platform&lt;/strong&gt; is more advantageous with less effort (you and your people can sleep well).
+From the view of business, the winner is determined.&lt;/p&gt;
+
+&lt;p&gt;In the second part, although using the community edition does not offer any real benefit in business, we still explored the way to deploy by ourselves to AWS.&lt;/p&gt;
+
+&lt;p&gt;In conclusion, ready-to-use solutions like Odoo Enterprise with Odoo Cloud seem to be the winner.
+If you like this, please give :+1:&lt;/p&gt;</content><author><name>Tuan Nguyen-Anh</name></author><category term="sre" /><category term="site reliability engineering" /><category term="cloud platforms" /><category term="public clouds" /><category term="AWS" /><category term="ec2" /><category term="aurora" /><category term="PostgreSQL" /><category term="SQL" /><category term="CRM" /><category term="odoo" /><summary type="html">Source: Odoo website Introduction What is Odoo? Odoo is an open-source software platform and eco-system for business apps that cover all your company needs: CRM, e-commerce, accounting, inventory, point-of-sale, project management, so on. The suite of open source apps is very easy-to-use and fully integrated: the customers deploy the base Odoo distribution in the Odoo cloud with few clicks or their on-premises server/cloud, and integration of the apps is without pains. Because every app needed for business as CRM and point-of-sale are available in the eco-system, installing can be done in some single steps.</summary></entry><entry><title type="html">On Hybrid Clouds: VMware Cloud on AWS</title><link href="https://www.caineng.in/sre/2021/02/14/hybrid-cloud-vmware-on-aws.html" rel="alternate" type="text/html" title="On Hybrid Clouds: VMware Cloud on AWS" /><published>2021-02-14T00:00:00+07:00</published><updated>2021-02-14T00:00:00+07:00</updated><id>https://www.caineng.in/sre/2021/02/14/hybrid-cloud-vmware-on-aws</id><content type="html" xml:base="https://www.caineng.in/sre/2021/02/14/hybrid-cloud-vmware-on-aws.html">&lt;p&gt;&lt;em&gt;Note: this post is about building Customer Data Center (CDC) for enterprise, not about applications for end-users.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/vmcaws.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For many years, enterprise customers have been deployed their infrastructure into VMware cloud with powerful and secure virtualization technologies like &lt;a href=&quot;https://www.vmware.com/products/vsphere.html&quot;&gt;vSphere&lt;/a&gt; for computing resources (VMs, .etc.), &lt;a href=&quot;https://www.vmware.com/products/vsan.html&quot;&gt;vSAN&lt;/a&gt; (storage) and &lt;a href=&quot;https://www.vmware.com/products/nsx.html&quot;&gt;NSX&lt;/a&gt; (networking). 
+While new and leading public cloud solutions like Amazon Web Services (AWS) offer lower cost tiers, with greater opportunities in building innovative solutions, transforming from the existing VMware cloud to AWS is a trade-off between reliability (on existing solutions) with better business offers.
+Building a hybrid cloud using &lt;a href=&quot;https://cloud.vmware.com/vmc-aws&quot;&gt;VMware Cloud on AWS&lt;/a&gt; is a way to achieve both goals: maintaining customers’ trust while migrating to novel solutions.
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;introduction-migration-to-aws&quot;&gt;Introduction: Migration to AWS&lt;/h1&gt;
+
+&lt;p&gt;Enterprise customers refer to the companies who have more than 500 personnel each (See the report [1], &lt;a href=&quot;https://www.vmware.com/content/dam/learn/en/amer/fy21/pdf/691726_2020_Business_Value_Running_Applications_VMware_Cloud_AWS_VMware_Hybrid_Cloud_Environments.pdf&quot;&gt;pdf&lt;/a&gt;).
+These customers have some characteristics in common: they have adopted a stable and reliable infrastructure for years and they are refraining from making a sudden changes in what is already running well.
+For example, a company who already have their infrastructure running on VMware Cloud and the system have established and have been running well for 20 years, then now it would be difficult t persuade the executives to change to AWS and stop all what already been running well so far.&lt;/p&gt;
+
+&lt;p&gt;The problems arise when persuading customer to migrate to a new platform like AWS:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;The cost of destroying what have been running well&lt;/strong&gt;: Our infrastructure in VMware have been running well for 20 years, now if we stop everything, we need to investigate on re-training our staffs to be familiar with new systems. The cost of migrating our products to new platform is also high and the waste should be considerable. This is a common customer claim.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;The gain of new business opportunities in new platform&lt;/strong&gt;: Does new platform offer us genuine solutions? Is the gain better than the cost?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Solving these trade-offs is a hurdle for migration to new businesses.
+VMware has offered a great solution to this problem: hybrid clouds with &lt;a href=&quot;https://cloud.vmware.com/vmc-aws&quot;&gt;VMware Cloud on AWS&lt;/a&gt;. In short, this means the customers &lt;strong&gt;deploy their data center to AWS Cloud using VMware Cloud technologies&lt;/strong&gt;. All of the resources will be allocated in AWS but the management will be done using VMware Cloud solutions such as vSphere, vSAN and NSX [2, 3].&lt;/p&gt;
+
+&lt;h1 id=&quot;vmware-cloud-on-aws&quot;&gt;VMware Cloud on AWS&lt;/h1&gt;
+
+&lt;h2 id=&quot;benefits&quot;&gt;Benefits&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Access to a public cloud environment that is consistent with an on-premises environment and can be operated with the same tools and skill sets as customers’ on-premises VMware environments, allowing migration, operations, and integration with customers’ on-premises environments&lt;/li&gt;
+  &lt;li&gt;Ability to add or remove resources on demand within minutes and use resources with hourly pay-as-you-go pricing, enabling agility and flexibility with customers’ VMware environments&lt;/li&gt;
+  &lt;li&gt;Access to AWS public cloud services, including databases, data analytics services, and emerging technologies such as artificial intelligence/machine learning (AI/ML)&lt;/li&gt;
+  &lt;li&gt;Delivered as a completely managed service by VMware, with pay-as-you-go pricing and no up-front commitments&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;learning-resources&quot;&gt;Learning resources&lt;/h2&gt;
+
+&lt;h3 id=&quot;tutorials&quot;&gt;Tutorials&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.919a954a9b6ca17cdc719ec42cda1401/GUID-E62521730EDBE3DC125813A448BA3B45.html&quot;&gt;Migrating MS SQL Server to AWS using VMware Cloud&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.fd6ed3145c4c711ec04722e9f7803c98/GUID-354BA0BF983966BFF710F44563729DF7.html&quot;&gt;Managing Oracle Database using VMware Cloud on AWS&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.324e0c5bdd4624ae8c3fbcd7460a8837/GUID-3F613B502E44AE64E4C88ED56EF7535A.html&quot;&gt;Performance Characterization of Microsoft SQL Server Using VMware Cloud on AWS&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.91696a39d9cb804e2888c43d538bab50/GUID-2892F57D4799679E31DB27E9DF358475.html&quot;&gt;Optimize Virtual Machine Configurations in VMware Cloud on AWS for Enterprise Applications Workload&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/GUID-25B7F9346825C50F67BF60403CCCAE21.html&quot;&gt;DNS Strategies for VMware Cloud on AWS&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/GUID-F0065BCA2A940BFF7F4D3220ED2DB286.html&quot;&gt;Using an On-Premises DHCP server&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/VMware-Cloud-on-AWS.c4d719788a38caf2d1599242f2b1b8cc/GUID-ECE503736CC8F886BE7B85CB79DB7405.html&quot;&gt;Understanding Integrations with AWS Services&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;official-guides&quot;&gt;Official guides&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.vmware.com/jp/VMware-Cloud-on-AWS/index.html&quot;&gt;User guides&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://aws.amazon.com/jp/vmware/&quot;&gt;AWS guides&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;others&quot;&gt;Others&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blogs.vmware.com/emea/en/2019/08/vmware-cloud-on-aws-get-your-basics-right-part-1/&quot;&gt;Series on how-to VMC on AWS&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://vmc.techzone.vmware.com/vmware-cloud-aws-tech-zone&quot;&gt;VMware Cloud on AWS Tech Zone&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://nicovibert.com/2020/01/29/terraform-for-vmware-cloud-on-aws/&quot;&gt;Introducing the HashiCorp Terraform Provider for VMware Cloud on AWS&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;Small business customers are likely to accept the solutions using new platforms like AWS because they don’t possess an existing solution their own.
+However, medium and large enterprises will need to consider the waste when migrating to new business platforms.
+Therefore, a solution like VMware Cloud on AWS is a big deal. 
+Enterprises will not need to stop their existing infrastructures, they only move the underlying resources which they rarely need to interact with to AWS, while they still use the same tools (vSphere, vSAN, NSX) for management in VMware Cloud.&lt;/p&gt;
+
+&lt;h1 id=&quot;references&quot;&gt;References&lt;/h1&gt;
+
+&lt;ol class=&quot;bibliography&quot;&gt;&lt;li&gt;&lt;span id=&quot;vmcaws&quot;&gt;Villars, R. L., Mohan, D., &amp;amp; Marden, M. (2020). &lt;i&gt;The Business Value of Running Applications on VMware Cloud on AWS in VMware Hybrid Cloud Environments&lt;/i&gt;. VMware.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;vmcawsy&quot;&gt;Cloud, V. M. (2018). &lt;i&gt;VMware Cloud on AWS: Tech Deep Dive Webinar&lt;/i&gt;. https://www.youtube.com/watch?v=R4Uq53rtPIE&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;vmcawst&quot;&gt;Cloud, V. M. &lt;i&gt;VMware Cloud on AWS: Deployment, Migration, and Configuration of Oracle Workloads&lt;/i&gt;. https://docs.vmware.com/en/VMware-Cloud-on-AWS/solutions/index.html&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</content><author><name>Tuan Nguyen-Anh</name></author><category term="sre" /><category term="site reliability engineering" /><category term="cloud platforms" /><category term="public clouds" /><category term="private clouds" /><category term="hybrid clouds" /><category term="customer data center" /><category term="cdc" /><category term="vmware" /><category term="vsphere" /><category term="vsan" /><category term="nsx" /><category term="vmware cloud on aws" /><category term="amazon web services" /><category term="oracle cloud infrastructure" /><category term="oci" /><summary type="html">Note: this post is about building Customer Data Center (CDC) for enterprise, not about applications for end-users. For many years, enterprise customers have been deployed their infrastructure into VMware cloud with powerful and secure virtualization technologies like vSphere for computing resources (VMs, .etc.), vSAN (storage) and NSX (networking). While new and leading public cloud solutions like Amazon Web Services (AWS) offer lower cost tiers, with greater opportunities in building innovative solutions, transforming from the existing VMware cloud to AWS is a trade-off between reliability (on existing solutions) with better business offers. Building a hybrid cloud using VMware Cloud on AWS is a way to achieve both goals: maintaining customers’ trust while migrating to novel solutions.</summary></entry><entry><title type="html">About Oracle Cloud Infrastructure (OCI)</title><link href="https://www.caineng.in/sre/2021/02/12/oracle-cloud-infra.html" rel="alternate" type="text/html" title="About Oracle Cloud Infrastructure (OCI)" /><published>2021-02-12T00:00:00+07:00</published><updated>2021-02-12T00:00:00+07:00</updated><id>https://www.caineng.in/sre/2021/02/12/oracle-cloud-infra</id><content type="html" xml:base="https://www.caineng.in/sre/2021/02/12/oracle-cloud-infra.html">&lt;p&gt;&lt;img src=&quot;/assets/img/oci.png&quot; alt=&quot;&quot; /&gt;
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;I’ve created this diagram to summarize the services in &lt;a href=&quot;https://www.oracle.com/cloud/&quot;&gt;Oracle Cloud Infrastructure (OCI)&lt;/a&gt;.
+I usually use AWS for building applications but apparently, OCI is often used in enterprise solutions.
+For example, &lt;a href=&quot;https://www.lastweekinaws.com/blog/why-zoom-chose-oracle-cloud-over-aws-and-maybe-you-should-too/&quot;&gt;Zoom also chose OCI to deploy their infra&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Unsurprisingly, I found that the structure of services in OCI is similar to AWS in several foundational categories: Management, Security, Identity, Database, Compute, Storage, .etc.&lt;/p&gt;
+
+&lt;p&gt;However, in terms of Artifical Intelligence and IoT applications, it feels like OCI has less showcases and developers who use OCI will be likely to have more tedious work to work.
+For example, building a chatbot is a relatively affordable task for IBM Watson users or AWS ML users.&lt;/p&gt;
+
+&lt;p&gt;Quite recently, OCI has announced some of their tutorials in &lt;a href=&quot;https://blogs.oracle.com/machinelearning/a-two-step-process-for-detecting-fraud-using-oracle-machine-learning&quot;&gt;Fraud Detection&lt;/a&gt;, and released their Oracle Machine Learning (OML) solution.&lt;/p&gt;
+
+&lt;p&gt;Anyway, all cloud platforms have their own upsides and downsides. Developers would learn to use and making their own choice. For me, for building AI/IoT applications, I still feel good with Amazon ;)&lt;/p&gt;</content><author><name>Tuan Nguyen-Anh</name></author><category term="sre" /><category term="site reliability engineering" /><category term="cloud platforms" /><category term="public clouds" /><category term="private clouds" /><category term="oracle" /><category term="oracle cloud infrastructure" /><category term="oci" /><summary type="html"></summary></entry><entry><title type="html">Understanding CopyNet</title><link href="https://www.caineng.in/ai/2021/02/04/copynet.html" rel="alternate" type="text/html" title="Understanding CopyNet" /><published>2021-02-04T00:00:00+07:00</published><updated>2021-02-04T00:00:00+07:00</updated><id>https://www.caineng.in/ai/2021/02/04/copynet</id><content type="html" xml:base="https://www.caineng.in/ai/2021/02/04/copynet.html">&lt;p&gt;CopyNet [1] is built upon the Seq2Seq framework [2] which improve accuracy by repeated patterns during conversations.
+First time hearing the name, I was confused because copying some parts of friend’s sentences is not technically interesting.
+However, I found that this &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;copying mechanism&lt;/code&gt; is somewhat realistic: we are often copying each other even what other people are saying.
+For example, when your friend tell you that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hi, my name is Jessy!&lt;/code&gt;, then a popular response would be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hi, Jessy!&lt;/code&gt;. You should copy the name &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Jessy&lt;/code&gt; as a quite normal reaction.
+In contrast, if you are too imaginative and instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;copying&lt;/code&gt;, you &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;generate&lt;/code&gt; a response like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hi, Michael&lt;/code&gt; to Jessy, this would be ridiculous.
+Then by incorporating the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;copying behavior&lt;/code&gt; into RNN Encoder-Decoder framework [2], it would make the question-answering goes smoothly.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;After understanding the motivation of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;copying mechanism&lt;/code&gt;, I have no concern with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;copy and paste&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;background-sequence-to-sequence-framework&quot;&gt;Background: Sequence-To-Sequence framework&lt;/h2&gt;
+
+&lt;h2 id=&quot;copynet&quot;&gt;CopyNet&lt;/h2&gt;
+
+&lt;h2 id=&quot;implementation&quot;&gt;Implementation&lt;/h2&gt;
+
+&lt;h3 id=&quot;dataset&quot;&gt;Dataset&lt;/h3&gt;
+&lt;p&gt;I tried the CopyNet for neural machine translation task in the &lt;a href=&quot;https://github.com/venali/BilingualCorpus&quot;&gt;BilingualCorpus&lt;/a&gt; dataset. This dataset contains 500K pairs of gold Japanese-English sentence pairs (and over 1.3M pairs in total, including non-gold translations).
+All the sentences are extracted from 14111 Wikipedia articles.
+Sentence pairs are given in 14111 XML document files.
+The below code will help to read all XML document files in a directory into a list of bilingual sentence pairs:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;opencorpora&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;itertools&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;glob&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;glob&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parse_sentence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'sen'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;children&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getchildren&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;jpn_sentences&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;eng_sentences&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'j'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;jpn_sentences&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'e'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;eng_sentences&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;itertools&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jpn_sentences&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eng_sentences&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parse_document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;pairs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getchildren&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'sen'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;pairs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parse_sentence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;pairs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parse_document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pairs&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parse_directory&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;files&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;glob&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/**/*.xml&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;recursive&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Found {} documents&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;files&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;pairs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;files&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;opencorpora&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; 
+            &lt;span class=&quot;n&quot;&gt;pairs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parse_document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pairs&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;A sample:&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;random&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;choice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pairs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;Out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'江戸時代には『甲陽軍鑑』が流行し、赤法衣と諏訪法性の兜に象徴される法師武者姿としてのイメージが確立した。'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+ &lt;span class=&quot;s&quot;&gt;'During the Edo period, &quot;Koyo Gunkan&quot; became popular, and the image of Shingen, as Hoshi-musha (armed priests) with a red clerical garment and a helmet of Suwahossho was established.'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;tokenization&quot;&gt;Tokenization&lt;/h3&gt;
+&lt;p&gt;Tokenization is a step-stone in all NLP tasks. For English, I can use space based splitting to do tokenization, but for JP language, when normally all tokens are concatenated without spaces, I use &lt;a href=&quot;https://spacy.io/models/ja#ja_core_news_lg&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;spacy&lt;/code&gt;’s JP language tokenizer&lt;/a&gt;. I don’t build tokenizer from scratch but do use a quite powerful and ready-to-use solution, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;spacy&lt;/code&gt;’s one.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;spacy.lang.ja&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JapaneseTokenizer&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;spacy.lang.en&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;English&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;spacy.tokenizer&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Tokenizer&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;spacy&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;nlp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;spacy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'ja_core_news_lg'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;tokenizer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JapaneseTokenizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nlp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokenizer&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;eng_tokenizer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Tokenizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;English&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vocab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;contains_digit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isdigit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create_vocab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pairs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;vocab&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;eng_vocab&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pairs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokenizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokenize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;eng_tokens&lt;/span&gt;  &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eng_tokenizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokenize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;normalized_form&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;contains_digit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'数'&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;part_of_speech&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; \
+                &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'@'&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'http'&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'www'&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;vocab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vocab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eng_tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;normalized_form&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;contains_digit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; \
+                &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'@'&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'http'&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'www'&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;eng_vocab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eng_vocab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vocab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eng_vocab&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I found that it is better to remove numerics, phone numbers, emails and URLs from the vocabulary and treat them as OOV. And using bare form (normalized form) of words gave a little boost.
+Note for the part &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;spacy.load('ja_core_news_lg')&lt;/code&gt; that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;spacy&lt;/code&gt; also uses a deep learning model for this tokenizer.&lt;/p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;ol class=&quot;bibliography&quot;&gt;&lt;li&gt;&lt;span id=&quot;gu2016incorporating&quot;&gt;Gu, J., Lu, Z., Li, H., &amp;amp; Li, V. O. K. (2016). &lt;i&gt;Incorporating Copying Mechanism in Sequence-to-Sequence Learning&lt;/i&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;bahdanau2014neural&quot;&gt;Bahdanau, D., Cho, K., &amp;amp; Bengio, Y. (2014). Neural machine translation by jointly learning to align and translate. &lt;i&gt;ArXiv Preprint ArXiv:1409.0473&lt;/i&gt;.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</content><author><name>Tuan Nguyen-Anh</name></author><category term="ai" /><category term="deep learning" /><category term="neural network" /><category term="neural machine translation" /><category term="question answering" /><category term="copynet" /><category term="seq2seq" /><category term="recurrent neural nets" /><summary type="html">CopyNet [1] is built upon the Seq2Seq framework [2] which improve accuracy by repeated patterns during conversations. First time hearing the name, I was confused because copying some parts of friend’s sentences is not technically interesting. However, I found that this copying mechanism is somewhat realistic: we are often copying each other even what other people are saying. For example, when your friend tell you that Hi, my name is Jessy!, then a popular response would be Hi, Jessy!. You should copy the name Jessy as a quite normal reaction. In contrast, if you are too imaginative and instead of copying, you generate a response like Hi, Michael to Jessy, this would be ridiculous. Then by incorporating the copying behavior into RNN Encoder-Decoder framework [2], it would make the question-answering goes smoothly.</summary></entry><entry><title type="html">Statistical Machine Translation: Alignment methods</title><link href="https://www.caineng.in/ai/2021/02/03/neural-translation.html" rel="alternate" type="text/html" title="Statistical Machine Translation: Alignment methods" /><published>2021-02-03T00:00:00+07:00</published><updated>2021-02-03T00:00:00+07:00</updated><id>https://www.caineng.in/ai/2021/02/03/neural-translation</id><content type="html" xml:base="https://www.caineng.in/ai/2021/02/03/neural-translation.html">&lt;!--more--&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#introduction&quot; id=&quot;markdown-toc-introduction&quot;&gt;Introduction&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#statistical-machine-translation&quot; id=&quot;markdown-toc-statistical-machine-translation&quot;&gt;Statistical Machine Translation&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#neural-machine-translation&quot; id=&quot;markdown-toc-neural-machine-translation&quot;&gt;Neural Machine Translation&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;h3 id=&quot;statistical-machine-translation&quot;&gt;Statistical Machine Translation&lt;/h3&gt;
+&lt;ol class=&quot;bibliography&quot;&gt;&lt;li&gt;&lt;span id=&quot;koehn2009statistical&quot;&gt;Koehn, P. (2009). &lt;i&gt;Statistical machine translation&lt;/i&gt;. Cambridge University Press.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;koehn2007moses&quot;&gt;Koehn, P., Hoang, H., Birch, A., Callison-Burch, C., Federico, M., Bertoldi, N., Cowan, B., Shen, W., Moran, C., Zens, R., &amp;amp; others. (2007). Moses: Open source toolkit for statistical machine translation. &lt;i&gt;Proceedings of the 45th Annual Meeting of the Association for Computational Linguistics Companion Volume Proceedings of the Demo and Poster Sessions&lt;/i&gt;, 177–180.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;h3 id=&quot;neural-machine-translation&quot;&gt;Neural Machine Translation&lt;/h3&gt;</content><author><name>Tuan Nguyen-Anh</name></author><category term="ai" /><category term="survey" /><category term="deep learning" /><category term="neural network" /><category term="neural machine translation" /><summary type="html"></summary></entry></feed>

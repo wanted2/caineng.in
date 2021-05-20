@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="https://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Implementing a complex system in AWS Lambda: Should or shouldn't? &middot; AiFi 
+  </title>
+
+  
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface" />
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/favicon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/feed.xml"
+  />
+
+  <!-- Additional head bits without overriding original head -->
+  <style>
+    div.chart {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+  </style>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="http://bl.ocks.org/mbostock/raw/4061502/0a200ddf998aa75dfdb1ff32e16b680a15e5cb01/box.js"></script>
+</head>
+
+
+  <body class="post">
+
+    <div id="sidebar">
+  <header>
+    <div class="site-title">
+      <a href="/">
+        
+          <span class="back-arrow icon"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 0h24v24H0z" fill="none"/>
+  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+</svg></span>
+        
+        AiFi
+      </a>
+    </div>
+    <p class="lead">The official AiFi</p>
+  </header>
+  <nav id="sidebar-nav-links">
+  
+    <a class="home-link "
+        href="/">Home</a>
+  
+  
+
+  
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/ai.html">Artificial Intelligence</a>
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/cv.html">Computer Vision</a>
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/non-english.html">Tiếng Việt, 日本語</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/sre.html">Site Reliability Engineering</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <!-- Optional additional links to insert in sidebar nav -->
+</nav>
+
+  <a href="/about.html">About</a>
+
+  
+
+  <nav id="sidebar-icon-links">
+  
+
+  <a id="subscribe-link"
+     class="icon" title="Subscribe" aria-label="Subscribe"
+     href="/feed.xml">
+    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <circle cx="6.18" cy="17.82" r="2.18"/>
+    <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
+</svg>
+  </a>
+
+  
+  
+  
+  
+
+  
+    <a id="tags-link"
+       class="icon"
+       title="Tags" aria-label="Tags"
+       href="/tags.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+    </a>
+  
+
+  
+    <a id="search-link"
+       class="icon"
+       title="Search" aria-label="Search"
+       href="/search.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+</svg>
+    </a>
+  
+
+  <!-- Optional additional links to insert for icons links -->
+</nav>
+
+  <p>
+  &copy; 2021.
+  <a href="/LICENSE.md">MIT License.</a>
+</p>
+
+</div>
+
+    <main class="container">
+      <header>
+  <h1 class="post-title">Implementing a complex system in AWS Lambda: Should or shouldn't?</h1>
+</header>
+<div class="content">
+  <div class="post-meta">
+  <span class="post-date">03 Apr 2021</span>
+  <span class="post-categories">
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/sre.html">
+          Site Reliability Engineering
+        </a>
+      
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/ai.html">
+          Artificial Intelligence
+        </a>
+      
+    
+  </span>
+  <span class="share-page">
+    &bull;
+    <a href="https://twitter.com/intent/tweet?text=Implementing a complex system in AWS Lambda: Should or shouldn't?&url=https://www.caineng.in/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt.html&via=&related=" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://facebook.com/sharer.php?u=https://www.caineng.in/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt.html" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square"></i></a>
+</span>
+
+<span title="Estimated read time">
+  
+  
+    14 mins
+  
+</span>
+
+</div>
+
+  <div id="table-of-contents">
+  <h2>Index</h2>
+    <ol id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#introduction">Introduction</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#purpose-finding-a-new-design">Purpose: Finding a new design</a></li>
+<li class="toc-entry toc-h3"><a href="#setting-up-a-script">Setting up a script</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h2"><a href="#implementations">Implementations</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#ner-in-lambda">NER in Lambda</a>
+<ol>
+<li class="toc-entry toc-h4"><a href="#the-handler">The handler</a></li>
+<li class="toc-entry toc-h4"><a href="#custom-lambda-layers">Custom Lambda Layers</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h3"><a href="#qa-in-lambda">QA in Lambda</a>
+<ol>
+<li class="toc-entry toc-h4"><a href="#task-qa">Task QA</a></li>
+<li class="toc-entry toc-h4"><a href="#the-handler-1">The handler</a></li>
+<li class="toc-entry toc-h4"><a href="#custom-lambda-layer">Custom Lambda Layer</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h3"><a href="#sam-template">SAM template</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h2"><a href="#discussion">Discussion</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#runtime">Runtime</a></li>
+<li class="toc-entry toc-h3"><a href="#memory">Memory</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h2"><a href="#conclusion">Conclusion</a></li>
+<li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
+</ol>
+  </div>
+
+  <div class="post-body">
+    <p><img src="/assets/img/mxnet.png" alt="" /></p>
+
+<p>Amazon Web Services Lambda [1] is a convenient serverless building block, can have hidden power.
+Surprisingly, it seems like that there is no official document explaining what should be a good Lambda function for a programming language.
+The size of an uncompressed Lambda function does not exceed 5 megabytes, and the size for all custom Lambda layers should not exceed 250 megabytes.
+Furthermore, parallelism can be limited with some supports to AVX2 [2] and multiprocessing [3].
+Although anything can be implemented in Lambda, should we try to put a <code class="language-plaintext highlighter-rouge">cumbersome</code> architecture on it?
+It is an open question, and this post is to explore a possible answer.
+<!--more--></p>
+
+<h2 id="introduction">Introduction</h2>
+
+<h3 id="purpose-finding-a-new-design">Purpose: Finding a new design</h3>
+
+<p>Managed services like Amazon Sagemaker [4] provides a consistent and powerful platform to train and deploy machine learning models.
+Another managed service is AWS Lambda [1] can serve as the integration to API Gateway, which handles and responds to requests upon connections to other services.
+It seems that it is a natural way to put a simplistic function in Lambda’s handler bodies.
+But it also seems like there is no such enforcement for the complexity of the bodies.
+In other words, we can put anything in them and pay-as-we-go.</p>
+
+<p>Then, (training ML models can take time, and we do not put them in AWS), but can we put a cumbersome ML inference system in Lambda and serving requests?
+In other words, we have 2 different usages for Lambda:</p>
+
+<ul>
+  <li><strong>Design 1</strong>: using Lambda as a <code class="language-plaintext highlighter-rouge">reception</code> and call SageMaker or Textract, Comprehend for inference.</li>
+  <li><strong>Design 2</strong>: using Lambda custom layers to put the whole ML inference system in it and don’t call to other services for inference. The inference is in Lambda only.</li>
+</ul>
+
+<p>Then we knew that Design 1 is usual.
+Is Design 2 a recommended way?</p>
+
+<h3 id="setting-up-a-script">Setting up a script</h3>
+
+<p>We already had a purpose, and we need a script to implement.
+The script is simplistic: we choose a cumbersome system in a machine learning task, deploy it to AWS Lambda and measure the gain.</p>
+
+<p><strong>The ML tasks</strong> are Named Entity Recognition (NER, [5,6]) and Context-based Question Answering (QA).
+We choose them because they are complex enough and pre-trained models are ready.
+NER is a problem in information extraction that looks at identifying atomic elements (entities) in text and classifying them into predefined classes such as person names, organizations, locations, dates, .etc.
+Approaches can be using lexicons, sliding windows, and sequential models (Hidden Markov Models and Conditional Random Fields).
+The input text is segmented into pieces of words (<code class="language-plaintext highlighter-rouge">tokens</code>), then a custom model classifies these token into predefined classes.
+Tokenizers can be whitespace-based tokenizers or a language-independent data-driven approach like SentencePiece [7,8,9].
+SentencePiece [7] implements subword regularization [8, 9].
+Context-based Question Answering is the task of answering a question based on a context text.
+The answer must be a part of the context.
+Therefore, the answer can be returned as <code class="language-plaintext highlighter-rouge">[start_position, length]</code>.
+A typical benchmark is the Standford SquAD dataset [10].
+However, we don’t train models but do use state-of-the-art model ALBERT [11] for inference.</p>
+
+<p><strong>The cumbersome systems/models</strong> are spaCy [12] and mxnet [13,14] based BERT models [11,15,16].
+spaCy is a ready-to-use Python library for linguistics tasks like NER, PoS tagging.
+Pipelines are units in spaCy to chain several different components such as tokenizers, ner, pos taggers, .etc.
+Apache mxnet is a flexible and efficient library for Deep Learning.
+Hence, the size of each library is about 250 megabytes.
+Because the total size is about 500 megabytes, we need to separate it into 2 Lambdas.</p>
+
+<p><strong>Serverless Architecture Model (SAM, [17])</strong> is used to deploy to Lambda.
+We test and measure, monitor the gain directly in the AWS Lambda Web interface.</p>
+
+<h2 id="implementations">Implementations</h2>
+
+<h3 id="ner-in-lambda">NER in Lambda</h3>
+
+<h4 id="the-handler">The handler</h4>
+<p>We run a spaCy pipeline in Lambda to respond to a batch of sentences.
+Pipelines in spaCy are reliable and stable processing units.
+The default pipeline is as follows:</p>
+
+<p><img src="https://spacy.io/pipeline-fde48da9b43661abcdf62ab70a546d71.svg" alt="" />
+<em>Figure 1. spaCy’s default pipeline (source: <a href="https://spacy.io/usage/processing-pipelines">spaCy</a>)</em></p>
+
+<p>Besides the entity information, it also returns PoS tags in the output <code class="language-plaintext highlighter-rouge">Doc</code>.
+We can use the pipeline in Python:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">spacy</span>
+
+<span class="c1"># Load default pipeline for linguistic task
+</span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">'en_core_web_sm'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>And the handler function is:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">lambda_handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="s">"""Lambda function to process linguistic tasks
+
+    Parameters
+    ----------
+    event: dict, required
+        API Gateway Lambda Proxy Input Format
+
+        Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+
+    context: object, required
+        Lambda Context runtime methods and attributes
+
+        Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
+
+    Returns
+    ------
+    API Gateway Lambda Proxy Output Format: dict
+
+        Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
+    """</span>
+
+    <span class="k">assert</span> <span class="s">"body"</span> <span class="ow">in</span> <span class="n">event</span><span class="p">,</span> <span class="s">"Event is not coming from API Gateway"</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">loads</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s">"body"</span><span class="p">])</span>
+    <span class="k">except</span> <span class="n">json</span><span class="p">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">respond</span><span class="p">(</span><span class="nb">Exception</span><span class="p">(</span><span class="s">"JSON data problem"</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">respond</span><span class="p">(</span><span class="nb">Exception</span><span class="p">(</span><span class="s">"JSON data problem"</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">batch_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">'batch'</span><span class="p">]</span>
+    <span class="k">except</span> <span class="nb">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">respond</span><span class="p">(</span><span class="nb">Exception</span><span class="p">(</span><span class="s">"You must submit a batch data"</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch_data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">respond</span><span class="p">(</span><span class="nb">Exception</span><span class="p">(</span><span class="s">"Batch data must be a list"</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="n">nb</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nb</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="ow">or</span> <span class="n">nb</span> <span class="o">&gt;</span> <span class="mi">300</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">respond</span><span class="p">(</span><span class="nb">Exception</span><span class="p">(</span><span class="s">"Batch size should be between 100 and 300 for trade-off between efficiency and waiting time"</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">"Processing a batch of {} sentences"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">nb</span><span class="p">))</span>
+    <span class="n">docs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">failed_sentences</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">batch_data</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span>
+            <span class="n">docs</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">to_json</span><span class="p">())</span>
+        <span class="k">except</span> <span class="nb">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">failed_sentences</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span>
+            <span class="k">continue</span>
+    <span class="n">logger</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="n">failed_sentences</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">respond</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">"success_sentences"</span><span class="p">:</span> <span class="n">docs</span><span class="p">,</span>
+        <span class="s">"failed_sentences"</span><span class="p">:</span> <span class="n">failed_sentences</span>
+    <span class="p">})</span>
+</code></pre></div></div>
+<p>We remark the economy of Lambda business.
+Concurrency [18] can provide up to 10000 Lambda processes running at a time, and Amazon makes money by charging on this use by requests and by GB-seconds.
+Each time a concurrent Lambda runs, the bootstrap runs again.
+For example, the line <code class="language-plaintext highlighter-rouge">nlp = spacy.load('en_core_web_sm')</code> runs every time invoking a concurrent Lambda.
+Therefore, using a large batch size, we gain the time of reloading the <code class="language-plaintext highlighter-rouge">nlp</code> indeed.
+However, a too large batch size (over 300 sentences) can lead to long service time.
+It reduces the quality of the service and user experiences.
+We choose a batch size between 100 and 300.</p>
+
+<h4 id="custom-lambda-layers">Custom Lambda Layers</h4>
+
+<p>spaCy is not installed in AWS Lambda runtime environments.
+Therefore, we need to add a custom Lambda layer with the spaCy library.
+Currently, AWS Lamda runtime uses <code class="language-plaintext highlighter-rouge">python3.7</code>.
+We must use Docker to build spaCy in an Amazon Linux container and zip the <code class="language-plaintext highlighter-rouge">site-packages</code> folder.
+A sample Dockerfile:</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> amazonlinux:2.0.20210219.0</span>
+
+<span class="k">RUN </span>yum update <span class="nt">-y</span>
+<span class="k">RUN </span>yum <span class="nb">install</span> <span class="nt">-y</span> python3-devel python3-setuptools python3-wheel git gcc gcc-c++ libatlas-devel
+<span class="k">RUN </span><span class="nb">mkdir</span> <span class="nt">-p</span> /packages/python/lib/python3.7/site-packages
+<span class="k">RUN </span>pip3 <span class="nb">install</span> <span class="nt">-U</span> numpy Cython
+<span class="k">RUN </span>pip3 <span class="nb">install</span> <span class="nt">-U</span> numpy Cython <span class="nt">-t</span> /packages/python/lib/python3.7/site-packages
+<span class="k">RUN </span>pip3 <span class="nb">install</span> <span class="nt">-U</span> cymem
+<span class="k">RUN </span>pip3 <span class="nb">install</span> <span class="nt">-U</span> cymem <span class="nt">-t</span> /packages/python/lib/python3.7/site-packages
+<span class="k">RUN </span>pip3 <span class="nb">install</span> <span class="nt">-U</span> murmurhash preshed
+<span class="k">RUN </span>pip3 <span class="nb">install</span> <span class="nt">-U</span> murmurhash preshed <span class="nt">-t</span> /packages/python/lib/python3.7/site-packages
+<span class="k">RUN </span><span class="nv">BLIS_REALLY_COMPILE</span><span class="o">=</span>1 <span class="nv">BLIS_ARCH</span><span class="o">=</span>generic pip3 <span class="nb">install</span> <span class="nt">-U</span> blis
+<span class="k">RUN </span><span class="nv">BLIS_REALLY_COMPILE</span><span class="o">=</span>1 <span class="nv">BLIS_ARCH</span><span class="o">=</span>generic pip3 <span class="nb">install</span> <span class="nt">-U</span> blis <span class="nt">-t</span> /packages/python/lib/python3.7/site-packages
+<span class="k">RUN </span>pip3 <span class="nb">install</span> <span class="nt">-U</span> thinc
+<span class="k">RUN </span>pip3 <span class="nb">install</span> <span class="nt">-U</span> thinc <span class="nt">-t</span> /packages/python/lib/python3.7/site-packages
+<span class="k">RUN </span>pip3 <span class="nb">install</span> <span class="nt">-U</span> spacy
+<span class="k">RUN </span>pip3 <span class="nb">install</span> <span class="nt">-U</span> spacy <span class="nt">-t</span> /packages/python/lib/python3.7/site-packages
+<span class="k">RUN </span>python3 <span class="nt">-m</span> spacy download en_core_web_sm
+<span class="k">RUN </span>python3 <span class="nt">-m</span> spacy download ja_core_news_sm
+<span class="k">RUN </span>pip3 <span class="nb">install </span>https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz <span class="nt">-t</span> /packages/python/lib/python3.7/site-packages/
+<span class="k">RUN </span><span class="nb">mkdir</span> <span class="nt">-p</span> /packages2/python/lib/python3.7/site-packages
+<span class="k">RUN </span>pip3 <span class="nb">install </span>https://github.com/explosion/spacy-models/releases/download/ja_core_news_sm-3.0.0/ja_core_news_sm-3.0.0.tar.gz <span class="nt">-t</span> /packages2/python/lib/python3.7/site-packages/
+
+<span class="k">WORKDIR</span><span class="s"> /packages</span>
+<span class="k">RUN </span>zip <span class="nt">-r</span> spacy-py37.zip python
+
+<span class="k">WORKDIR</span><span class="s"> /packages2</span>
+<span class="k">RUN </span>zip <span class="nt">-r</span> spacy-ja-py37.zip python
+</code></pre></div></div>
+<p>Note, only <code class="language-plaintext highlighter-rouge">spacy-py37.zip</code> has nearly 250 megabytes when uncompressed.</p>
+
+<h3 id="qa-in-lambda">QA in Lambda</h3>
+
+<h4 id="task-qa">Task QA</h4>
+<p>Given the context, the machine looks for a part of the given context which answers the question.
+A sample triplet is as follows:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Context:
+The Norman dynasty had a major political, cultural and military impact on medieval Europe and even the Near East. The Normans were famed for their martial spirit and eventually for their Christian piety, becoming exponents of the Catholic orthodoxy into which they assimilated. They adopted the Gallo-Romance language of the Frankish land they settled, their dialect becoming known as Norman, Normaund or Norman French, an important literary language. The Duchy of Normandy, which they formed by treaty with the French crown, was a great fief of medieval France, and under Richard I of Normandy was forged into a cohesive and formidable principality in feudal tenure. The Normans are noted both for their culture, such as their unique Romanesque architecture and musical traditions, and for their significant military accomplishments and innovations. Norman adventurers founded the Kingdom of Sicily under Roger II after conquering southern Italy on the Saracens and Byzantines, and an expedition on behalf of their duke, William the Conqueror, led to the Norman conquest of England at the Battle of Hastings in 1066. Norman cultural and military influence spread from these new European centres to the Crusader states of the Near East, where their prince Bohemond I founded the Principality of Antioch in the Levant, to Scotland and Wales in Great Britain, to Ireland, and to the coasts of north Africa and the Canary Islands.
+
+Question: Who was the duke in the battle of Hastings?
+Answer: William the Conqueror
+</code></pre></div></div>
+<h4 id="the-handler-1">The handler</h4>
+<p>We pay attention to the BERT Transformer architecture [15,16].
+BERT representations have been trained in several pretext tasks [19].</p>
+
+<p><img src="/assets/img/bert.svg" alt="" />
+<em>Figure 2. BERT architecture</em></p>
+
+<p>The input of BERT models is a pair of <code class="language-plaintext highlighter-rouge">(question, context)</code> with a series of 0s and 1s representing the token types(question or context?), and the output is a triplet $(S,E,A)$.
+We formulate the probability of finding a triplet output given the contextual embedding as
+\(P(S, E, A | C) = P(S | C)\times P(E | S,C)\times P(A | C)\)
+where $C$ is the contextual embedding vector, $S$ is the start position of the answer in the context, $E$ is the end position, and $A$ is the answerable decision to the question.
+In the inference, $P(S|C)$ is modeled as the log-softmax of contextual embedding logits.
+$P(E|S,C)$ is the log-softmax of concatenated features between contextual embeddings and start features.
+$P(A|C)$ is computed using a feed-forward neural network and log-softmax.
+The beam search is then applied in the computed score $P(S,E,A|C)$ to find the best candidates for an answer.
+ALBERT [11] is a lightweight successor of BERT.
+The inference code is almost similar.</p>
+
+<h4 id="custom-lambda-layer">Custom Lambda Layer</h4>
+
+<p>While mxnet library itself is small and takes nearly 250 megabytes, adding Gluon-NLP makes the size is over the limit.
+Therefore, while building mxnet in a custom layer, we put <code class="language-plaintext highlighter-rouge">gluon-nlp</code> code into a Lambda function.</p>
+
+<h3 id="sam-template">SAM template</h3>
+
+<p>The template for the Lambdas can be found at <a href="https://github.com/wanted2/aws-sam-spacy-mxnet-bert-puppy-talk-example">https://github.com/wanted2/aws-sam-spacy-mxnet-bert-puppy-talk-example</a>.</p>
+
+<h2 id="discussion">Discussion</h2>
+
+<h3 id="runtime">Runtime</h3>
+<p>We tested in Lambda and observed that</p>
+
+<ul>
+  <li>
+    <p><strong>Spacy function</strong>: for a batch of 100 sentences, it took 5.7 seconds. For a batch of 500 sentences, it took 28.7 seconds. Therefore, we set the timeout to 30 seconds and recommend users to send batches with less than 300 items.</p>
+  </li>
+  <li>
+    <p><strong>Multiprocessing</strong>:
+There is a good guideline about multiprocessing in AWS Lambda:
+https://aws.amazon.com/jp/blogs/compute/parallel-processing-in-python-with-aws-lambda/
+I created the code (following the above article) to see if multiprocessing can help.
+<strong>Unfortunately, multiprocessing does not help ;)</strong>
+For a batch of 100 sentences, it took 15.5s, 3x slower than sequential processing.</p>
+  </li>
+</ul>
+
+<h3 id="memory">Memory</h3>
+<p>A memory budget 256MB was enough for spaCy.
+The budget for mxnet inference is 4GB.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Some lessons we learned from this implementation:</p>
+
+<ul>
+  <li><strong>Simplicity is the best design</strong>: adding custom Lambda layers requires going through the hurdle of building too many unexpected things such as custom library distributions for specific architecture and operating systems (amazon linux), adjusting the size to match the policy of Lambda, .etc.</li>
+  <li><strong>Don’t think you can do whatever you want with Lambda</strong>. By bypassing the size restrictions of Lambda code, indeed, we are <code class="language-plaintext highlighter-rouge">hacking</code> AWS in some senses. Then this is a bad design! The company made the restriction and the design of Lambda to protect their business models (maybe), and we are hacking them for more performance! :D That’s the whole picture of what we were doing.</li>
+  <li><strong>Design 2 is for hackers, then Design 1 is for usual developers</strong>.</li>
+</ul>
+
+<p>In this post, we only considered two designs with all components are in the AWS Cloud.
+In practice, the systems may have components not in the cloud, and that makes the game is far interesting.</p>
+
+<h2 id="reference">Reference</h2>
+
+<ol class="bibliography"><li><span id="AWSLambd88:online"><i>AWS Lambda – Serverless Compute - Amazon Web Services</i>. https://aws.amazon.com/lambda/.</span></li>
+<li><span id="Creating27:online"><i>Creating faster AWS Lambda functions with AVX2 | AWS Compute Blog</i>. https://aws.amazon.com/blogs/compute/creating-faster-aws-lambda-functions-with-avx2/.</span></li>
+<li><span id="Parallel52:online"><i>Parallel Processing in Python with AWS Lambda | AWS Compute Blog</i>. https://aws.amazon.com/blogs/compute/parallel-processing-in-python-with-aws-lambda/.</span></li>
+<li><span id="AmazonSa17:online"><i>Amazon SageMaker – Machine Learning – Amazon Web Services</i>. https://aws.amazon.com/sagemaker/.</span></li>
+<li><span id="NamedEnt13:online"><i>Named Entity Recognition · Prodigy · An annotation tool for AI, Machine Learning &amp; NLP</i>. https://prodi.gy/docs/named-entity-recognition.</span></li>
+<li><span id="NamedEnt0:online"><i>Named Entity Recognition - Cohen Courses</i>. http://curtis.ml.cmu.edu/w/courses/index.php/Named_Entity_Recognition.</span></li>
+<li><span id="googlese65:online"><i>google/sentencepiece: Unsupervised text tokenizer for Neural Network-based text generation.</i> https://github.com/google/sentencepiece.</span></li>
+<li><span id="sennrich-etal-2016-neural">Sennrich, R., Haddow, B., &amp; Birch, A. (2016). Neural Machine Translation of Rare Words with Subword Units. <i>Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)</i>, 1715–1725. https://doi.org/10.18653/v1/P16-1162</span></li>
+<li><span id="DBLP:journals/corr/abs-1804-10959">Kudo, T. (2018). Subword Regularization: Improving Neural Network Translation Models
+               with Multiple Subword Candidates. <i>CoRR</i>, <i>abs/1804.10959</i>. http://arxiv.org/abs/1804.10959</span></li>
+<li><span id="TheStanf29:online"><i>The Stanford Question Answering Dataset</i>. https://rajpurkar.github.io/SQuAD-explorer/.</span></li>
+<li><span id="DBLP:journals/corr/abs-1909-11942">Lan, Z., Chen, M., Goodman, S., Gimpel, K., Sharma, P., &amp; Soricut, R. (2019). ALBERT: A Lite BERT for Self-supervised Learning of Language
+               Representations. <i>CoRR</i>, <i>abs/1909.11942</i>. http://arxiv.org/abs/1909.11942</span></li>
+<li><span id="spaCyIn92:online"><i>spaCy: Industrial-strength Natural Language Processing in Python</i>. https://spacy.io/.</span></li>
+<li><span id="ApacheMX35:online"><i>Apache MXNet on AWS</i>. https://aws.amazon.com/mxnet/.</span></li>
+<li><span id="ApacheMX2:online"><i>Apache MXNet | A flexible and efficient library for deep learning.</i> https://mxnet.apache.org/versions/1.8.0/.</span></li>
+<li><span id="DBLP:journals/corr/abs-1810-04805">Devlin, J., Chang, M.-W., Lee, K., &amp; Toutanova, K. (2018). BERT: Pre-training of Deep Bidirectional Transformers for Language
+               Understanding. <i>CoRR</i>, <i>abs/1810.04805</i>. http://arxiv.org/abs/1810.04805</span></li>
+<li><span id="GluonNLP52:online"><i>GluonNLP: NLP made easy — gluonnlp 0.10.0 documentation</i>. https://nlp.gluon.ai/index.html.</span></li>
+<li><span id="Whatisth14:online"><i>What is the AWS Serverless Application Model (AWS SAM)? - AWS Serverless Application Model</i>. https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html.</span></li>
+<li><span id="Managing69:online"><i>Managing concurrency for a Lambda function - AWS Lambda</i>. https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html.</span></li>
+<li><span id="SelfSupe2:online"><i>Self Supervised Representation Learning in NLP</i>. https://amitness.com/2020/05/self-supervised-learning-nlp/.</span></li></ol>
+
+    
+
+
+
+<div class="post-tags">
+  
+    
+    <a href="/tags.html#nlp">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">nlp</span>
+    </a>
+  
+    
+    <a href="/tags.html#natural-language-processing">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">natural language processing</span>
+    </a>
+  
+    
+    <a href="/tags.html#site-reliability-engineering">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">site reliability engineering</span>
+    </a>
+  
+    
+    <a href="/tags.html#spacy">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">spacy</span>
+    </a>
+  
+    
+    <a href="/tags.html#mxnet">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">mxnet</span>
+    </a>
+  
+    
+    <a href="/tags.html#albert">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">albert</span>
+    </a>
+  
+    
+    <a href="/tags.html#bert">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">bert</span>
+    </a>
+  
+    
+    <a href="/tags.html#gluon">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">gluon</span>
+    </a>
+  
+    
+    <a href="/tags.html#gluon-nlp">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">gluon-nlp</span>
+    </a>
+  
+</div>
+  </div>
+
+  
+  <section class="comments">
+    <h2>Comments</h2>
+    
+  <div id="disqus_thread">
+    <button class="disqus-load" onClick="loadDisqusComments()">
+      Load Comments
+    </button>
+  </div>
+  <script>
+
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW
+  *  TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT:s
+  *  https://disqus.com/admin/universalcode/#configuration-variables
+  */
+  var disqus_config = function () {
+    this.page.url = "https://www.caineng.in/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt.html";
+    this.page.identifier = "" ||
+                           "https://www.caineng.in/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt.html";
+  }
+  function loadDisqusComments() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//caineng.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  </script>
+  <noscript>
+    Please enable JavaScript to view the
+    <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.
+  </noscript>
+
+
+
+  </section>
+
+  <section class="related">
+  <h2>Related Posts</h2>
+  <ul class="posts-list">
+    
+      <li>
+        <h3>
+          <a href="/cv/ai/2021/05/20/understanding-object-detection-nms.html">
+            Understanding Object Detection Algorithms: the Non-maximum-suppression (NMS)
+            <small>20 May 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english.html">
+            Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp trong ngành trí tuệ nhân tạo?
+            <small>24 Apr 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/sre/non-english/2021/03/13/ban-ve-thiet-ke-he-thong-co-quan-ly-user-non-english.html">
+            Bàn về thiết kế hệ thống có quản lý users: Cây nhà lá vườn hay ăn sẵn?
+            <small>13 Mar 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</section>
+
+</div>
+
+    </main>
+
+    <!-- Optional footer content -->
+
+    <script src="https://kit.fontawesome.com/d0b91d895e.js" crossorigin="anonymous"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </body>
+</html>

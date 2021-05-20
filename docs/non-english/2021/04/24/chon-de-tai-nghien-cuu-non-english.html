@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="https://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp trong ngành trí tuệ nhân tạo? &middot; AiFi 
+  </title>
+
+  
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface" />
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/favicon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/feed.xml"
+  />
+
+  <!-- Additional head bits without overriding original head -->
+  <style>
+    div.chart {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+  </style>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="http://bl.ocks.org/mbostock/raw/4061502/0a200ddf998aa75dfdb1ff32e16b680a15e5cb01/box.js"></script>
+</head>
+
+
+  <body class="post">
+
+    <div id="sidebar">
+  <header>
+    <div class="site-title">
+      <a href="/">
+        
+          <span class="back-arrow icon"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 0h24v24H0z" fill="none"/>
+  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+</svg></span>
+        
+        AiFi
+      </a>
+    </div>
+    <p class="lead">The official AiFi</p>
+  </header>
+  <nav id="sidebar-nav-links">
+  
+    <a class="home-link "
+        href="/">Home</a>
+  
+  
+
+  
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/ai.html">Artificial Intelligence</a>
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/cv.html">Computer Vision</a>
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/non-english.html">Tiếng Việt, 日本語</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/sre.html">Site Reliability Engineering</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <!-- Optional additional links to insert in sidebar nav -->
+</nav>
+
+  <a href="/about.html">About</a>
+
+  
+
+  <nav id="sidebar-icon-links">
+  
+
+  <a id="subscribe-link"
+     class="icon" title="Subscribe" aria-label="Subscribe"
+     href="/feed.xml">
+    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <circle cx="6.18" cy="17.82" r="2.18"/>
+    <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
+</svg>
+  </a>
+
+  
+  
+  
+  
+
+  
+    <a id="tags-link"
+       class="icon"
+       title="Tags" aria-label="Tags"
+       href="/tags.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+    </a>
+  
+
+  
+    <a id="search-link"
+       class="icon"
+       title="Search" aria-label="Search"
+       href="/search.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+</svg>
+    </a>
+  
+
+  <!-- Optional additional links to insert for icons links -->
+</nav>
+
+  <p>
+  &copy; 2021.
+  <a href="/LICENSE.md">MIT License.</a>
+</p>
+
+</div>
+
+    <main class="container">
+      <header>
+  <h1 class="post-title">Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp trong ngành trí tuệ nhân tạo?</h1>
+</header>
+<div class="content">
+  <div class="post-meta">
+  <span class="post-date">24 Apr 2021</span>
+  <span class="post-categories">
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/non-english.html">
+          Tiếng Việt, 日本語
+        </a>
+      
+    
+  </span>
+  <span class="share-page">
+    &bull;
+    <a href="https://twitter.com/intent/tweet?text=Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp trong ngành trí tuệ nhân tạo?&url=https://www.caineng.in/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english.html&via=&related=" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://facebook.com/sharer.php?u=https://www.caineng.in/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english.html" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square"></i></a>
+</span>
+
+<span title="Estimated read time">
+  
+  
+    19 mins
+  
+</span>
+
+</div>
+
+  <div id="table-of-contents">
+  <h2>Index</h2>
+    <ol id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#giới-thiệu">Giới thiệu</a></li>
+<li class="toc-entry toc-h2"><a href="#lựa-chọn-lĩnh-vực-và-bài-toán">Lựa chọn lĩnh vực và bài toán</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#đừng-nghĩ-các-mảng-cũng-như-nhau-hãy-đánh-giá-đúng-tiềm-năng-thị-trường">Đừng nghĩ các mảng cũng như nhau. Hãy đánh giá đúng tiềm năng thị trường.</a></li>
+<li class="toc-entry toc-h3"><a href="#tiêu-chí-để-được-gọi-là-sản-phẩm-là-gì">Tiêu chí để được gọi là sản phẩm là gì?</a></li>
+<li class="toc-entry toc-h3"><a href="#các-chướng-ngại-tương-lai">Các chướng ngại tương lai</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h2"><a href="#nhìn-trước-thị-trường-việc-làm-và-cơ-hội-nghề-nghiệp">Nhìn trước thị trường việc làm và cơ hội nghề nghiệp</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#bạn-định-xin-việc-ở-đâu-công-ty-ăn-xổi-hay-công-ty-có-tầm-nhìn-xa">Bạn định xin việc ở đâu? Công ty “ăn xổi” hay công ty “có tầm nhìn xa”?</a></li>
+<li class="toc-entry toc-h3"><a href="#các-công-ty-công-nghệ-đang-cần-gì">Các công ty công nghệ đang cần gì?</a></li>
+<li class="toc-entry toc-h3"><a href="#offshore-thì-sao">Offshore thì sao?</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h2"><a href="#kết-luận">Kết luận</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#một-số-lĩnh-vực-đã-đến-level-sản-phẩm-thị-trường">Một số lĩnh vực đã đến level sản phẩm thị trường</a></li>
+<li class="toc-entry toc-h3"><a href="#tổng-kết">Tổng kết</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h2"><a href="#tài-liệu-tham-khảo">Tài liệu tham khảo</a></li>
+</ol>
+  </div>
+
+  <div class="post-body">
+    <style> /* set the CSS */
+
+.tooltip {	
+    position: absolute;			
+    text-align: left;			
+    width: auto;					
+    height: 75px;					
+    padding: 2px;	
+    margin: 2px			
+    font: 10px sans-serif;		
+    background: green;
+    opacity: 0.6;	
+    border: 1px;		
+    border-radius: 5px;			
+    pointer-events: none;			
+}
+
+</style>
+
+<div id="chart"></div>
+
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 50},
+    width = 800 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+// Append tooltips
+var div = d3.select("body").append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
+// append the svg object to the body of the page
+var svg = d3.select("#chart")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+var x = d3.scaleTime().range([0, width]);
+var y = d3.scaleLinear().range([height, 0]);
+var paddingForText = 10;
+  // gridlines in x axis function
+  function make_x_gridlines() {		
+      return d3.axisBottom(x)
+          .ticks(3)
+  }
+
+  // gridlines in y axis function
+  function make_y_gridlines() {		
+      return d3.axisLeft(y)
+          .ticks(5)
+  }
+//Read the data
+d3.csv("/assets/coco_perf.csv",
+
+  // When reading the csv, I must format variables:
+  function(d){
+    return { year : d3.timeParse("%Y-%m-%d")(d.year), map : d.map, name: d.name }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.year; }))
+      .range([ 0, width]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+    svg.append("text")             
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("Released Year");
+       // text label for the y axis
+  svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("Box mAP [%]"); 
+    // add the X gridlines
+    svg.append("g")			
+        .attr("class", "grid")
+        .attr("transform", "translate(0," + height + ")")
+        .call(make_x_gridlines()
+            .tickSize(-height)
+            .tickFormat("")
+        )
+
+    // add the Y gridlines
+    svg.append("g")			
+        .attr("class", "grid")
+        .call(make_y_gridlines()
+            .tickSize(-width)
+            .tickFormat("")
+        )
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([25, 60])
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    // Add the line
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "green")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.year) })
+        .y(function(d) { return y(d.map) })
+        )
+
+    svg.append("g").selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("r", 4)
+    .attr("cx", function(d) {
+        return x(d.year)
+    })
+    .attr("cy", function(d) {
+        return y(d.map)
+    })
+    .attr("fill", "red")
+    .attr("stroke", "red")
+    .on("mouseover", function(d) {		
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            div	.html(d.name + "<br/>"  + d.map + "%")	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
+            })					
+        .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
+
+svg.append("g").selectAll("text")
+    .data(data)
+    .enter()
+    .append("text")
+    .attr("x", function(d) {
+        return x(d.year) - paddingForText
+    })
+    .attr("y", function(d) {
+        return y(d.map) - paddingForText
+    })
+    .attr("fill", "green")
+    .style("font-size", "12px")
+    .text(function(d) {
+        return d.map
+    });
+
+})
+
+</script>
+
+<p><em><strong>Ví dụ về sự phát triển của một lĩnh vực nghiên cứu trong vòng 5 năm (01/2016-01/2021) trên 1 bộ dữ liệu chuẩn công nghiệp [1]. Có thể dễ dàng thấy trong 5 năm, trên bộ dữ liệu với số lượng đối tượng hàng triệu (do vậy đạt tiêu chuẩn công nghiệp), nhưng độ chính xác chỉ tăng 30%, từ 28.8% (SSD512, [2]) lên 58.7% (Swin-L, [3]). So với nhiều mảng khác mà model tốt nhất đã lên trên 99.9% [4,5], mảng này có nhiều khả năng mất đến 5 năm nữa để đến được level tương tự để ra sản phẩm thị trường.</strong></em>
+<!--more--></p>
+
+<h2 id="giới-thiệu">Giới thiệu</h2>
+<p>Trí tuệ nhân tạo đang dần trở thành 1 lĩnh vực ứng dụng có ảnh hưởng lớn trong công nghiệp.
+Và đương nhiên thị trường việc làm cho mảng này đang dần dần mở ra.
+Vì vậy, nhiều bạn cả già lẫn trẻ đang dần có những lầm tưởng về cơ hội rộng mở trong lĩnh vực AI này.
+Việc đầu tiên trong định hướng lại nghề nghiệp của AI, chính là nhắm vào lực lượng lao động chủ chốt: các chuyên gia (sinh viên PhD, tech enthusiast, giáo sư, giảng viên, chuyên gia công nghệ), các lập trình viên, …
+Định hướng đầu tiên chính là <strong>Chọn đề tài/bài toán nào để làm và ra có việc?</strong></p>
+
+<p><strong>Câu chuyện của A</strong></p>
+
+<p><strong>(Sự kiện 1)</strong> Năm 2016, A bắt đầu thực hiện dự án nghiên cứu với đề tài là mảng được mô tả trong hình vẽ ở trên. 
+Lúc đó, mảng này mô hình tốt nhất chỉ đạt được độ chính xác là 28.8%.
+<strong>(Sự kiện 2)</strong> Giáo sư hướng dẫn chỉ yêu cầu A rằng, phải tìm được việc mới cho rời lab.
+3 năm trôi qua, năm 2019, A nóng lòng muốn kết thúc, tìm đến doanh nghiệp C xin việc.
+<strong>(Sự kiện 3)</strong> Sau khi tìm hiểu kỹ càng về mảng nghiên cứu này, C đáp rằng khi nào mảng này tiến đến 99.9% hiệu suất trên tập dữ liệu lớn vài chục triệu đối tượng thì mới đủ tiêu chí lên sản phẩm.
+Công ty muốn ăn xổi ngay nên chỉ có những dự án ra thành phẩm ngay mới có nhu cầu tuyển dụng.
+Lúc này State-of-the-art (SOTA) mới 55%!
+<strong>(Sự kiện 4)</strong> A quay về ước tính, mảng này dù A có cống hiến hay không thì với tốc độ của 5 năm qua, chắc phải thêm 5 năm nữa, tức năm 2026 mới có việc!</p>
+
+<p><strong>Quan sát 4 sự kiện trên, bạn nghĩ A đã sai những điểm nào trong năm 2016 và 2019?</strong></p>
+
+<ul>
+  <li>Đầu tiên, A đã sai khi chọn bài toán có xuất phát điểm quá thấp (28.8%). Một người làm AI có kinh nghiệm đều hiểu rằng với một lĩnh vực đang lên nào đi chăng nữa, 1 năm tiến được 10% là quá giỏi rồi. Thế nên với xuất phát điểm thấp như vậy, sau 3 năm, thì có thể dự đoán tiến bộ được 30% là may. Và vì vậy, việc rời lab mà công trình chỉ là 1 thứ không đủ tiêu chí lên sản phẩm là quá hiến nhiên.</li>
+  <li>Tiếp theo, là không nghe cảnh cáo của giáo sư. Giáo sư nói chuyện việc làm là có ý muốn nhắc A tìm hiểu thị trường đi.</li>
+  <li>Sai lầm cuối cùng, là “yếu thích ra gió”. Làm một mảng mà tính sản phẩm yếu, nhưng lại xin việc 1 công ty thích “ăn xổi”. Công ty thích ăn xổi thì đương nhiên thấy hồ sơ như vậy họ sẽ thấy là phải nuôi thêm 5 năm nữa đến mức lên sản phẩm, là họ sẽ muốn tránh. A nên tìm việc ở công ty có tầm nhìn xa, muốn làm chủ thị trường từ khi còn trứng nước.</li>
+</ul>
+
+<p><strong>Câu chuyện của B</strong></p>
+
+<p>Anh kỹ sư B làm giám đốc sản phẩm của 1 công ty hạng trung.
+Nhân trước lúc muốn chuyển việc, anh muốn làm 1 dự án sản phẩm để làm đẹp hồ sơ.
+Vì vậy, anh chọn ngay 1 bài toán mà model “xịn” nhất thị trường đã lên 99.0% về độ chính xác.
+Vì setup đã chỉn chu như vậy, quá trình triển khai diễn ra thuận lợi và hầu như tất cả chỉ là quy trình chuyển giao công nghệ sẵn có.
+Trong lúc chuẩn bị close dự án, B cũng lanh lẹ sắp xếp đi xin việc tại khời nghiệp D vốn đang chiêu mộ nhân tài với đãi ngộ hàng ngàn đô la.
+D sau khi xem xét kỹ càng thì từ chối vì hồ sơ tương tự B đang xếp hàng dài dằng dặc.</p>
+
+<p><strong>Quan sát các sự kiện trên, bạn nghĩ B đã sai những điểm nào?</strong></p>
+
+<ul>
+  <li>B đã chọn bài toán có xuất phát điểm quá cao (99.0%), và vì vậy thử thách để chứng tỏ năng lực bản thân là hầu như không có. Thậm chí, một dịch vụ tương tự như của B đã có sẵn cũng không lạ.</li>
+  <li>B xin vào 1 công ty có tầm nhìn xa, nhưng lại không có điểm gì để thể hiện mảng đang làm là còn chỗ khai thác. Công ty tầm nhìn xa khác Công ty ăn xổi là họ sẽ tìm kiếm cơ hội mới. Nhưng mảng những 99.0% thì bên trong có nhiều người làm tốt rồi. Họ chấp nhận tính sản phẩm không quá mạnh (và không quá yếu :D ) nhưng phải có cơ hội làm chủ thị trường.</li>
+</ul>
+
+<p>Cả A và B đã lựa chọn bài toán 1 cách không chuẩn xác ngay từ đầu. Và những quyết định tiếp theo cũng trong chuỗi hành động sai. Các yếu tố quan trọng để quyết định thành bại:</p>
+
+<ul>
+  <li>Đánh giá đúng thị trường, lựa chon bài toán vừa sức.</li>
+  <li>Kết nối tốt với cơ hội việc làm khi ra trường.</li>
+</ul>
+
+<p>Đi vào một số lĩnh vực cụ thể như luận án tiến sĩ, có thể có những hướng dẫn cụ thể khác [6,7]. Trong bài viết này, chúng ta sẽ tập trung vào vấn đề thị trường việc làm.</p>
+
+<h2 id="lựa-chọn-lĩnh-vực-và-bài-toán">Lựa chọn lĩnh vực và bài toán</h2>
+
+<h3 id="đừng-nghĩ-các-mảng-cũng-như-nhau-hãy-đánh-giá-đúng-tiềm-năng-thị-trường">Đừng nghĩ các mảng cũng như nhau. Hãy đánh giá đúng tiềm năng thị trường.</h3>
+<div id="chart2"></div>
+
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 50},
+    width = 800 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+// Append tooltips
+var div2 = d3.select("#chart2").append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
+// append the svg object to the body of the page
+var svg2 = d3.select("#chart2")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+var x2 = d3.scaleTime().range([0, width]);
+var y2 = d3.scaleLinear().range([height, 0]);
+var paddingForText = 10;
+  // gridlines in x axis function
+  function make_x_gridlines() {		
+      return d3.axisBottom(x2)
+          .ticks(3)
+  }
+
+  // gridlines in y axis function
+  function make_y_gridlines() {		
+      return d3.axisLeft(y2)
+          .ticks(5)
+  }
+//Read the data
+d3.csv("/assets/mot17_perf.csv",
+
+  // When reading the csv, I must format variables:
+  function(d){
+    return { year : d3.timeParse("%Y/%m/%d")(d.year), mota : d.MOTA, name: d.Tracker }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.year; }))
+      .range([ 0, width]);
+    svg2.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+    svg2.append("text")             
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("Released Year");
+       // text label for the y axis
+  svg2.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("MOTA [%]"); 
+    // add the X gridlines
+    svg2.append("g")			
+        .attr("class", "grid")
+        .attr("transform", "translate(0," + height + ")")
+        .call(make_x_gridlines()
+            .tickSize(-height)
+            .tickFormat("")
+        )
+
+    // add the Y gridlines
+    svg2.append("g")			
+        .attr("class", "grid")
+        .call(make_y_gridlines()
+            .tickSize(-width)
+            .tickFormat("")
+        )
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([55, 75])
+      .range([ height, 0]);
+    svg2.append("g")
+      .call(d3.axisLeft(y));
+    svg2.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "n")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.year) })
+        .y(function(d) { return y(d.mota) })
+        )
+
+    svg2.append("g").selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("r", 4)
+    .attr("cx", function(d) {
+        return x(d.year)
+    })
+    .attr("cy", function(d) {
+        return y(d.mota)
+    })
+    .attr("fill", "red")
+    .attr("stroke", "red")
+    .on("mouseover", function(d) {		
+            div2.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            div2.html(d.name + "<br/>"  + d.mota + "%")	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
+            })					
+        .on("mouseout", function(d) {		
+            div2.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
+
+svg2.append("g").selectAll("text")
+    .data(data)
+    .enter()
+    .append("text")
+    .attr("x", function(d) {
+        return x(d.year) - paddingForText
+    })
+    .attr("y", function(d) {
+        return y(d.mota) - paddingForText
+    })
+    .attr("fill", "green")
+    .style("font-size", "12px")
+    .text(function(d) {
+        return d.mota
+    });
+
+})
+
+</script>
+
+<p><em><strong>Top-20 thuật toán trên benchmark MOT17 [8] tại thời điểm bài viết. Có thể dễ thấy bắt đầu năm 2020, thuật toán tốt nhất là ISE [9] mới đạt MOTA 60.1% thì đến tháng 3 năm nay, tức là sau hơn 1 năm, phương pháp tốt nhất là MOTer [10] đã có MOTA là 71.9%. Tức là tiến bộ tầm 11.8%.</strong></em></p>
+
+<p>So với mảng Object Detection mà chúng ta đã nói ở trên, mảng này hiện đã tiến tới 71.9% trên bộ dữ liệu có 250 ngàn đối tượng.
+Vì vậy, về mặt chuẩn công nghiệp là đã tiến khá gần mức chấp nhận lên sản phẩm.
+Tốc độ phát triển tầm 8-9%/năm.
+Tuy nhiên, mảng tracking này có những yêu cầu khắt khe hơn về xử lý real-time, các phương pháp đo, …</p>
+
+<h3 id="tiêu-chí-để-được-gọi-là-sản-phẩm-là-gì">Tiêu chí để được gọi là sản phẩm là gì?</h3>
+
+<p>Nhìn chung trong các bài toán AI mà có độ chính xác và sử dụng trong công nghiệp thì yêu cầu về độ chính xác là gần 100% nhất có thể.
+Thường sẽ là cuộc cạnh tranh giữa các cao thủ công nghệ về độ chính xác.
+Chuẩn chung sẽ là 99.999%.
+Tại sao thì là bạn hãy suy nghĩ xem, 1 thuật toán chỉ có độ chính xác 50% thì bạn sẽ phải tốn bao nhiêu công sức để đảm bảo rằng 50% trường hợp sai sẽ được xử lý.
+Ví dụ có 100 triệu người dùng, thì bạn sẽ phải suy nghĩ rằng sẽ có 50 triệu trường hợp sai.
+Nhưng nếu thuật toán chính xác tới 99.9% thì trong 100 triệu người dùng, sẽ chỉ có \(0.001\times 100,000,000=100,000\) trường hợp sai.
+Nếu thuật toán chính xác tới 99.99% thì chỉ có 10 ngàn trường hợp sai.
+Và nếu chính xác tới 99.999% thì bạn sẽ phải ứng phó với chỉ 1000 trường hợp sai trên 100 triệu người dùng.</p>
+
+<p><em>Vậy bây giờ bạn nhìn thấy giới thiệu 1 lĩnh vực mà thuật toán tốt nhất mới có được 50%, thì lên sản phẩm thế nào bây giờ?</em></p>
+
+<p>Khi các thuật toán đạt tiêu chuẩn về độ chính xác trên tập lớn rồi thì sẽ có những tiêu chuẩn khác như tốc độ xử lý, tài nguyên, đạo đức khoa học và pháp luật [11].
+Khi thực hiện thí nghiệm trên dữ liệu của con người, có khá nhiều điểm về đạo đức, bảo vệ dữ liệu cá nhân, pháp luật mà tôi xin giới thiệu tham khảo thêm tại: [11].</p>
+<h3 id="các-chướng-ngại-tương-lai">Các chướng ngại tương lai</h3>
+
+<p>Trong mọi dự án, foresee được các chướng ngại, nguy cơ là 1 việc phải làm.
+Ví dụ, khi chọn đối tượng là con người, các vướng mắc về an toàn dữ liệu cá nhân là bắt buộc phải nhìn ra.
+Phần lớn các dự án AI đều sẽ đòi hỏi kiểm chứng trên tập đối tượng lớn, và vì vậy nếu làm kém bảo vệ riêng tư người dùng sẽ gặp khá nhiều vấn đề với đạo đức và pháp luật, thậm chí có thể kiện cáo bồi thường hàng triệu đô la.</p>
+
+<p>Tốc độ phát triển của ngành nhanh hay chậm cũng ảnh hưởng tới kết quả đầu ra.
+Nếu 1 ngành ít được phát triển, thậm chí sau 1 năm có thể chẳng có tiến bộ gì về accuracy.
+Yên tâm là những mảng có phát triển đều đặn như object detection hay tracking thường có tốc độ phát triển tầm 7-8%/năm.</p>
+
+<h2 id="nhìn-trước-thị-trường-việc-làm-và-cơ-hội-nghề-nghiệp">Nhìn trước thị trường việc làm và cơ hội nghề nghiệp</h2>
+
+<h3 id="bạn-định-xin-việc-ở-đâu-công-ty-ăn-xổi-hay-công-ty-có-tầm-nhìn-xa">Bạn định xin việc ở đâu? Công ty “ăn xổi” hay công ty “có tầm nhìn xa”?</h3>
+<p>Sau khi có được danh sách những chủ đề và thời điểm công nghệ đó có thể lên sản phẩm, bạn phải nghĩ xem “à thế xin việc ở đâu bây giờ?”</p>
+
+<p>Bạn cần tìm hiểu xem các công ty công nghệ đang cần gì. Và bạn cần bỏ qua những công ty không phù hợp mà nộp và các công ty định hướng của bạn.
+Tất nhiên, đây là sau khi đã giới hạn hết chỉ còn các công ty thuộc mảng của bạn.</p>
+
+<p>Trước khi thảo luận về điều các công ty muốn, xin phép phân loại các công ty trong mảng AI thành</p>
+
+<ul>
+  <li><strong>Công ty thích “ăn xổi”</strong>: Nhìn chung thì phần lớn các công ty có địa vị, danh tiếng, thậm chí các tập đoàn lớn thường muốn nhìn thấy sản phẩm ngay. Nhưng mà đâu phải muốn sản phẩm là có sản phẩm ngay. Lên được sản phẩm hay không là có tiêu chí rồi. Và hiện tại, ngành hẹp đang đạt được bao nhiêu là sự thực không thay đổi. Giả dụ ngành giừ các nghiên cứu tốt nhất ở Âu Mỹ mới có 60% và tốc độ phát triển chỉ 7-8% thì muốn lên sản phẩm thế nào?</li>
+  <li><strong>Công ty có tầm nhìn xa</strong>: Thường là các công ty khởi nghiệp, công ty mới lập. Họ hiểu rằng, ăn xổi chì là nhất thời. Muốn dài lâu thì phải kiếm 1 mảng chưa đến 90% và nhảy vào làm chủ.</li>
+</ul>
+
+<h3 id="các-công-ty-công-nghệ-đang-cần-gì">Các công ty công nghệ đang cần gì?</h3>
+<p>Công ty thích “ăn xổi” thì sẽ thường cần chuyên gia mang tới mảng có thể lên sản phẩm ngay. Vì vậy tốt nhất bạn nên có hồ sơ của những cái đã lên tới 99.999%, thậm chí có thể triển khai luôn càng tốt.</p>
+
+<p>Công ty có tầm nhìn xa thì lại cần những cái có thể không quá mạnh, nhưng cả thị trường đều đang yếu và cơ hội làm chủ thị trường là cao.</p>
+
+<p>Tốt nhất là 1 mảng mới tầm 70-80% thì sẽ hấp dẫn cả ăn xổi lần tầm nhìn xa.</p>
+
+<h3 id="offshore-thì-sao">Offshore thì sao?</h3>
+<p>Offshore thì là làm sản phẩm và mở ra thêm mảng AI nếu có nhu cầu.
+Vì vậy, có những offshore mà lại vừa có tính ăn xổi lần tính tầm nhìn xa khi tiếp cận AI.
+Bạn nên chú ý khi mang công nghệ AI tới các công ty offshore.</p>
+
+<h2 id="kết-luận">Kết luận</h2>
+
+<h3 id="một-số-lĩnh-vực-đã-đến-level-sản-phẩm-thị-trường">Một số lĩnh vực đã đến level sản phẩm thị trường</h3>
+<p>Cuối cùng là chúng ta cũng điểm xem các mảng nào đã đến level lên sản phẩm thị trường.
+Nên nhớ khi đã đến level lên sản phẩm, tức là cũng không có gì mới!</p>
+
+<ul>
+  <li>
+    <p><strong>Nhóm công nghệ nhận dạng (ứng dụng trong bio-metrics, eKYC, …)</strong>: Face Verification chẳng hạn là đã lên tới 99.9% trên tập 12 triệu đối tượng người thật [4,5].
+Các bài toán khác trong mảng này như Fingerprint hay Gait recognition cũng đạt hiệu suất trên 90% từ khá lâu.
+eKYC cũng được xây dựng trên các công nghệ cũ này và chủ yếu mang tính chuyển giao công nghệ.
+Cái quan trọng là gói công nghệ này đã lên gần 100% và các yêu cầu khác cũng khá chuẩn nên việc lên sản phẩm là không có nhiều cản trở.
+Tuy nhiên, như đã phân tích trong mục các công ty ăn xổi thì thị trường chỉ còn lại mảng ngách, hoặc chuyển giao công nghệ là chính.
+Việc làm chủ thị trường ở cấp thế giới và khu vực là khó, thậm chí trong thị trường ngách cũng sẽ là cạnh tranh khốc liệt vì là gói công nghệ đã tiêu chuẩn, nên ai cũng có thể nhanh chóng bắt nhịp.</p>
+  </li>
+  <li>
+    <p><strong>Nhóm công nghệ phát hiện bất thường và lên cảnh báo</strong>: Cũng không lạ khi Amazon những năm gần đây dịch vụ hóa gói công nghệ này thành Amazon Fraud Detector (phát hiện lừa đảo, [12]) và Amazon Lookout for Equipment (phát hiện hỏng hóc trong máy móc, [13]). Dịch vụ có sẵn như vậy đương nhiên là vì độ khả thi kỹ thuật chính xác 99.99% trên tập dữ liệu lớn là đã có rồi. Tương lai gần có thể là các ứng dụng chứng khoán, với độ chính xác cũng đang gần 100%.</p>
+  </li>
+</ul>
+
+<h3 id="tổng-kết">Tổng kết</h3>
+
+<p>Nhìn chung, các lời khuyên hữu ích cho việc tìm kiếm sự nghiệp trong mảng trí tuệ nhân tạo chính là xác định đúng thị trường, xác định đúng công ty muốn vào và thời điểm để đi xin việc.</p>
+
+<p>Có nhiều công nghệ vẫn under development, nhưng có nhiều công nghệ cũ như bio-metrics, eKYC, phát hiện bất thường đã đạt tiêu chuẩn lên sản phẩm và các công ty đã chờ chúng từ rất lâu. Nhưng cũng nên nhớ là các công ty đã làm chủ các công nghệ này từ lâu, từ khi chúng còn 70-80%, chưa đủ mức lên sản phẩm. Vậy tại sao công ty bạn không làm chủ một công nghệ mới 70-80% ngay từ bây giờ?</p>
+
+<h2 id="tài-liệu-tham-khảo">Tài liệu tham khảo</h2>
+
+<ol class="bibliography"><li><span id="COCOtest31"><i>COCO test-dev Benchmark (Object Detection) | Papers With Code</i>. https://paperswithcode.com/sota/object-detection-on-coco.</span></li>
+<li><span id="conf/eccv/LiuAESRFB16">Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S. E., Fu, C.-Y., &amp; Berg, A. C. (2016). SSD: Single Shot MultiBox Detector. In B. Leibe, J. Matas, N. Sebe, &amp; M. Welling (Eds.), <i>ECCV (1)</i> (Vol. 9905, pp. 21–37). Springer.</span></li>
+<li><span id="liu2021Swin">Liu, Z., Lin, Y., Cao, Y., Hu, H., Wei, Y., Zhang, Z., Lin, S., &amp; Guo, B. (2021). Swin Transformer: Hierarchical Vision Transformer using Shifted Windows. <i>ArXiv Preprint ArXiv:2103.14030</i>.</span></li>
+<li><span id="NECfacia36:online"><i>NEC facial recognition system offers 99.9% accuracy with mask on - Nikkei Asia</i>. https://asia.nikkei.com/Spotlight/Coronavirus/NEC-facial-recognition-system-offers-99.9-accuracy-with-mask-on.</span></li>
+<li><span id="FaceReco74:online"><i>Face Recognition Vendor Test (FRVT) | NIST</i>. https://www.nist.gov/programs-projects/face-recognition-vendor-test-frvt.</span></li>
+<li><span id="HowtoCho11:online"><i>How to Choose a PhD Research Topic | DiscoverPhDs</i>. https://www.discoverphds.com/advice/finding/phd-research-topic.</span></li>
+<li><span id="FoolProo45:online"><i>Fool Proof Tips for Finding PhD Research Topics - PhDPortal.com</i>. https://www.phdportal.com/articles/996/fool-proof-tips-for-finding-phd-research-topics.html.</span></li>
+<li><span id="MOTChall87:online"><i>MOT Challenge - Results</i>. https://motchallenge.net/results/MOT17/.</span></li>
+<li><span id="MOTChall87:online2"><i>MOT Challenge</i>. https://motchallenge.net/method/MOT=2927&amp;chl=10.</span></li>
+<li><span id="xu2021transcenter">Xu, Y., Ban, Y., Delorme, G., Gan, C., Rus, D., &amp; Alameda-Pineda, X. (2021). <i>TransCenter: Transformers with Dense Queries for Multiple-Object Tracking</i>.</span></li>
+<li><span id="ỨngdụngC61:online"><i>Ứng dụng Computer Vision trong thời đại COVID-19 (3): Quy trình tiêu chuẩn cho việc thu thập dữ liệu liên quan tới đối tượng là con người – NEOS VietNam AIoT</i>. https://neosaiiot.wordpress.com/2021/04/23/ung-dung-computer-vision-trong-thoi-dai-covid-19-3-quy-trinh-tieu-chuan-cho-viec-thu-thap-du-lieu-lien-quan-toi-doi-tuong-la-con-nguoi/.</span></li>
+<li><span id="AmazonFr13:online"><i>Amazon Fraud Detector – Amazon Web Services</i>. https://aws.amazon.com/vi/fraud-detector/.</span></li>
+<li><span id="AmazonLo45:online"><i>Amazon Lookout for Equipment - Amazon Web Services</i>. https://aws.amazon.com/lookout-for-equipment/.</span></li></ol>
+
+    
+
+
+
+<div class="post-tags">
+  
+    
+    <a href="/tags.html#research-topic">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">research topic</span>
+    </a>
+  
+    
+    <a href="/tags.html#jobs">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">jobs</span>
+    </a>
+  
+    
+    <a href="/tags.html#cơ-hội-nghề-nghiệp">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">cơ hội nghề nghiệp</span>
+    </a>
+  
+    
+    <a href="/tags.html#lời-khuyên-sự-nghiệp">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">lời khuyên sự nghiệp</span>
+    </a>
+  
+</div>
+  </div>
+
+  
+  <section class="comments">
+    <h2>Comments</h2>
+    
+  <div id="disqus_thread">
+    <button class="disqus-load" onClick="loadDisqusComments()">
+      Load Comments
+    </button>
+  </div>
+  <script>
+
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW
+  *  TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT:s
+  *  https://disqus.com/admin/universalcode/#configuration-variables
+  */
+  var disqus_config = function () {
+    this.page.url = "https://www.caineng.in/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english.html";
+    this.page.identifier = "" ||
+                           "https://www.caineng.in/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english.html";
+  }
+  function loadDisqusComments() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//caineng.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  </script>
+  <noscript>
+    Please enable JavaScript to view the
+    <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.
+  </noscript>
+
+
+
+  </section>
+
+  <section class="related">
+  <h2>Related Posts</h2>
+  <ul class="posts-list">
+    
+      <li>
+        <h3>
+          <a href="/cv/ai/2021/05/20/understanding-object-detection-nms.html">
+            Understanding Object Detection Algorithms: the Non-maximum-suppression (NMS)
+            <small>20 May 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt.html">
+            Implementing a complex system in AWS Lambda: Should or shouldn't?
+            <small>03 Apr 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/sre/non-english/2021/03/13/ban-ve-thiet-ke-he-thong-co-quan-ly-user-non-english.html">
+            Bàn về thiết kế hệ thống có quản lý users: Cây nhà lá vườn hay ăn sẵn?
+            <small>13 Mar 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</section>
+
+</div>
+
+    </main>
+
+    <!-- Optional footer content -->
+
+    <script src="https://kit.fontawesome.com/d0b91d895e.js" crossorigin="anonymous"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </body>
+</html>

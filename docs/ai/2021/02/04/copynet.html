@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="https://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Understanding CopyNet &middot; AiFi 
+  </title>
+
+  
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface" />
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/favicon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/feed.xml"
+  />
+
+  <!-- Additional head bits without overriding original head -->
+  <style>
+    div.chart {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+  </style>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="http://bl.ocks.org/mbostock/raw/4061502/0a200ddf998aa75dfdb1ff32e16b680a15e5cb01/box.js"></script>
+</head>
+
+
+  <body class="post">
+
+    <div id="sidebar">
+  <header>
+    <div class="site-title">
+      <a href="/">
+        
+          <span class="back-arrow icon"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 0h24v24H0z" fill="none"/>
+  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+</svg></span>
+        
+        AiFi
+      </a>
+    </div>
+    <p class="lead">The official AiFi</p>
+  </header>
+  <nav id="sidebar-nav-links">
+  
+    <a class="home-link "
+        href="/">Home</a>
+  
+  
+
+  
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/ai.html">Artificial Intelligence</a>
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/cv.html">Computer Vision</a>
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/non-english.html">Tiếng Việt, 日本語</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/sre.html">Site Reliability Engineering</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <!-- Optional additional links to insert in sidebar nav -->
+</nav>
+
+  <a href="/about.html">About</a>
+
+  
+
+  <nav id="sidebar-icon-links">
+  
+
+  <a id="subscribe-link"
+     class="icon" title="Subscribe" aria-label="Subscribe"
+     href="/feed.xml">
+    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <circle cx="6.18" cy="17.82" r="2.18"/>
+    <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
+</svg>
+  </a>
+
+  
+  
+  
+  
+
+  
+    <a id="tags-link"
+       class="icon"
+       title="Tags" aria-label="Tags"
+       href="/tags.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+    </a>
+  
+
+  
+    <a id="search-link"
+       class="icon"
+       title="Search" aria-label="Search"
+       href="/search.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+</svg>
+    </a>
+  
+
+  <!-- Optional additional links to insert for icons links -->
+</nav>
+
+  <p>
+  &copy; 2021.
+  <a href="/LICENSE.md">MIT License.</a>
+</p>
+
+</div>
+
+    <main class="container">
+      <header>
+  <h1 class="post-title">Understanding CopyNet</h1>
+</header>
+<div class="content">
+  <div class="post-meta">
+  <span class="post-date">04 Feb 2021</span>
+  <span class="post-categories">
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/ai.html">
+          Artificial Intelligence
+        </a>
+      
+    
+  </span>
+  <span class="share-page">
+    &bull;
+    <a href="https://twitter.com/intent/tweet?text=Understanding CopyNet&url=https://www.caineng.in/ai/2021/02/04/copynet.html&via=&related=" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://facebook.com/sharer.php?u=https://www.caineng.in/ai/2021/02/04/copynet.html" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square"></i></a>
+</span>
+
+<span title="Estimated read time">
+  
+  
+    6 mins
+  
+</span>
+
+</div>
+
+  <div id="table-of-contents">
+  <h2>Index</h2>
+    <ol id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#background-sequence-to-sequence-framework">Background: Sequence-To-Sequence framework</a></li>
+<li class="toc-entry toc-h2"><a href="#copynet">CopyNet</a></li>
+<li class="toc-entry toc-h2"><a href="#implementation">Implementation</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#dataset">Dataset</a></li>
+<li class="toc-entry toc-h3"><a href="#tokenization">Tokenization</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h2"><a href="#references">References</a></li>
+</ol>
+  </div>
+
+  <div class="post-body">
+    <p>CopyNet [1] is built upon the Seq2Seq framework [2] which improve accuracy by repeated patterns during conversations.
+First time hearing the name, I was confused because copying some parts of friend’s sentences is not technically interesting.
+However, I found that this <code class="language-plaintext highlighter-rouge">copying mechanism</code> is somewhat realistic: we are often copying each other even what other people are saying.
+For example, when your friend tell you that <code class="language-plaintext highlighter-rouge">Hi, my name is Jessy!</code>, then a popular response would be <code class="language-plaintext highlighter-rouge">Hi, Jessy!</code>. You should copy the name <code class="language-plaintext highlighter-rouge">Jessy</code> as a quite normal reaction.
+In contrast, if you are too imaginative and instead of <code class="language-plaintext highlighter-rouge">copying</code>, you <code class="language-plaintext highlighter-rouge">generate</code> a response like <code class="language-plaintext highlighter-rouge">Hi, Michael</code> to Jessy, this would be ridiculous.
+Then by incorporating the <code class="language-plaintext highlighter-rouge">copying behavior</code> into RNN Encoder-Decoder framework [2], it would make the question-answering goes smoothly.</p>
+
+<!--more-->
+
+<p>After understanding the motivation of the <code class="language-plaintext highlighter-rouge">copying mechanism</code>, I have no concern with <code class="language-plaintext highlighter-rouge">copy and paste</code>.</p>
+
+<h2 id="background-sequence-to-sequence-framework">Background: Sequence-To-Sequence framework</h2>
+
+<h2 id="copynet">CopyNet</h2>
+
+<h2 id="implementation">Implementation</h2>
+
+<h3 id="dataset">Dataset</h3>
+<p>I tried the CopyNet for neural machine translation task in the <a href="https://github.com/venali/BilingualCorpus">BilingualCorpus</a> dataset. This dataset contains 500K pairs of gold Japanese-English sentence pairs (and over 1.3M pairs in total, including non-gold translations).
+All the sentences are extracted from 14111 Wikipedia articles.
+Sentence pairs are given in 14111 XML document files.
+The below code will help to read all XML document files in a directory into a list of bilingual sentence pairs:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">opencorpora</span>
+<span class="kn">import</span> <span class="nn">itertools</span><span class="p">,</span> <span class="n">os</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+
+<span class="k">def</span> <span class="nf">parse_sentence</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span><span class="p">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s">'sen'</span><span class="p">:</span>
+        <span class="n">children</span> <span class="o">=</span> <span class="n">i</span><span class="p">.</span><span class="n">getchildren</span><span class="p">()</span>
+        <span class="n">jpn_sentences</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">eng_sentences</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">c</span><span class="p">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s">'j'</span><span class="p">:</span>
+                <span class="n">jpn_sentences</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">c</span><span class="p">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s">'e'</span><span class="p">:</span>
+                <span class="n">eng_sentences</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="p">.</span><span class="n">product</span><span class="p">(</span><span class="n">jpn_sentences</span><span class="p">,</span> <span class="n">eng_sentences</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">parse_document</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">p</span><span class="p">.</span><span class="n">getchildren</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">i</span><span class="p">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s">'sen'</span><span class="p">:</span>
+            <span class="n">pairs</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">parse_sentence</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pairs</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">parse_document</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">pairs</span>
+
+<span class="k">def</span> <span class="nf">parse_directory</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">"/**/*.xml"</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Found {} documents"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)))</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">opencorpora</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span> 
+            <span class="n">pairs</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">parse_document</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">pairs</span>
+</code></pre></div></div>
+
+<p>A sample:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">random</span>
+<span class="n">random</span><span class="p">.</span><span class="n">choice</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+
+<span class="n">Out</span><span class="p">:</span>
+<span class="p">(</span><span class="s">'江戸時代には『甲陽軍鑑』が流行し、赤法衣と諏訪法性の兜に象徴される法師武者姿としてのイメージが確立した。'</span><span class="p">,</span>
+ <span class="s">'During the Edo period, "Koyo Gunkan" became popular, and the image of Shingen, as Hoshi-musha (armed priests) with a red clerical garment and a helmet of Suwahossho was established.'</span><span class="p">)</span> 
+</code></pre></div></div>
+<h3 id="tokenization">Tokenization</h3>
+<p>Tokenization is a step-stone in all NLP tasks. For English, I can use space based splitting to do tokenization, but for JP language, when normally all tokens are concatenated without spaces, I use <a href="https://spacy.io/models/ja#ja_core_news_lg"><code class="language-plaintext highlighter-rouge">spacy</code>’s JP language tokenizer</a>. I don’t build tokenizer from scratch but do use a quite powerful and ready-to-use solution, the <code class="language-plaintext highlighter-rouge">spacy</code>’s one.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">spacy.lang.ja</span> <span class="kn">import</span> <span class="n">JapaneseTokenizer</span>
+<span class="kn">from</span> <span class="nn">spacy.lang.en</span> <span class="kn">import</span> <span class="n">English</span>
+<span class="kn">from</span> <span class="nn">spacy.tokenizer</span> <span class="kn">import</span> <span class="n">Tokenizer</span>
+<span class="kn">import</span> <span class="nn">spacy</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">'ja_core_news_lg'</span><span class="p">)</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">JapaneseTokenizer</span><span class="p">(</span><span class="n">nlp</span><span class="p">).</span><span class="n">tokenizer</span>
+<span class="n">eng_tokenizer</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">English</span><span class="p">().</span><span class="n">vocab</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">contains_digit</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">char</span><span class="p">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">string</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">create_vocab</span><span class="p">(</span><span class="n">pairs</span><span class="p">):</span>
+    <span class="n">vocab</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">eng_vocab</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+        <span class="n">eng_tokens</span>  <span class="nb">list</span><span class="p">(</span><span class="n">eng_tokenizer</span><span class="p">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">token</span><span class="p">.</span><span class="n">normalized_form</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">contains_digit</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="ow">and</span> <span class="s">'数'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">token</span><span class="p">.</span><span class="n">part_of_speech</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> \
+                <span class="ow">and</span> <span class="s">'@'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">and</span> <span class="s">'http'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">and</span> <span class="s">'www'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+                <span class="n">vocab</span><span class="p">[</span><span class="n">text</span><span class="p">]</span> <span class="o">=</span> <span class="n">vocab</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">eng_tokens</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">token</span><span class="p">.</span><span class="n">normalized_form</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">contains_digit</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> \
+                <span class="ow">and</span> <span class="s">'@'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">and</span> <span class="s">'http'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">and</span> <span class="s">'www'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+                <span class="n">eng_vocab</span><span class="p">[</span><span class="n">text</span><span class="p">]</span> <span class="o">=</span> <span class="n">eng_vocab</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">vocab</span><span class="p">,</span> <span class="n">eng_vocab</span>
+</code></pre></div></div>
+
+<p>I found that it is better to remove numerics, phone numbers, emails and URLs from the vocabulary and treat them as OOV. And using bare form (normalized form) of words gave a little boost.
+Note for the part <code class="language-plaintext highlighter-rouge">spacy.load('ja_core_news_lg')</code> that <code class="language-plaintext highlighter-rouge">spacy</code> also uses a deep learning model for this tokenizer.</p>
+<h2 id="references">References</h2>
+
+<ol class="bibliography"><li><span id="gu2016incorporating">Gu, J., Lu, Z., Li, H., &amp; Li, V. O. K. (2016). <i>Incorporating Copying Mechanism in Sequence-to-Sequence Learning</i>.</span></li>
+<li><span id="bahdanau2014neural">Bahdanau, D., Cho, K., &amp; Bengio, Y. (2014). Neural machine translation by jointly learning to align and translate. <i>ArXiv Preprint ArXiv:1409.0473</i>.</span></li></ol>
+
+    
+
+
+
+<div class="post-tags">
+  
+    
+    <a href="/tags.html#deep-learning">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">deep learning</span>
+    </a>
+  
+    
+    <a href="/tags.html#neural-network">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">neural network</span>
+    </a>
+  
+    
+    <a href="/tags.html#neural-machine-translation">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">neural machine translation</span>
+    </a>
+  
+    
+    <a href="/tags.html#question-answering">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">question answering</span>
+    </a>
+  
+    
+    <a href="/tags.html#copynet">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">copynet</span>
+    </a>
+  
+    
+    <a href="/tags.html#seq2seq">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">seq2seq</span>
+    </a>
+  
+    
+    <a href="/tags.html#recurrent-neural-nets">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">recurrent neural nets</span>
+    </a>
+  
+</div>
+  </div>
+
+  
+  <section class="comments">
+    <h2>Comments</h2>
+    
+  <div id="disqus_thread">
+    <button class="disqus-load" onClick="loadDisqusComments()">
+      Load Comments
+    </button>
+  </div>
+  <script>
+
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW
+  *  TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT:s
+  *  https://disqus.com/admin/universalcode/#configuration-variables
+  */
+  var disqus_config = function () {
+    this.page.url = "https://www.caineng.in/ai/2021/02/04/copynet.html";
+    this.page.identifier = "" ||
+                           "https://www.caineng.in/ai/2021/02/04/copynet.html";
+  }
+  function loadDisqusComments() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//caineng.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  </script>
+  <noscript>
+    Please enable JavaScript to view the
+    <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.
+  </noscript>
+
+
+
+  </section>
+
+  <section class="related">
+  <h2>Related Posts</h2>
+  <ul class="posts-list">
+    
+      <li>
+        <h3>
+          <a href="/cv/ai/2021/05/20/understanding-object-detection-nms.html">
+            Understanding Object Detection Algorithms: the Non-maximum-suppression (NMS)
+            <small>20 May 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english.html">
+            Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp trong ngành trí tuệ nhân tạo?
+            <small>24 Apr 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt.html">
+            Implementing a complex system in AWS Lambda: Should or shouldn't?
+            <small>03 Apr 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</section>
+
+</div>
+
+    </main>
+
+    <!-- Optional footer content -->
+
+    <script src="https://kit.fontawesome.com/d0b91d895e.js" crossorigin="anonymous"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </body>
+</html>

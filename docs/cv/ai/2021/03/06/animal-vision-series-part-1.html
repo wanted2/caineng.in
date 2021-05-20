@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="https://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Animal Vision Part 1: Course Introduction &middot; AiFi 
+  </title>
+
+  
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface" />
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/favicon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/feed.xml"
+  />
+
+  <!-- Additional head bits without overriding original head -->
+  <style>
+    div.chart {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+  </style>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="http://bl.ocks.org/mbostock/raw/4061502/0a200ddf998aa75dfdb1ff32e16b680a15e5cb01/box.js"></script>
+</head>
+
+
+  <body class="post">
+
+    <div id="sidebar">
+  <header>
+    <div class="site-title">
+      <a href="/">
+        
+          <span class="back-arrow icon"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 0h24v24H0z" fill="none"/>
+  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+</svg></span>
+        
+        AiFi
+      </a>
+    </div>
+    <p class="lead">The official AiFi</p>
+  </header>
+  <nav id="sidebar-nav-links">
+  
+    <a class="home-link "
+        href="/">Home</a>
+  
+  
+
+  
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/ai.html">Artificial Intelligence</a>
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/cv.html">Computer Vision</a>
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/non-english.html">Tiếng Việt, 日本語</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+      <a class="category-link "
+          href="/category/sre.html">Site Reliability Engineering</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <!-- Optional additional links to insert in sidebar nav -->
+</nav>
+
+  <a href="/about.html">About</a>
+
+  
+
+  <nav id="sidebar-icon-links">
+  
+
+  <a id="subscribe-link"
+     class="icon" title="Subscribe" aria-label="Subscribe"
+     href="/feed.xml">
+    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <circle cx="6.18" cy="17.82" r="2.18"/>
+    <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
+</svg>
+  </a>
+
+  
+  
+  
+  
+
+  
+    <a id="tags-link"
+       class="icon"
+       title="Tags" aria-label="Tags"
+       href="/tags.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+    </a>
+  
+
+  
+    <a id="search-link"
+       class="icon"
+       title="Search" aria-label="Search"
+       href="/search.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+</svg>
+    </a>
+  
+
+  <!-- Optional additional links to insert for icons links -->
+</nav>
+
+  <p>
+  &copy; 2021.
+  <a href="/LICENSE.md">MIT License.</a>
+</p>
+
+</div>
+
+    <main class="container">
+      <header>
+  <h1 class="post-title">Animal Vision Part 1: Course Introduction</h1>
+</header>
+<div class="content">
+  <div class="post-meta">
+  <span class="post-date">06 Mar 2021</span>
+  <span class="post-categories">
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/cv.html">
+          Computer Vision
+        </a>
+      
+    
+      &bull;
+
+      
+      
+      
+
+      
+        <a href="/category/ai.html">
+          Artificial Intelligence
+        </a>
+      
+    
+  </span>
+  <span class="share-page">
+    &bull;
+    <a href="https://twitter.com/intent/tweet?text=Animal Vision Part 1: Course Introduction&url=https://www.caineng.in/cv/ai/2021/03/06/animal-vision-series-part-1.html&via=&related=" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://facebook.com/sharer.php?u=https://www.caineng.in/cv/ai/2021/03/06/animal-vision-series-part-1.html" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square"></i></a>
+</span>
+
+<span title="Estimated read time">
+  
+  
+    8 mins
+  
+</span>
+
+</div>
+
+  <div id="table-of-contents">
+  <h2>Index</h2>
+    <ol id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#introduction">Introduction</a></li>
+<li class="toc-entry toc-h2"><a href="#system">System</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#a-system-for-farming-management">A system for farming management</a></li>
+<li class="toc-entry toc-h3"><a href="#technologies">Technologies</a>
+<ol>
+<li class="toc-entry toc-h4"><a href="#image-classification">Image classification</a></li>
+<li class="toc-entry toc-h4"><a href="#object-detection-and-segmentation">Object detection and segmentation</a></li>
+<li class="toc-entry toc-h4"><a href="#image-anomaly-detection">Image Anomaly Detection</a></li>
+<li class="toc-entry toc-h4"><a href="#machine-learning">Machine Learning</a></li>
+<li class="toc-entry toc-h4"><a href="#image-processing">Image Processing</a></li>
+<li class="toc-entry toc-h4"><a href="#attribute-detection">Attribute Detection</a></li>
+<li class="toc-entry toc-h4"><a href="#fine-grained-categorization">Fine-Grained Categorization</a></li>
+</ol>
+</li>
+</ol>
+</li>
+<li class="toc-entry toc-h2"><a href="#about-this-course">About this course</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#tools">Tools</a></li>
+<li class="toc-entry toc-h3"><a href="#posts">Posts</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h2"><a href="#references">References</a></li>
+</ol>
+  </div>
+
+  <div class="post-body">
+    <p><img src="/assets/img/dogs.PNG" alt="" /></p>
+
+<p>The purpose of this <code class="language-plaintext highlighter-rouge">learning-by-doing</code> course is to get familiar with a cross-discipline topic: Computer Vision for Agriculture.
+Specifically, we introduce Animal Vision (AniV), targeting canine animals.
+Learners get through several useful applications of Computer Vision (CV) into Animal Farming:</p>
+
+<ul>
+  <li>Object Recognition, Detection and Segmentation (including class, instance and panoptic segmentation [1])</li>
+  <li>Methods to adapt to new domains in farming such as Transfer Learning and Domain Adaptation.</li>
+  <li>Image enhancement methods such as de-raining, super-resolution, .etc.</li>
+  <li>Applications such as Dog counting, animal crowd density estimation, anomaly detection.
+The objective of this course is to build a proper Animal Vision system below.</li>
+</ul>
+
+<!--more-->
+
+<h2 id="introduction">Introduction</h2>
+
+<p><strong>Automation</strong> is changing the world with growing conventional technologies such as Information Tech, Software, Hardware, and frontier domains such as Artificial Intelligence (AI), Machine Learning (ML), Deep Learning (DL), Internet of Things (IoT), Computational Linguistics (CL), and Computer Vision (CV).
+Cloud platforms like Amazon Web Services (AWS) provides convenient solutions to handle many industrial problems at hand, such as Equipment Defect Detection using <em>AWS Lookout for Equipment [2]</em>.
+For Agriculture Automation, the uses of CV are also growing [3, 4] in two sectors in agriculture: crops and farming.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Applications</th>
+      <th>Sub-tasks</th>
+      <th>Description</th>
+      <th>Technologies</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Crop Management</td>
+      <td>Crop Monitoring</td>
+      <td>AI engine mounted into a UAV can detect crops and monitor their growth for human diagnostic. Human experts and farmers can perform further investigations and change the plan of feeding crops.</td>
+      <td>UAV/Drones, object detection/classification/segmentation</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>Yield Prediction</td>
+      <td>Using deep learning with satellite imagery, we can gather various information like soil conditions, nitrogen levels, moisture, seasonal weather, historical yield information of crops for precise farming.</td>
+      <td>Time series forecasting, fruit object counting</td>
+    </tr>
+    <tr>
+      <td>Food Safety</td>
+      <td>Environment Management</td>
+      <td>From historical information of crop environment, such as soil conditions, nitrogen levels, moisture, seasonal weather, spotting the outliers to judge the quality of the crops and fruits.</td>
+      <td>Time series anomaly detection</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>Spraying pesticides</td>
+      <td>We use AI-enabled drones to monitor the infected crops and spray the pesticides to prevent crops from insects and pests. The computer vision allows drones to precisely detect the infected crops and spray the pesticides accordingly.</td>
+      <td>Image anomaly detection, UAV/Drones, object detection/classification/segmentation</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>Automatic quality grading and sorting</td>
+      <td>Using the deep learning techniques, we calculate the percentage of infection. The grading and sorting of the fruit image helping farmers to reduce the crop damages due to storage.</td>
+      <td>Image classification, image anomaly detection, object detection/classification/segmentation</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>Weight estimation</td>
+      <td>CV enables automatic weight detection to ensure that animals grow well before being sent to the slaughterhouse.</td>
+      <td>Image weight estimation, UAV/Drones, object detection/classification/segmentation</td>
+    </tr>
+    <tr>
+      <td>Farming Management</td>
+      <td>Livestock Management</td>
+      <td>Automatic counting of animals in the farms helps the farmers better manage their hounds. When an individual has a sickness, the AI-enabled system can alert the farmers to separate that individual from the rest.</td>
+      <td>Animal counting, density estimation, image anomaly detection, UAV/Drones, object detection/classification/segmentation</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The applications in this field include Forestry Management, which is similar to Crop Management but has some other issues such as burning prevention.
+Our targets include Farming Management (and weight estimation).</p>
+
+<h2 id="system">System</h2>
+
+<h3 id="a-system-for-farming-management">A system for farming management</h3>
+
+<p><img src="/assets/img/farm.png" alt="" /></p>
+
+<ol>
+  <li>
+    <p>A camera captures an image and sends it to the server. In the server, a <strong>Global Anomaly Detector (GAD)</strong> detects whether if there is a non-targeted class in the image. For example, if the monitor scenario only accepts dogs and sheep, the system must raise an alert (5) when a wolf or a human thief appears.</p>
+  </li>
+  <li>
+    <p>If GAD detects only accepted classes, (4) a <strong>1-class detector/segmentation model</strong> (or <strong>limited-domain model, LDM</strong>) detects the (7) <strong>annotations (bounding boxes and polygons)</strong>. Here, we find other benefits of GAD: it reduces the <strong>load and mistakes of LDM</strong>. <strong>Why?</strong> Because in the course, we see that 1-class models and 1-vs-rest learning mechanisms often result in <strong>over-confidence problem</strong>: the 1-class model makes many false-positives (FPs) on the rest classes. Therefore, using a GAD reduces the chance of such over-confidence by <strong>early detection of intrusions</strong>.</p>
+  </li>
+  <li>
+    <p>For each detection of LDM, it is passed to a <strong>wide-domain classifier (WDC)</strong> such as an ImageNet pre-trained model. GAD does early intrusion detection, WDC performs late detection of intrusions. Because a 1-class model can give many FPs, GAD is insufficient. Since WDC learned in 1000 classes, a larger knowledge base than LDM, it is less over-confident.
+WDC firmly prevents non-target classes from being intruded into the Analytics Database.</p>
+  </li>
+  <li>
+    <p>If the detection surpasses RAD, it has less chance to be a false alarm. 
+We want to obtain further analytics information: 
+(10) <strong>Regional Anomaly Detector (RAD)</strong> which finds if the instance region has sickness or not; 
+(11) <strong>Fine-Grained Classifier (FGC)</strong> returns the detailed classes such as breed names of the instances (an Egyptian dog rather than a dog); and 
+(12) <strong>Weight Estimation Model (WEM)</strong> returns the instance weight for further diagnostics.</p>
+  </li>
+  <li>
+    <p>The above information is inserted by timestamp to the Analytics Database to display in the Dashboard to the farm owners.</p>
+  </li>
+</ol>
+
+<p>In this course, we learn the CV and ML technologies to implement this system.</p>
+
+<h3 id="technologies">Technologies</h3>
+
+<h4 id="image-classification">Image classification</h4>
+
+<p>As said before, Global Anomaly Detector (GAD) for early intrusion detection, as well as the Wide-Domain Classifier for late intrusion detection, are implemented by Wide-domain models such as pre-trained ImageNet models. This technology is well known today, especially after 2012 with the boost of the Deep Learning era.</p>
+
+<h4 id="object-detection-and-segmentation">Object detection and segmentation</h4>
+<p>We apply these classes of technology to 1-class models and RAD models above.</p>
+
+<h4 id="image-anomaly-detection">Image Anomaly Detection</h4>
+<p>This technology aims at delivering the infected instances in an image.
+The deliverables can be bounding boxes, polygons, or binary labels (sickness/noon-sickness).
+GAD and RAD use this technology. <strong>Gathering training data</strong> can be a problem due to the frequency of rare events.</p>
+
+<h4 id="machine-learning">Machine Learning</h4>
+
+<p>Data augmentation, balancing training data, domain adaptation, and transfer learning can be the core set of ML technologies we need to learn.</p>
+
+<h4 id="image-processing">Image Processing</h4>
+
+<p>Some worst cases in practice require further care about image quality:</p>
+
+<ul>
+  <li><strong>Bad weather</strong> such as raining and snowing can result in low detection quality. De-raining models can be useful.</li>
+  <li><strong>Camera movement</strong> can be complement by calibration.</li>
+  <li><strong>Low-resolution imagery</strong> requires up-scaling or super-resolution.</li>
+</ul>
+
+<p>The models can be run on the input images before fed to GAD.</p>
+
+<h4 id="attribute-detection">Attribute Detection</h4>
+
+<p>For farming, they feed most animal breeds for meat.
+Therefore, attributes which affect the quality of food are inevitable.
+They are animal health conditions such as weight and sickness.</p>
+
+<h4 id="fine-grained-categorization">Fine-Grained Categorization</h4>
+
+<p>FGC helps to identify the breeds and origins of the animals.
+This technology contributes to quality insurance to keep traceability of food origin.</p>
+
+<h2 id="about-this-course">About this course</h2>
+
+<p>In this course, we implement the Animal Vision System (AVS) using frontier technologies.</p>
+
+<h3 id="tools">Tools</h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Language</td>
+      <td>English</td>
+    </tr>
+    <tr>
+      <td>OS</td>
+      <td>Ubuntu, macOS, Windows x64</td>
+    </tr>
+    <tr>
+      <td>Programming Language</td>
+      <td>Python (C/C++)</td>
+    </tr>
+    <tr>
+      <td>Deep Learning frameworks</td>
+      <td>PyTorch</td>
+    </tr>
+    <tr>
+      <td>Computer Vision and Machine Learning libraries</td>
+      <td><code class="language-plaintext highlighter-rouge">opencv-contrib-python, scikit-learn, scipy, scikit-image</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="posts">Posts</h3>
+
+<ol class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><strong>Introduction (this post)</strong></li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><strong>Introduction about Computer Vision (using <code class="language-plaintext highlighter-rouge">scikit-image</code> and <code class="language-plaintext highlighter-rouge">opencv</code>)</strong>
+    <ul>
+      <li>Image filters, edge detection, calibration, artifact removals, .etc.</li>
+    </ul>
+  </li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><strong>Object detection, classification and segmentation</strong>
+    <ul>
+      <li>Image features</li>
+      <li>Conventional object detection methods like the Viola-Jones cascade method.</li>
+      <li>Convolutional neural networks, convolutional/pooling/upscaling/dilated operations, etc.</li>
+    </ul>
+  </li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><strong>Advanced problems in image enhancement (1)</strong>
+    <ul>
+      <li>Generative Adversarial Networks, Auto-Encoders</li>
+    </ul>
+  </li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><strong>Advanced problems in image enhancement (2)</strong>
+    <ul>
+      <li>Haze removal, artifact removal, reconstruction</li>
+      <li>Super-resolution, de-raining methods.</li>
+    </ul>
+  </li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><strong>Machine learning (1)</strong>
+    <ul>
+      <li>The role of data augmentation</li>
+      <li>Common learning problems: over-fitting/under-fitting</li>
+      <li>Over-confidence problems: Open-world recognition</li>
+    </ul>
+  </li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><strong>Machine learning (2)</strong>
+    <ul>
+      <li>Learning in new domains</li>
+      <li>Transfer learning vs. Domain Adaptation</li>
+    </ul>
+  </li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><strong>Machine learning (3)</strong>
+    <ul>
+      <li>One-vs-rest learning</li>
+      <li>Limited-domain learners (experts) vs. Wide-domain learners (generalists) and over-confidence problems.</li>
+    </ul>
+  </li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><strong>Machine learning (4)</strong>
+    <ul>
+      <li>Anomaly Detection</li>
+    </ul>
+  </li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><strong>Animal Vision (1)</strong>
+    <ul>
+      <li>Object counting</li>
+      <li>Density Estimation</li>
+    </ul>
+  </li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><strong>Animal Vision (2)</strong>
+    <ul>
+      <li>Attribute detection: weight estimation and anomalous individual detection</li>
+    </ul>
+  </li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><strong>Conclusion</strong>
+    <ul>
+      <li>The whole system</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="references">References</h2>
+
+<ol class="bibliography"><li><span id="Kirillov_2019_CVPR">Kirillov, A., He, K., Girshick, R., Rother, C., &amp; Dollar, P. (2019, June). Panoptic Segmentation. <i>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</i>.</span></li>
+<li><span id="AmazonLo59:online"><i>Amazon Lookout for Equipment - Amazon Web Services</i>. https://aws.amazon.com/jp/lookout-for-equipment/</span></li>
+<li><span id="Applicat67:online"><i>Application of Computer Vision in Precision Agriculture &amp; Farming | by Vikram Singh Bisen | VSINGHBISEN | Medium</i>. https://webcache.googleusercontent.com/search?q=cache:vzxIOTUqiOEJ:https://medium.com/vsinghbisen/application-of-computer-vision-in-precision-agriculture-farming-79b0600d5a5d+</span></li>
+<li><span id="TIAN20201">Tian, H., Wang, T., Liu, Y., Qiao, X., &amp; Li, Y. (2020). Computer vision technology in agricultural automation —A review. <i>Information Processing in Agriculture</i>, <i>7</i>(1), 1–19. https://doi.org/10.1016/j.inpa.2019.09.006</span></li></ol>
+
+    
+
+
+
+<div class="post-tags">
+  
+    
+    <a href="/tags.html#ai">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">ai</span>
+    </a>
+  
+    
+    <a href="/tags.html#animal-vision">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">animal vision</span>
+    </a>
+  
+    
+    <a href="/tags.html#computer-vision">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">computer vision</span>
+    </a>
+  
+    
+    <a href="/tags.html#artificial-intelligence">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">artificial intelligence</span>
+    </a>
+  
+    
+    <a href="/tags.html#image-processing">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">image processing</span>
+    </a>
+  
+</div>
+  </div>
+
+  
+  <section class="comments">
+    <h2>Comments</h2>
+    
+  <div id="disqus_thread">
+    <button class="disqus-load" onClick="loadDisqusComments()">
+      Load Comments
+    </button>
+  </div>
+  <script>
+
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW
+  *  TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT:s
+  *  https://disqus.com/admin/universalcode/#configuration-variables
+  */
+  var disqus_config = function () {
+    this.page.url = "https://www.caineng.in/cv/ai/2021/03/06/animal-vision-series-part-1.html";
+    this.page.identifier = "" ||
+                           "https://www.caineng.in/cv/ai/2021/03/06/animal-vision-series-part-1.html";
+  }
+  function loadDisqusComments() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//caineng.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  </script>
+  <noscript>
+    Please enable JavaScript to view the
+    <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.
+  </noscript>
+
+
+
+  </section>
+
+  <section class="related">
+  <h2>Related Posts</h2>
+  <ul class="posts-list">
+    
+      <li>
+        <h3>
+          <a href="/cv/ai/2021/05/20/understanding-object-detection-nms.html">
+            Understanding Object Detection Algorithms: the Non-maximum-suppression (NMS)
+            <small>20 May 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english.html">
+            Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp trong ngành trí tuệ nhân tạo?
+            <small>24 Apr 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt.html">
+            Implementing a complex system in AWS Lambda: Should or shouldn't?
+            <small>03 Apr 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</section>
+
+</div>
+
+    </main>
+
+    <!-- Optional footer content -->
+
+    <script src="https://kit.fontawesome.com/d0b91d895e.js" crossorigin="anonymous"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </body>
+</html>

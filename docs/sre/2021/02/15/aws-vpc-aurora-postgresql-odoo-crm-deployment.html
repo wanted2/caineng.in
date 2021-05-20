@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="https://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Deploy Odoo to AWS EC2 and Aurora with best practices &middot; AiFi 
+  </title>
+
+  
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface" />
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/favicon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/feed.xml"
+  />
+
+  <!-- Additional head bits without overriding original head -->
+  <style>
+    div.chart {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+  </style>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="http://bl.ocks.org/mbostock/raw/4061502/0a200ddf998aa75dfdb1ff32e16b680a15e5cb01/box.js"></script>
+</head>
+
+
+  <body class="post">
+
+    <div id="sidebar">
+  <header>
+    <div class="site-title">
+      <a href="/">
+        
+          <span class="back-arrow icon"><svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 0h24v24H0z" fill="none"></path>
+  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
+</svg></span>
+        
+        AiFi
+      </a>
+    </div>
+    <p class="lead">The official AiFi</p>
+  </header>
+  <nav id="sidebar-nav-links">
+  
+    <a class="home-link " href="/">Home</a>
+  
+  
+
+  
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  
+
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link " href="/category/ai.html">Artificial Intelligence</a>
+    
+  
+
+  
+    
+      <a class="category-link " href="/category/cv.html">Computer Vision</a>
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+      <a class="category-link " href="/category/non-english.html">Tiếng Việt, 日本語</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+      <a class="category-link " href="/category/sre.html">Site Reliability Engineering</a>
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <!-- Optional additional links to insert in sidebar nav -->
+</nav>
+
+  <a href="/about.html">About</a>
+
+  
+
+  <nav id="sidebar-icon-links">
+  
+
+  <a id="subscribe-link" class="icon" title="Subscribe" aria-label="Subscribe" href="/feed.xml">
+    <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <circle cx="6.18" cy="17.82" r="2.18"></circle>
+    <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"></path>
+</svg>
+  </a>
+
+  
+  
+  
+  
+
+  
+    <a id="tags-link" class="icon" title="Tags" aria-label="Tags" href="/tags.html">
+      <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"></path>
+</svg>
+    </a>
+  
+
+  
+    <a id="search-link" class="icon" title="Search" aria-label="Search" href="/search.html">
+      <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+    <path d="M0 0h24v24H0z" fill="none"></path>
+</svg>
+    </a>
+  
+
+  <!-- Optional additional links to insert for icons links -->
+</nav>
+
+  <p>
+  © 2021.
+  <a href="/LICENSE.md">MIT License.</a>
+</p>
+
+</div>
+
+    <main class="container">
+      <header>
+  <h1 class="post-title">Deploy Odoo to AWS EC2 and Aurora with best practices</h1>
+</header>
+<div class="content">
+  <div class="post-meta">
+  <span class="post-date">15 Feb 2021</span>
+  <span class="post-categories">
+    
+      •
+
+      
+      
+      
+
+      
+        <a href="/category/sre.html">
+          Site Reliability Engineering
+        </a>
+      
+    
+  </span>
+  <span class="share-page">
+    •
+    <a href="https://twitter.com/intent/tweet?text=Deploy%20Odoo%20to%20AWS%20EC2%20and%20Aurora%20with%20best%20practices&amp;url=https://www.caineng.in/sre/2021/02/15/aws-vpc-aurora-postgresql-odoo-crm-deployment.html&amp;via=&amp;related=" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://facebook.com/sharer.php?u=https://www.caineng.in/sre/2021/02/15/aws-vpc-aurora-postgresql-odoo-crm-deployment.html" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square"></i></a>
+</span>
+
+<span title="Estimated read time">
+  
+  
+    6 mins
+  
+</span>
+
+</div>
+
+  <div id="table-of-contents">
+  <h2>Index</h2>
+    <ol id="toc" class="section-nav">
+<li class="toc-entry toc-h1">
+<a href="#introduction">Introduction</a>
+<ol>
+<li class="toc-entry toc-h2"><a href="#what-is-odoo">What is Odoo?</a></li>
+<li class="toc-entry toc-h2">
+<a href="#which-odoo-edition-should-i-use">Which Odoo edition should I use?</a>
+<ol>
+<li class="toc-entry toc-h3"><a href="#comparisons">Comparisons</a></li>
+<li class="toc-entry toc-h3"><a href="#odoo-enterprise">Odoo Enterprise</a></li>
+<li class="toc-entry toc-h3"><a href="#odoo-community">Odoo Community</a></li>
+</ol>
+</li>
+</ol>
+</li>
+<li class="toc-entry toc-h1">
+<a href="#deploying-odoo-to-amazon-web-service-aws">Deploying Odoo to Amazon Web Service (AWS)</a>
+<ol>
+<li class="toc-entry toc-h2"><a href="#setup-vpc-in-a-defense-in-depth-style">Setup VPC in a defense-in-depth style</a></li>
+<li class="toc-entry toc-h2"><a href="#setup-ssh-bastion-server-for-further-investigation">Setup SSH Bastion server for further investigation</a></li>
+<li class="toc-entry toc-h2"><a href="#setup-aurora-instance">Setup Aurora instance</a></li>
+<li class="toc-entry toc-h2"><a href="#deploy-odoo-140">Deploy Odoo 14.0</a></li>
+</ol>
+</li>
+<li class="toc-entry toc-h1"><a href="#conclusion">Conclusion</a></li>
+</ol>
+  </div>
+
+  <div class="post-body">
+    <p><img src="https://odoocdn.com/openerp_website/static/src/img/2020/home/market_position_update.svg" alt="Odoo perf">
+<em>Source: <a href="https://odoocdn.com/openerp_website/static/src/img/2020/home/market_position_update.svg">Odoo website</a></em></p>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="what-is-odoo">What is Odoo?</h2>
+<p><a href="https://www.odoo.com/">Odoo</a> is an open-source software platform and eco-system for business apps that cover all your company needs: CRM, e-commerce, accounting, inventory, point-of-sale, project management, so on.
+The suite of open source apps is very easy-to-use and fully integrated: the customers deploy the base Odoo distribution in the Odoo cloud with few clicks or their on-premises server/cloud, and integration of the apps is without pains.
+Because every app needed for business as CRM and point-of-sale are available in the eco-system, installing can be done in some single steps.</p>
+
+<!--more-->
+
+<h2 id="which-odoo-edition-should-i-use">Which Odoo edition should I use?</h2>
+
+<h3 id="comparisons">Comparisons</h3>
+<p>Odoo has two different editions: <a href="https://www.odoo.com/page/editions">Odoo Enterprise and Community</a>.
+The enterprise edition provides better support and a richer set of features.
+With community edition, the company pays less for a usable solution but with lack of some useful features:</p>
+
+<ul>
+  <li>No mobile app.</li>
+  <li>No integration to commercial platforms like Amazon and eBay.</li>
+  <li>No digital sign, subscription, gift programs, VoIP supports.</li>
+  <li>No custom supports such as field services, AI/IoT solutions, payroll OCR, scheduling, maintenance.</li>
+  <li>No social and marketing automation.</li>
+</ul>
+
+<h3 id="odoo-enterprise">Odoo Enterprise</h3>
+<p>There are several aspects to care about the pricing of Odoo Enterprise to your organization:</p>
+
+<ul>
+  <li>
+<em>The number of users</em>: Odoo license is applied to the number of employees. Note, employees who report their timesheets are counted as users. New customers obtain a 15% discount for each user at the time of this post.</li>
+  <li>
+<em>The number of apps</em>: Only CRM app is coming with the base Odoo Enterprise. The price of each additional app ranges from 4 to 8 dollars.</li>
+  <li>
+<em>Where do you host Odoo?</em>: There are 3 hosting types: Cloud hosting, on-premises, and <a href="https://www.odoo.sh/">Odoo.sh platform</a>. The first two options add no extra costs. You pay by yourself to the Cloud provider (AWS, IBM Cloud) or server costs. For the third option, the <a href="https://www.odoo.sh/">Odoo.sh platform</a>, you can find a simulation below with a 50-employee company, using 50GB of data every month, 1 staging environment, and they pay about 207.20 dollars monthly.
+I follow the rule-of-thumb as discussed <a href="https://www.odoo.com/forum/help-1/how-many-workers-do-i-need-with-odoo-sh-145771">here</a>.
+1 worker would be equal to 25 users.
+Therefore with 50 employees, we would like to have 3 workers.</li>
+</ul>
+
+<p><img src="/assets/img/odo.sh-pricing.png" alt="">
+<em>Source: <a href="https://www.odoo.sh/pricing">https://www.odoo.sh/pricing</a></em></p>
+
+<ul>
+  <li>
+<em>How do you implement Odoo?</em>: After purchasing the license to Odoo Enterprise, you can implement it in 3 ways: by yourself, using <a href="https://www.odoo.com/pricing-packs">Odoo Success Packs</a>, or by asking help from a partner company. The first option charges you nothing. The second one is available only if Odoo has some branches in your neighborhood. It charges at least 975 dollars (after a 15% discount for new customers). The final option is to check the list of Odoo partner companies in your region and asking them for installation and maintenance supports. 
+Every option to install and maintain a distribution of Odoo Enterprise requires at least 1000$/year, except the first one. 
+If you put Odoo Enterprise in your server, Odoo Success Packs are not applied.</li>
+</ul>
+
+<p>Let’s get some example of pricing model for Odoo Enterprise in a medium-sized company:</p>
+
+<p><em>Example 1</em>: Company A has 50 employees with only 15 users (Human Resource teams, accountants, sales) use Odoo.
+They use 37 apps (excluding CRM) and <a href="https://www.odoo.sh/">Odoo.sh platform</a> with <a href="https://www.odoo.com/pricing-packs">Odoo Success Packs</a> Standard.
+It requires 1 Odoo Cloud Worker, with 100GB data storage and 1 staging environment.
+This plan costs A 92 dollars per month.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>Item</strong></td>
+      <td><strong>Quantity</strong></td>
+      <td><strong>Price</strong></td>
+      <td><strong>Cost ($)</strong></td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>Employees usage</td>
+      <td>15</td>
+      <td>8$/user</td>
+      <td>120</td>
+    </tr>
+    <tr>
+      <td>Discount on employees usage</td>
+      <td>12</td>
+      <td>-2$/user</td>
+      <td>-30</td>
+    </tr>
+    <tr>
+      <td>App usage</td>
+      <td>37 apps</td>
+      <td>8.22$/app</td>
+      <td>304</td>
+    </tr>
+    <tr>
+      <td>Hosting (Odoo.sh)</td>
+      <td>1</td>
+      <td>92</td>
+      <td>92</td>
+    </tr>
+    <tr>
+      <td>Implementation (Success Packs Standard)</td>
+      <td>1</td>
+      <td>333.33</td>
+      <td>333.33</td>
+    </tr>
+    <tr>
+      <td>Discount on Success Packs Standard</td>
+      <td>1</td>
+      <td>-50</td>
+      <td>-50</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td><strong>Total</strong></td>
+      <td> </td>
+      <td> </td>
+      <td><strong>769.33/month</strong></td>
+    </tr>
+  </tfoot>
+</table>
+
+<p><img src="/assets/img/odo.sh-pricing-2.png" alt="">
+<em>Source: <a href="https://www.odoo.sh/pricing">https://www.odoo.sh/pricing</a></em></p>
+
+<p><em>Example 2:</em> Company B has 50 employees with only 15 users (Human Resource teams, accountants, sales) use Odoo.
+They use 37 apps (excluding CRM). 
+They choose to buy the Enterprise pack but buy no Odoo.sh or Success Packs.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>Item</strong></td>
+      <td><strong>Quantity</strong></td>
+      <td><strong>Price</strong></td>
+      <td><strong>Cost ($)</strong></td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>Employees usage</td>
+      <td>15</td>
+      <td>8$/user</td>
+      <td>120</td>
+    </tr>
+    <tr>
+      <td>Discount on employees usage</td>
+      <td>15</td>
+      <td>-2$/user</td>
+      <td>-30</td>
+    </tr>
+    <tr>
+      <td>App usage</td>
+      <td>37 apps</td>
+      <td>8.22$/app</td>
+      <td>304</td>
+    </tr>
+    <tr>
+      <td>Hosting (Odoo.sh)</td>
+      <td>0</td>
+      <td>207.20</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Implementation (Success Packs)</td>
+      <td>0</td>
+      <td>333.33</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Discount on Success Packs</td>
+      <td>0</td>
+      <td>-50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Customer hosting service</td>
+      <td>1</td>
+      <td>200</td>
+      <td>200</td>
+    </tr>
+    <tr>
+      <td>Development and maintenance</td>
+      <td>1</td>
+      <td>200</td>
+      <td>200</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td><strong>Total</strong></td>
+      <td> </td>
+      <td> </td>
+      <td><strong>794.00/month</strong></td>
+    </tr>
+  </tfoot>
+</table>
+
+<p><img src="/assets/img/odo.sh-pricing-3.png" alt="">
+<em>Source: <a href="https://www.odoo.sh/pricing">https://www.odoo.sh/pricing</a></em></p>
+
+<p>The development and maintenance which company B pay for is to the developers who implement and maintain the Odoo distribution in the company.
+In usual cases, there are one or two people in charge of this stuff.
+Note, this is the lowest price the author found.
+Comparing to example 1, company B pays a little bit in total, and the processes rely more on human workers and are more <strong>prone to human errors</strong>.</p>
+
+<p><strong><em>Huh, a ready-to-use solution is cheaper than a self-service solution, right?</em></strong></p>
+
+<h3 id="odoo-community"><a href="https://www.odoo.com/page/community">Odoo Community</a></h3>
+
+<p>The pricing model becomes affordable, but you have to implement and find hosting services yourself.
+Then, a sufficient background on the Odoo Community edition and deployments are required.
+<strong>You only pay for hosting services and people who implement Odoo on your business.</strong>
+Note that, although the community edition does not come with some custom apps, there is a third-party community with many alternatives for free and paid: <a href="https://apps.odoo.com/">https://apps.odoo.com/</a>.
+Furthermore, when the app you need in the given third-party community, you can start adding an idea to the community since the development of Odoo is fully open-source. (However, it might be better to have ready-to-use solutions).
+<strong>The process is highly dependent on human and is prone to human errors.</strong>
+Compared to the second example, this solution costs less, but the customer hosting price and Development/Maintenance costs might not be changed.
+So will similar quality, it only reduces about 60% for Odoo apps.
+And because you need specialized personnel to implement custom Odoo apps, the cost for Development/Maintenance can increase.</p>
+
+<h1 id="deploying-odoo-to-amazon-web-service-aws">Deploying Odoo to Amazon Web Service (AWS)</h1>
+
+<p>After understanding the pricing model and the merits and demerits of each edition, we go to the deployment with <a href="https://www.odoo.com/page/community">Odoo Community</a> to AWS EC2, Aurora for better understanding.</p>
+
+<h2 id="setup-vpc-in-a-defense-in-depth-style">Setup VPC in a defense-in-depth style</h2>
+
+<h2 id="setup-ssh-bastion-server-for-further-investigation">Setup SSH Bastion server for further investigation</h2>
+
+<h2 id="setup-aurora-instance">Setup Aurora instance</h2>
+
+<h2 id="deploy-odoo-140">Deploy Odoo 14.0</h2>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>In the first section, we compare available solutions for deployments of Odoo (both paid and free editions).
+Surprisingly, we found that paid solution, the <strong>Odoo Enterprise can be cheaper than using the free solutions if we count all development and maintenance fees</strong>.
+And because this is a reliable and stable solution, <strong>Odoo Enterprise with full support from Odoo Cloud Platform</strong> is more advantageous with less effort (you and your people can sleep well).
+From the view of business, the winner is determined.</p>
+
+<p>In the second part, although using the community edition does not offer any real benefit in business, we still explored the way to deploy by ourselves to AWS.</p>
+
+<p>In conclusion, ready-to-use solutions like Odoo Enterprise with Odoo Cloud seem to be the winner.
+If you like this, please give <img class="emoji" title=":+1:" alt=":+1:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f44d.png" height="20" width="20"></p>
+
+    
+
+
+
+<div class="post-tags">
+  
+    
+    <a href="/tags.html#site-reliability-engineering">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"></path>
+</svg>
+      </span> <span class="tag-name">site reliability engineering</span>
+    </a>
+  
+    
+    <a href="/tags.html#cloud-platforms">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"></path>
+</svg>
+      </span> <span class="tag-name">cloud platforms</span>
+    </a>
+  
+    
+    <a href="/tags.html#public-clouds">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"></path>
+</svg>
+      </span> <span class="tag-name">public clouds</span>
+    </a>
+  
+    
+    <a href="/tags.html#aws">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"></path>
+</svg>
+      </span> <span class="tag-name">AWS</span>
+    </a>
+  
+    
+    <a href="/tags.html#ec2">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"></path>
+</svg>
+      </span> <span class="tag-name">ec2</span>
+    </a>
+  
+    
+    <a href="/tags.html#aurora">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"></path>
+</svg>
+      </span> <span class="tag-name">aurora</span>
+    </a>
+  
+    
+    <a href="/tags.html#postgresql">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"></path>
+</svg>
+      </span> <span class="tag-name">PostgreSQL</span>
+    </a>
+  
+    
+    <a href="/tags.html#sql">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"></path>
+</svg>
+      </span> <span class="tag-name">SQL</span>
+    </a>
+  
+    
+    <a href="/tags.html#crm">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"></path>
+</svg>
+      </span> <span class="tag-name">CRM</span>
+    </a>
+  
+    
+    <a href="/tags.html#odoo">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"></path>
+</svg>
+      </span> <span class="tag-name">odoo</span>
+    </a>
+  
+</div>
+  </div>
+
+  
+  <section class="comments">
+    <h2>Comments</h2>
+    
+  <div id="disqus_thread">
+    <button class="disqus-load" onclick="loadDisqusComments()">
+      Load Comments
+    </button>
+  </div>
+  <script>
+
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW
+  *  TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT:s
+  *  https://disqus.com/admin/universalcode/#configuration-variables
+  */
+  var disqus_config = function () {
+    this.page.url = "https://www.caineng.in/sre/2021/02/15/aws-vpc-aurora-postgresql-odoo-crm-deployment.html";
+    this.page.identifier = "" ||
+                           "https://www.caineng.in/sre/2021/02/15/aws-vpc-aurora-postgresql-odoo-crm-deployment.html";
+  }
+  function loadDisqusComments() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//caineng.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  </script>
+  <noscript>
+    Please enable JavaScript to view the
+    <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.
+  </noscript>
+
+
+
+  </section>
+
+  <section class="related">
+  <h2>Related Posts</h2>
+  <ul class="posts-list">
+    
+      <li>
+        <h3>
+          <a href="/cv/ai/2021/05/20/understanding-object-detection-nms.html">
+            Understanding Object Detection Algorithms: the Non-maximum-suppression (NMS)
+            <small>20 May 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/non-english/2021/04/24/chon-de-tai-nghien-cuu-non-english.html">
+            Làm thế nào chọn đề tài nghiên cứu phù hợp với lựa chọn nghề nghiệp trong ngành trí tuệ nhân tạo?
+            <small>24 Apr 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/sre/ai/2021/04/03/aws-lambda-spacy-mxnet-possible-but-shouldnt.html">
+            Implementing a complex system in AWS Lambda: Should or shouldn't?
+            <small>03 Apr 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</section>
+
+</div>
+
+    </main>
+
+    <!-- Optional footer content -->
+
+    <script src="https://kit.fontawesome.com/d0b91d895e.js" crossorigin="anonymous"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </body>
+</html>
