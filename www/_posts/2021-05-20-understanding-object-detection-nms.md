@@ -74,7 +74,7 @@ Therefore, we need to sort the box list before running NMS.
 ### Should we prune low-confidence boxes before or after running NMS?
 
 In my implementation of [inference of YOLOv5](https://github.com/wanted2/yolov5-tf-inference/blob/main/src/yolotf/utils.py#L226), I prune low-confidence boxes before NMS.
-Because NMS takes time, prunning low-probability candidates beforehand is preferred.
+Because NMS takes time, pruning low-probability candidates beforehand is preferred.
 After NMS, if the candidates is still too many, then we can merge boxes again using another overlapping measurements such as the IoU.
 
 In this implementation, the NMS often takes about 10-20 ms to opt out some hundreds boxes.
