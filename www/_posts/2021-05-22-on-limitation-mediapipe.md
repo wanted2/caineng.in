@@ -32,18 +32,18 @@ toc: true
 ![](/assets/img/annotated_image1.png)
 _[Source 1](https://www.neowin.net/news/microsoft-sets-a-new-world-record-for-most-people-in-a-selfie/), [Source 2](https://github.com/peiyunh/tiny/blob/master/data/demo/selfie.jpg), **Credit: Microsoft**_
 
-Google AI announced MediaPipe Holistic [1] as a simultaneous face, hand and pose inference engine for on-device AI.
+Google AI announced MediaPipe Holistic [1] as a simultaneous face, hand, and pose inference engine for on-device AI.
 As we knew, on-device AI works in a specialized environment such as Edge devices (Arduino, Raspberry Pi, Jetson Nano) and mobile devices (Android/iOS/...).
-These enviroments are characterised with limited computing power (except Jetson Nano, all are low-end CPUs), often no Internet (wifi modules may be not embedded).
+These environments are characterized by limited computing power (except Jetson Nano, all are low-end CPUs), often no Internet (wifi modules maybe not embedded).
 Then MediaPipe is a great offer.
-It provides a consistent interface for working with deep learning models and computer vision models in various programming language.
-The soultion is also end-to-end, so the code can be done by calling ready-to-use functions. __But wait, such a big deal?__
-This post will provide a fairer view of the MediaPipe library for on-device face detection.
-__The result is that, although MediaPipe is fast but the accuracy is limited for crowded scenes.__
+It provides a consistent interface for working with deep learning models and computer vision models in various programming languages (Java, Swift, Python, Javascript, ...).
+The solution is also end-to-end, so the code can be done by calling ready-to-use functions. __But wait, such a big deal?__
+This post provides a fairer view of the MediaPipe library for on-device face detection.
+__The result is that, although MediaPipe is fast, however, the accuracy is limited for crowded scenes.__
 __It works best when there is only one person in the frame.__
 <!--more-->
 
-## Lession 1: MediaPipe works poorly in multi-faces scenario
+## Lesson 1: MediaPipe works poorly in multi-faces scenario
 
 Let's start with the famous selfie photo made by Microsoft Lumina 730. 
 
@@ -82,8 +82,8 @@ with mp_face_detection.FaceDetection(
       mp_drawing.draw_detection(annotated_image, detection)
     cv2.imwrite('./annotated_image' + str(idx) + '.png', annotated_image)
 ```
-I downloaded the selfie photo and named it as `selfie.jpg`.
-Since I speculated that MediaPipe will not work in such a scenario (More than 1,000 faces in one photo), I cropped two different versions: one with less than 100 faces (`selfie-small.jpg`) and one with only 3 big faces (`selfie-3.jpg`).
+I downloaded the selfie photo and named it `selfie.jpg`.
+Since I speculated that MediaPipe does not work in such a scenario (More than 1,000 faces in one photo), I cropped two different versions: one with less than 100 faces (`selfie-small.jpg`) and one with only 3 big faces (`selfie-3.jpg`).
 
 <div class="row">
   <div class="column">
@@ -140,19 +140,21 @@ Other small faces are missed.
 
 With low budgets, we cannot expect too much.
 
-One bright side of MediaPipe from this result is that __because small faces are often missed, then false-positives (hijackers) is not a serious problem__.
-For critial applications such as face authentication, making wrong decisions (false-posistives) can lead to hijackers/spoofers getting in the system, but if MediaPipe misses too many small faces, our hijackers will be omitted __hopefully__ in return.
+One bright side of MediaPipe from this result is that __because small faces are often missed, then false positives (hijackers) is not a serious problem__.
+For critical applications such as face authentication, making wrong decisions (false positives) can lead to hijackers/spoofers getting in the system, but if MediaPipe misses too many small faces, our hijackers are omitted __hopefully__ in return.
 
 ## Lesson 2: MediaPipe is fast
 
-For the original image, MediaPipe took about 20 ms in average.
+For the original image, MediaPipe took about 20 ms on average.
 For the small image (100 faces), it took about 10-15 ms.
 And for the smallest image, it took about 7-8 ms.
 
-Since MediaPipe is not good at crowded scenes, then we can specualte that it will be used in scenarios with a few faces.
-In such scenarios, then 7-8ms/image, or 125FPS is not bad.
+Since MediaPipe is not good at crowded scenes, then we can speculate that it is used in scenarios with a few faces.
+In such scenarios, then 7-8ms/image, or 125 FPS is not bad.
 
 ## Conclusion
+MediaPipe is fast but works poorly in crowded scenes.
+From this observation, one recommendation is to only use it in one-person or few-people scenarios.
 
 The source code can be found at my [Github](https://github.com/wanted2/mediapipe-multi-faces).
 
