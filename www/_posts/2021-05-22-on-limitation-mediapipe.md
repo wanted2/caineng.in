@@ -140,8 +140,8 @@ Other small faces are missed.
 
 With low budgets, we cannot expect too much.
 
-One bright side of MediaPipe from this result is that __because small faces are often missed, then false positives (hi-jackers) is not a serious problem__.
-For critical applications such as face authentication, making wrong decisions (false positives) can lead to hi-jackers/spoofers getting in the system, but if MediaPipe misses too many small faces, our hi-jackers are omitted __hopefully__ in return.
+One bright side of MediaPipe from this result is that __because small faces are often missed, then false positives (spoofers) is not a serious problem__.
+For critical applications such as face authentication, making wrong decisions (false positives) can lead to spoofers getting in the system, but if MediaPipe misses too many small faces, our small spoofers are omitted __hopefully__ in return.
 
 ## Lesson 2: MediaPipe is fast
 
