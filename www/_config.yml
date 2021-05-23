@@ -6,7 +6,7 @@ kramdown:
 
 # Setup
 title:            AiFi
-tagline:          'A freelancer blog (pre-publish versions, be careful about the preciseness)'
+tagline:          'An AI engineer blog (pre-publish versions, be careful about the preciseness)'
 description:      'This is the pre-publish version of AiFi blog. See final version at https://www.caineng.in'
 url:              https://d1oozge46goiac.cloudfront.net
 baseurl:          '/'

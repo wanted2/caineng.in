@@ -6,7 +6,7 @@ kramdown:
 
 # Setup
 title:            AiFi
-tagline:          'A freelancer blog'
+tagline:          'An AI engineer blog'
 description:      'The official AiFi'
 url:              https://www.caineng.in
 baseurl:          '/'
