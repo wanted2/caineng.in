@@ -8,7 +8,7 @@ kramdown:
 title:            AiFi
 tagline:          'An AI engineer blog'
 description:      'The official AiFi'
-url:              https://www.caineng.in
+url:              https://wanted2.github.io
 baseurl:          '/'
                   # the optional subpath of your site, e.g. "/blog"
                   # NB: This applies to all pages in your Jekyll site.
@@ -18,7 +18,7 @@ baseurl:          '/'
 
 author:
   name:           'Tuan Nguyen-Anh'
-  url:            https://www.caineng.in
+  url:            https://wanted2.github.io
 
 paginate:         5
 # paginate_path:    '/page:num'
