@@ -1,16 +1,13 @@
 ---
 layout: page
-title: 
-sidebar_link: true
+title: Tuan Nguyen-Anh
+sidebar_link: false
 ---
 
-<img src='/assets/img/IMG_6283.JPG' width='128' alt='Tuan Nguyen-Anh' style="float: right;" >
+<!--img src='/assets/img/IMG_6283.JPG' width='128' alt='Tuan Nguyen-Anh' style="float: right;" -->
 
-<h2>Tuan Nguyen-Anh</h2>
-
-Artificial Intelligence Engineer
-
-Bridge System Engineer (BrSE) / Project Manager (PM)
+<script type="text/javascript" src="https://platform.linkedin.com/badges/js/profile.js" async defer></script>
+<div class="LI-profile-badge"  data-version="v1" data-size="medium" data-locale="ja_JP" data-type="horizontal" data-theme="dark" data-vanity="tuan-nguyen-b21490213" style="float: left; margin-right: 20px; margin-bottom: 10px; margin-top: 10px;"><a class="LI-simple-link" href='https://vn.linkedin.com/in/tuan-nguyen-b21490213?trk=profile-badge'>Tuan Nguyen</a></div>
 
 <div id="webaddress">
 <a href="mailto:tuan.nguyenanh.brse@gmail.com">tuan.nguyenanh.brse@gmail.com</a>
@@ -22,18 +19,6 @@ Bridge System Engineer (BrSE) / Project Manager (PM)
 # Curriculum Vitae
 
 [English](/assets/english.pdf)
-
-# Experience
-
-| `2012/10 - 2015/10` | AppResearch Inc., Japan | Web development |
-| `2018/02 - 2018/08` | Carnegie Mellon University, US | Language Technology Institute (LTI) Research Associate |
-| `2018/10 - 2019/03` | The University of Tokyo, Japan | Teaching Assistant |
-| `2021/01 - Now` | Neos Vietnam | AI/IoT development, BrSE (Japanese) |
-
-# Education
-
-| `2012/04 - 2015/03` | The University of Tokyo, Japan | Falcuty of Engineering | Bachelor of Engineering |
-| `2015/04 - 2017/03` | The University of Tokyo, Japan | Graduate School of Information Science and Technology | Master of Science |
 
 # Interests
 
