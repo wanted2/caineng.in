@@ -54,6 +54,31 @@ Ví dụ như đơn giản trong bài toán game, mà để mở được cửa 
 Lý do cũng giống hệt như việc phân biệt ngu-khôn ở trên, giả dụ ở lại thành phố là `ngu`, còn mang về nông thôn là `khôn`, nhưng nó sẽ dẫn đến tương lai là người ta sẽ tìm cách hạ thu nhập cơ bản ở nông thôn xuống, thế là quyết định trước được đánh nhãn là `khôn`, giờ lại trở thành `ngu`.
 AI hiện trạng năm 2021, dù của bất cứ tập đoàn công ty nào trên thế giới, thiếu sự hỗ trợ sau lưng của con người thì vẫn chỉ là một cỗ máy vô hại, dễ bị đánh lừa.
 
+## Bài kiểm tra Turing và cách phân biệt giữa AI ngu dốt với AI thông minh
+
+Bài kiểm tra Turing [3] là một phần không thể thiếu của lịch sử AI.
+Alan Turing là một nhà khoa học máy tính vĩ đại trong lịch sử với kỳ công phá giải mật mã của phát xít Đức.
+Sau thể chiến II, ông đã dành khá nhiều công sức để phát triển lên cỗ máy tính thông minh, mà đó chính là nền móng của trí tuệ nhân tạo hiện đại (chủ yếu thuật toán).
+Đương nhiên với tư cách một nhà khoa học máy tính và cũng là một kỹ sư hệ thống, Turing không chỉ phát triển (develop) thuật toán và mã chương trình, ông còn phải thiết kế về mặt quản lý chất lượng sản phẩm, và đương nhiên một câu hỏi đã xoáy vào tâm trí ông khi nghĩ đến sự an toàn của người dùng khi sử dụng AI: __Làm thế nào để đánh giá sự thông minh của AI?__
+
+Sau một thời gian dày công đào sâu vấn đề, ông đi đến kết luận trong luận văn nổi tiếng "Computing Machinery and Intellignce" [4], đó là cái cần kiểm tra chính là "AI có thực sự đang suy nghĩ?".
+Các bạn đều biết, việc không suy nghĩ mà vẫn trả lời được bài kiểm tra chỉ có 2 khả năng: một là may mắn, hai là __ngu nhưng copy giỏi__.
+Khả năng hai tức là cỗ máy không suy nghĩ, nhưng nó đơn giản copy lại câu trả lời từ đâu đó.
+Turing thì vẫn là người phương Tây, nên có thể vì thế ông không chấp nhận sự "lập lờ" ngu-khôn mà người Á Đông thường chấp nhận (tức là ngu nhưng bắt chước giỏi thì cứ tính là khôn vì vẫn được việc, và lại rẻ nữa chứ, vì mức giá của công việc AI ở phương Đông hiện tại chắc chỉ bằng 1/10 tới 1/5 của Silicon Valley), và sâu hơn, ông không tính cái trường hợp hai là trí tuệ thông minh.
+
+Tất nhiên, với suy nghĩ của phương Tây, Turing cũng đúng. Vì ngày nay chúng ta đang phải đối phó với nguy cơ DeepFake [5] chẳng hạn.
+Đó chính ví dụ rõ ràng của trường hợp 2, mà Turing muốn loại.
+Và bài kiểm tra Turing chính là để AI thực hiện phỏng vấn với con người và con người sẽ tìm cách hỏi đáp theo một kịch bản mở (chứ không phải lời thoại soạn trước), để thử thách AI.
+Sau đó, dựa vào sự xác nhận của con người đã tương tác với AI để đánh giá độ hoàn hảo của AI.
+Và quay lại vấn đề ở mục 1., vấn đề thử thách nhất với AI trong màn phỏng vấn này chính là làm sao đánh giá được những quyết định của chính AI đưa ra là `ngu hay khôn`, là `biết hay chưa biết` về lâu dài.
+Vì những quyết định đó sẽ ảnh hưởng tới lợi ích về sau, như vị trí làm việc tương lai, đãi ngộ, ...
+Còn về phía người thực hiện phỏng vấn, thì họ cũng như nhà tuyển dụng, chuyện ngu hay khôn, biết hay không cũng không quan trọng bằng việc tìm ra AI tốt __có khả năng tự suy nghĩ__, chứ không phải __ngu nhưng bắt chước giỏi__.
+
+Đó chính là ý nguyện của Alan Turing!
+
+## Kết luận
+
+
 ## References
 
 {% bibliography --file stupidity %}
