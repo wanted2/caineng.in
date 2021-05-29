@@ -34,6 +34,13 @@ Cái sự "lập lờ" (ambiguity) này không chỉ có trong văn hóa Việt 
 Lão Tử ở Trung Quốc có câu "Biết, nhưng nói là không biết ... ấy là biết".
 Điều này thể hiện một bộ phận không nhỏ trong xã hội đương thời của Lão Tử có hiện tượng "biết, nhưng cứ nói là không biết" (known but pretend to be unknown), và Lão Tử hàm ý cũng mỉa mai, có lẽ những người đó mới thực sự là người "biết".
 
+Suy nghĩ của người Á Đông là như vậy, chỉ cần nhìn thấy được sự lập lờ để né tránh, còn chấp nhận cho nó tồn tại.
+Tuy nhiên, người phương Tây thì thường có khuynh hướng làm rõ ràng ra.
+Như giáo sư Yann Lecun, người nhận giải Turing năm 2019, một giải tương đương giải Nobel cho ngành khoa học máy tính, đã thẳng thắn phê "kém, ngu" cho ứng dụng máy móc hiện tại.
+Tôi xin tạm dịch nguyên văn lời phát biểu của ông trong lễ nhận giải cách đây 2 năm có lẻ:
+
+> Máy móc (hiện tại năm 2019) vẫn rất, rất ngu. Hệ thống AI thông minh nhất ngày nay còn yếu kiến thức sống hơn cả một chú mèo nhà.
+
 ## References
 
 {% bibliography --file stupidity %}
