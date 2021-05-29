@@ -78,6 +78,10 @@ Còn về phía người thực hiện phỏng vấn, thì họ cũng như nhà 
 
 ## Kết luận
 
+Qua bài tiểu luận nhỏ, hy vọng đã có thể đưa đến các bạn một cái nhìn đúng về sự thông minh của AI hiện tại.
+Thực ra cái quan trọng nhất của công việc AI, là đảm bảo di chúc của Alan Turing được thực hiện, tức là, **AI phải có khả năng tự suy nghĩ**, cái đó thì thông qua conversation là bài kiểm tra Turing (mà thực ra là phỏng vấn).
+
+Một việc chắc chắn không thể tránh khỏi đó là hiện tại các phát triển AI chỉ mang tính cấp thấp như nhận dạng, tracking, phát hiện, cảnh báo có điều kiện, ... trong tương lai, cùng với Deep Learning (thuật toán học dựa trên hoạt động của não người, để cho mô hình AI học từ hàng ngàn, hàng triệu thậm chí hàng tỷ nơ rôn não), thì chúng ta sẽ nhanh chóng đưa AI xử lý hết các nhiệm vụ cấp thấp, để tiến tới những nhiệm vụ cấp cao hơn, như quyết định có lợi cho tương lai, phân biệt ngu-khôn, biết-chưa biết, ...
 
 ## References
 
