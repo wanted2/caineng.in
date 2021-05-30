@@ -21,7 +21,7 @@ toc: true
 
 Google MLKit [1] is a software solution for Machine Learning problems in mobile devices (Android and iOS).
 It supports computer visions and natural language applications.
-The library is optimized for mobiles and is easy to use.
+The library is optimized for mobiles and is convenient.
 In this example, we build a mobile OCR solution with Android CameraX API [2].
 The demo code can be seen at [my Github](https://github.com/wanted2/mocr-mlkit-camerax-examples).
 <!--more-->
@@ -52,8 +52,8 @@ This can be done by using the presets in `build.gradle`:
 
 ### CameraX setup
 We also need to add presets for CameraX.
-With this API, all events such as start capturing, handling when image's available, stop capturing are binded automatically to the cameraX lifecycle.
-The lifecycle is initizalized with a camera selector, an image analyzed and a `Preview`.
+With this API, all events such as start capturing, handling when an image's available, stop capturing are bound automatically to the cameraX lifecycle.
+The lifecycle is initialized with a camera selector, an image analyzer, and a `Preview`.
 ```gradle
     def camerax_version = "1.1.0-alpha04"
     implementation "androidx.camera:camera-core:${camerax_version}"
@@ -64,7 +64,7 @@ The lifecycle is initizalized with a camera selector, an image analyzed and a `P
 ## Camera lifecycle
 
 ### Initializing the lifecycle
-CameraX API binds all event in camera into a lifecycle.
+CameraX API binds all events in a camera into a lifecycle.
 To preview captured image sequence, we need to add to the main layout a `PreviewView` component:
 
 ```xml
@@ -95,7 +95,7 @@ The process provider is initialized as follows (in `onCreate()`):
             }
         }, ContextCompat.getMainExecutor(this));
 ```
-Heavyweight resources such as image analysis, previewing and camera selection can be bind to the lifecycle owner in the `bindPreview` function:
+Heavyweight resources such as image analysis, previewing, and camera selection can be bind to the lifecycle owner in the `bindPreview` function:
 
 ```java
     private void bindPreview(ProcessCameraProvider processCameraProvider) {
@@ -107,16 +107,16 @@ Heavyweight resources such as image analysis, previewing and camera selection ca
         Camera camera = processCameraProvider.bindToLifecycle(this, cameraSelector, imageAnalysis, preview);
     }
 ```
-For the ease of uses, we initialized the back camera with `CameraSelector.LENS_FACING_BACK`.
-And the preview is binded to a view `mContentView`.
+For ease of use, we initialized the back camera with `CameraSelector.LENS_FACING_BACK`.
+And the preview is bound to a view `mContentView`.
 
-With the `ProcessCameraProvider` the heavyweight resources are managed efficiently by the lifecycle owner.
-Using the CameraX API, we pay less for managing the lifecycle, and with more reliable processing.
+With the `ProcessCameraProvider`, the heavyweight resources are managed efficiently by the lifecycle owner.
+Using the CameraX API, we pay less for managing the lifecycles and with more reliable processing.
 
 ### Image Analyzer
 
-An useful tool in CameraX API is the `ImageAnalyzer` interface, which is used to define custom Image Processing pipelines.
-Here, whenever an image capture returned in the form of `ImageProxy` instances, we need to get the image, crop the region of interest and do real-time text recognition.
+A useful tool in CameraX API is the `ImageAnalyzer` interface, which is used to define custom Image Processing pipelines.
+Here, whenever an image capture is returned in the form of `ImageProxy` instances, we need to get the image, crop the region of interest and do real-time text recognition.
 Such a pipeline can be done in `ImageAnalysis.Analyzer.analyze`'s body.
 To keep track of the location user touched in the screen, we have a `posisition`:
 ```java
@@ -184,26 +184,26 @@ And the custom image analysis pipeline:
     }
 ```
 
-The recognizer is initialized in the constructor, and it will take some seconds for first run since the model need to be downloaded from Firebase.
+The recognizer is initialized in the constructor, and it will take some seconds for the first time since the model needs to be downloaded from Firebase.
 
 After the text blocks are detected, we will display the results in a bottom sheet.
-A green rectangle with the aspect ratio is 2:1 is drawn around the touched location by passing the `position` to the `OverlayView` class.
+A green rectangle with an aspect ratio of 2:1 is drawn around the touched location after passing the `position` to the `OverlayView` class.
 
 ## Google MLKit
 <img style="float: right; margin-left: 40px;" width="50%" src="/assets/img/mlkit2.jpg" />
-The Machine Learning pipeline running in the Image Analyzer is real-time and the precision is quite good.
-By limiting the search region to a `256 x 128` rectangle with the center is the touched location seem to be helpful to reduce the false-alarm (noisy text).
-It can be a good interaction since apps like searching for words in English often need to focus to only one compound word.
-For example, foreigner tourists (people who don't use English) when looking for an unknown word may only need to adjust the rectangle to the word they don't know.
+The Machine Learning pipeline running in the Image Analyzer is real-time, and the precision is quite good.
+By limiting the search region to a `256 x 128` rectangle with the center is the touched location seems to be helpful to reduce the false alarms (noisy text).
+It can be a good interaction since apps like searching for words in English often need to focus only on one compound word.
+For example, foreign tourists (people who don't use English), when looking for unknown words, may only need to adjust the rectangle to the word they don't know.
 
 ## Conclusion
 
-I used Google MLKit and Android CameraX API to build a light-weight mobile OCR app `mOCR`.
+I used Google MLKit and Android CameraX API to build a lightweight mobile OCR application, the `mOCR`.
 The result is a real-time recognition achieved by CameraX and MLKit.
 The accuracy is good with a focused design in human user interaction.
-A promising application should be dictionary lookup for signs in metro stations or airports, which will be helpful in the Olympics.
+A promising application should look into dictionaries for signs in metro stations or airports, and it is helpful in the Olympics.
 
-A next step is to add the dictionary lookup to `mOCR`.
+The next step is to add the dictionary lookup to `mOCR`.
 
 
 
