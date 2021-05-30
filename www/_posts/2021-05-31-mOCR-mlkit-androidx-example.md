@@ -17,7 +17,7 @@ tags:
 toc: true
 ---
 
-![](/assets/img/mlkit1.png)
+![](/assets/img/mlkit1.jpg)
 
 Google MLKit [1] is a software solution for Machine Learning problems in mobile devices (Android and iOS).
 It supports computer visions and natural language applications.
