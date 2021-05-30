@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "mOCR: An real-time application of OCR with Google MLKit and Android CameraX"
+title: "mOCR: A real-time application of OCR with Google MLKit and Android CameraX"
 excerpt_separator: "<!--more-->"
 categories:
   - cv
@@ -21,7 +21,7 @@ toc: true
 
 Google MLKit [1] is a software solution for Machine Learning problems in mobile devices (Android and iOS).
 It supports computer visions and natural language applications.
-The library is optimized for mobiles and is easy-to-use.
+The library is optimized for mobiles and is easy to use.
 In this example, we build a mobile OCR solution with Android CameraX API [2].
 The demo code can be seen at [my Github](https://github.com/wanted2/mocr-mlkit-camerax-examples).
 <!--more-->
