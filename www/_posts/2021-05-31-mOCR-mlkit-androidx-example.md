@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "mOCR: An simple application of OCR with Google MLKit and Android CameraX"
+title: "mOCR: An real-time application of OCR with Google MLKit and Android CameraX"
 excerpt_separator: "<!--more-->"
 categories:
   - cv
@@ -32,7 +32,7 @@ The demo code can be seen at [my Github](https://github.com/wanted2/mocr-mlkit-c
 <img style="float: left; margin-right: 40px;" src="https://github.com/wanted2/mocr-mlkit-camerax-examples/raw/main/screen.gif" />
 </div>
 
-We will build a simple demo shown in the left figure.
+We build a real-time demo shown in the left figure.
 
 * When a user tap on the screen, a bounding box surrounding the location being tapped is the detection area from which text characters are recognized.
 
@@ -52,7 +52,7 @@ This can be done by using the presets in `build.gradle`:
 
 ### CameraX setup
 We also need to add presets for CameraX.
-With this API, all events such as start capturing, handling when image's available, stop caturing are binded automatically to the cameraX lifecycle.
+With this API, all events such as start capturing, handling when image's available, stop capturing are binded automatically to the cameraX lifecycle.
 The lifecycle is initizalized with a camera selector, an image analyzed and a `Preview`.
 ```gradle
     def camerax_version = "1.1.0-alpha04"
@@ -73,7 +73,7 @@ To preview captured image sequence, we need to add to the main layout a `Preview
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 ```
-The captured images will be displayed here, and in the code of the main activity, we will retrived the view:
+The captured images will be displayed here, and in the code of the main activity, we retrieve the view:
 
 ```java
 mContentView = findViewById(R.id.fs_cam_preview);
@@ -111,7 +111,7 @@ For the ease of uses, we initialized the back camera with `CameraSelector.LENS_F
 And the preview is binded to a view `mContentView`.
 
 With the `ProcessCameraProvider` the heavyweight resources are managed efficiently by the lifecycle owner.
-Using the CameraX API, we pay less for managing the lifecyle, and with more reliable processing.
+Using the CameraX API, we pay less for managing the lifecycle, and with more reliable processing.
 
 ### Image Analyzer
 
@@ -198,7 +198,7 @@ For example, foreigner tourists (people who don't use English) when looking for 
 
 ## Conclusion
 
-I used Google MLKit and Android CameraX API to build a simple mobile OCR app `mOCR`.
+I used Google MLKit and Android CameraX API to build a light-weight mobile OCR app `mOCR`.
 The result is a real-time recognition achieved by CameraX and MLKit.
 The accuracy is good with a focused design in human user interaction.
 A promising application should be dictionary lookup for signs in metro stations or airports, which will be helpful in the Olympics.
