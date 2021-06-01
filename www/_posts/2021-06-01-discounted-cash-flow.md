@@ -23,20 +23,22 @@ __What is the hurdle rate__ that makes the profile (together with the project) i
 
 ## Assumptions
 
-* Assume that the profile is trusted that the holder can produce sufficient works in one year which worths 4.2M.
+* Assume that the profile is trusted that the holder can produce sufficient works in a year worths 4.2M.
 
-* Although 50M will flow to the project, many other stuffs also need money and the professor himself also need to be paid. Then let's say about 21M will be secured for paying the postdoc.
+* Although 50M will flow to the project, other stuff also needs money.
+Hence, the professor himself also needs to pay himself.
+Then let's say about 21M will be secured for paying the postdoc.
 
 ## Discounted Cash Flow
 
-Also referred to as the net present value (NPV) method, the discounted cash fl ow method determines the net present value of all cash fl ows by discounting them by the required rate of return (also known as the __hurdle rate__, cutoff rate, and similar terms) as follows:
+Also referred to as the net present value (NPV) method, the discounted cash flow method determines the net present value of all cash flows by discounting them by the required rate of return (also known as the __hurdle rate__, cutoff rate, and similar terms) as follows:
 
 $\mbox{DCF} = I_0 + \sum_{t=1}^T\frac{F_0}{(1+h+p)^t},$
 where, 
 * $I_0<0$ is the initial investment, and in this case, $I_0=-21$M, which is a negative value
 * $T=5$ is the total number of periods.
 * $F_0$ is the net cash flow in period $t$
-* $h$ is the hurdle rate, i.e., the percentage of gross income which must be returned to the investors (project's sponsors not the professor himself)
+* $h$ is the hurdle rate, i.e., the percentage of gross income which must be returned to the investors (project's sponsors)
 * $p=0.03$ is the inflation rate.
 
 Now, by substitution in to this case,
@@ -57,5 +59,34 @@ $DCF =-21 + F_0\sum_{t=1}^5\frac{1}{(1+0.15+0.03)^t} \geq 0$
 or,
 $-21+F_0\times 3.127 \geq 0$
 
-Then the value the postdoc is expected to make each year in next 5 years is $F_0\geq \frac{21}{3.217}=6.7$M.
-In another word, if the sponsor require 15% of gross income, the postdoc must make more 2.5M than the cash he is paid.
+Then the money the postdoc is expected to make each year in the following 5 years is $F_0\geq \frac{21}{3.217}=6.7$M.
+In other words, if the sponsors require 15% of gross income, the postdoc must make more 2.5M than the cash he is paid.
+
+
+## When $h=5$% then how much the postdoc must produce every year?
+
+We would solve the equation:
+
+$DCF =-21 + F_0\sum_{t=1}^5\frac{1}{(1+0.05+0.03)^t} \geq 0$
+or,
+$-21+F_0\times 3.993 \geq 0$
+
+Then the money the postdoc is expected to make each year in the following 5 years is $F_0\geq \frac{21}{3.993}=5.2$M.
+In other words, if the sponsors require only 5% of gross income, the postdoc must make 1M than the cash he is paid every year.
+
+## What if the offer is only 3.5M in gross and the initial investment is only 17.5M?
+
+In case of hurdle rate is 5%, then the value the postdoc must make is $\frac{17.5}{3.993}=4.4M$.
+The expectation is low, and matching the ability of the postdoc (his profile can make 4.2M per year as evaluated), then __lower salary lower duty__, easy life!
+
+In case of hurdle rate is 15%, then the value the postdoc must make is $\frac{17.5}{3.127}=5.6M$.
+The expectation is higher than the ability of the postdoc (his profile can make 4.2M per year as evaluated).
+
+
+## Conclusion: what's the strategy?
+
+The best deal for this postdoc is to negotiate with the professor and the sponsors to have:
+* hurdle rate is 5%; and
+* annual income is only 3.5 million.
+
+Otherwise, overtime is frequent, and his life will be destroyed.
