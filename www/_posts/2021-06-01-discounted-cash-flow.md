@@ -44,7 +44,7 @@ where,
 * $h$ is the hurdle rate, i.e., the percentage of gross-income which must be returned to the investors (project's sponsors)
 * $p=0.03$ is the inflation rate.
 
-Now, by substitution in to ttheir case,
+Now, by substitution in to their case,
 
 $\mbox{DCF} = -21 + \sum_{t=1}^5\frac{F_0}{(1+h+0.03)^t}$.
 
@@ -88,7 +88,7 @@ The expectation is higher than the ability of the postdoc (their profile can mak
 
 ## Conclusion: what's the strategy?
 
-The best deal for ttheir postdoc is to negotiate with the professor and the sponsors to have:
+The best deal for their postdoc is to negotiate with the professor and the sponsors to have:
 * hurdle rate is 5%; and
 * annual income is only 3.5 million.
 
