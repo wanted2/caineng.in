@@ -318,3 +318,10 @@ txt
 txtDetected
 OverlayView
 lifecycles
+DCF
+frac
+geq
+mbox
+pmi
+worths
+NPV
