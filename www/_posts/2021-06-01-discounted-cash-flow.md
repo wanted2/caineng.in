@@ -28,9 +28,9 @@ __What is the hurdle rate__ that makes the profile (together with the project) i
 
 * Assume that the profile is trusted that the holder can produce sufficient works in a year worths 4.2M.
 
-* Although 50M will flow to the project, other stuff also needs money.
-Hence, the professor themselves also needs to pay themselves.
-Then let's say about 21M will be secured for paying the postdoc.
+* Although 50M flow to the project, other stuff also needs money.
+Hence, the professor needs to pay themselves.
+Then let's say about 21M are secured for paying the postdoc.
 
 ## Discounted Cash Flow
 
@@ -75,7 +75,7 @@ or,
 $-21+F_0\times 3.993 \geq 0$
 
 Then the money the postdoc is expected to make each year in the following 5 years is $F_0\geq \frac{21}{3.993}=5.2$M.
-In other words, if the sponsors require only 5% of gross-income, the postdoc must make 1M than the cash they is paid every year.
+In other words, if the sponsors require only 5% of gross-income, the postdoc must make 1M than the cash they are paid every year.
 
 ## What if the offer is only 3.5M in gross-income and the initial investment is only 17.5M?
 
