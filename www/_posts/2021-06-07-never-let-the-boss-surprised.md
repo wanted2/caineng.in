@@ -23,7 +23,7 @@ Never hide the failures nor the risks from the PM!
 ## Introduction: On the need of a man with high self-esteem
 At the beginning of a project, the PM must select the best personnel for the team by cooperating with the functional managers.
 Besides personal characteristics such as _technical skills, political sensitivity, problem or goal orientation_, another aspect which is usually expected to be found in the team member is __high self-esteem__.
-That translates into Japanese as "自尊心" or into Vietnamese as "lòng tự tôn."
+That translates into Japanese as "自尊心" or into Vietnamese as "lòng tu tôn."
 
 In practice, there are two signs of lack of self-esteem:
 
