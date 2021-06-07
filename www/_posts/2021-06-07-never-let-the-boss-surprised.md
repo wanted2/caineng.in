@@ -17,7 +17,7 @@ toc: true
 
 A prime law in projects is that _"Never Let The Boss Be Surprised!"_.
 As such a phrase, team members must be honest to the Project Manager (PM), and the PM must also be honest to the senior managers in a parent organization.
-Never hide the failures nor the risks from the PM!
+Never hide the troubles nor the risks from the PM!
 <!--more-->
 
 ## Introduction: On the need of a man with high self-esteem
@@ -27,11 +27,11 @@ That translates into Japanese as "自尊心" or into Vietnamese as "lòng tu tô
 
 In practice, there are two signs of lack of self-esteem:
 
-* The members fear their own errors and try to hide the failures from the eyes of the PM. They are threatened by their own mistakes, though everyone can have mistakes!
+* The members fear their own errors and try to hide the troubles from the eyes of the PM. They are threatened by their own mistakes, though everyone can have mistakes!
 
-* The members try to point out the mistakes of others. They try to take advantage of others' failures and cover their own.
+* The members try to point out the mistakes of others. They try to take advantage of others' troubles and cover their own.
 
-__A man who is high self-esteem will never hide his own badness nor laugh at other mistakes. He faces his failures as challenges and helps others to improve.__
+__A man who is high self-esteem will never hide his own badness nor laugh at other mistakes. He faces his troubles as challenges and helps others to improve.__
 
 Then a man without self-esteem always makes the boss surprised!
 
