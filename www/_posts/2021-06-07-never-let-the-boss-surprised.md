@@ -23,15 +23,15 @@ Never hide the troubles nor the risks from the PM!
 ## Introduction: On the need of a man with high self-esteem
 At the beginning of a project, the PM must select the best personnel for the team by cooperating with the functional managers.
 Besides personal characteristics such as _technical skills, political sensitivity, problem or goal orientation_, another aspect which is usually expected to be found in the team member is __high self-esteem__.
-That translates into Japanese as "自尊心" or into Vietnamese as "lòng tu tôn."
+That translates into Japanese language as "自尊心" or into Vietnamese as "lòng tu tôn."
 
 In practice, there are two signs of lack of self-esteem:
 
-* The members fear their own errors and try to hide the troubles from the eyes of the PM. They are threatened by their own mistakes, though everyone can have mistakes!
+* The members worry about their own errors and try to hide the troubles from the eyes of the PM. They are threatened by their own mistakes, though everyone can have mistakes!
 
 * The members try to point out the mistakes of others. They try to take advantage of others' troubles and cover their own.
 
-__A man who is high self-esteem will never hide his own badness nor laugh at other mistakes. He faces his troubles as challenges and helps others to improve.__
+__A man who is high self-esteem will never hide badness nor laugh at other mistakes. The man faces troubles as challenges and helps others to improve.__
 
 Then a man without self-esteem always makes the boss surprised!
 
@@ -40,7 +40,7 @@ You are the PM in a company amongst other PMs.
 You try to hide the unexpectedness in your project spilling out, but ultimately, the "bad news travels fast" when it happens.
 Then the boss (senior manager) won't be surprised because of the news, but because __you hide the news__.
 
-Not only the team members must be honest to their boss, but also the boss (PM) must be honest to his senior manager and the top management.
+Not only the team members must be honest to their boss, but also the boss (PM) must be honest to the senior manager and the top management.
 Under the corporate culture, not so many things can be a secret.
 The right actions should include timely reports, being self-esteem, and being straightforward.
 
