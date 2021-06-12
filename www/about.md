@@ -23,4 +23,4 @@ sidebar_link: false
 # Interests
 
 Site Reliability Engineering (SAP/DevOps), Artificial Intelligence, Internet of Things, Computer Vision, Machine Learning,
-Bridge System Engineer, Project Management, IT Communicator
+Bridge System Engineer, Project Management
