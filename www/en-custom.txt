@@ -343,3 +343,10 @@ th
 flexibilities
 soloers
 TMO
+dsmweb
+interdependency
+DSM
+DMM
+MDM
+Gantt
+intra
