@@ -23,12 +23,12 @@ toc: true
 _Source: dsmweb.org_
 
 Tracking the information flow throughout the project is required for planning the coordinating flows.
-Traditional tools like the Gantt chart are good at tracking the interdependencies between executions of concurrent tasks but fail to describe the causal dependencies between flows.
+Traditional tools like the Gantt chart are good at tracking the interdependency between runs of concurrent tasks but fail to describe the causal dependencies between flows.
 This problem is magnified when multidisciplinary teams join the stage.
 Hence, the problem becomes increasingly serious while handling many domains at once.
 To cope with this issue, __Design Structure Matrix (DSM)__, __Domain Mapping Matrix (DMM)__, and __Multiple Domain Matrix (MDM)__ have been proposed.
 While DSM tracks the information flows, DMM can be used to show the person-task assignments.
-MDM combines both DSM and MDM in multiple domains, i. e., coordinations of not only tasks but also people.
+MDM combines both DSM and MDM in multiple domains, i. e., coordination of not only tasks but also people.
 It can track all structures of the team, tasks, and assignments at once.
 
 <!--more-->
@@ -36,7 +36,7 @@ It can track all structures of the team, tasks, and assignments at once.
 ## Design structure matrix
 
 Integration management is important because it makes the deliverables regarding customer needs but lacks coordination of flows.
-For instance, in the below figure, __task 1__ needs to gather information from task 3 before execution.
+For instance, in the below figure, __task 1__ needs to gather information from task 3 before running.
 Such information flow does not appear in previous tools like the Gantt chart.
 While not aware of such flow, planning tasks, like which task should be done before a particular task, can result in a mess.
 With this schedule, then __task 3__ is completed after __task 1__.
@@ -45,7 +45,7 @@ However, __task 1__ requires information flow from __task 3__, thus task 1 must 
 ![](https://dsmweborg.files.wordpress.com/2019/04/dsm_tutorial_basic3_9f5f52512b.jpg)
 _Source: dsmweb.org_
 
-## Concurency
+## Concurrency
 
 Concurrent engineering helps to enhance the performance but makes the system is hard to design due to the complexity of dependencies and reworks.
 Let's see the example.
