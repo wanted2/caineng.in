@@ -9,6 +9,6 @@ jobs:
     # The checkout step
     - uses: actions/checkout@v2.3.4
     - name: Orthograph-err
-      uses: place-labs/orthograph-err@v1.2.0
+      uses: place-labs/orthograph-err@v1.3.0
       with:
         path: www/_posts/*.md
