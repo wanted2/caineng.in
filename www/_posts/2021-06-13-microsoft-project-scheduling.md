@@ -80,7 +80,7 @@ The risk assessment, another aspect of the schedules, will be addressed in anoth
 CPM can be used for resources as well.
 However, to accelerate the speed, introducing more resources (or crashing with resources) can be useful.
 It is equal to trading time with cost, and this is the essence of __resource allocation problem__.
-Resource loading is the amount of a specific resource to finish an activity in a period.
+Resource loading is the amount of a specific resource to finish an activity in a duration.
 For example, to finish a task, we need 2 labor-hour, then that is the resource loading.
 In reality, the resource loading can be uneven during the project lifetime.
 Resource leveling concerns making the loading even throughout the project time.
@@ -89,7 +89,7 @@ In other words, leveling helps to __stabilize the workloads__ over time.
 
 One concern for the PMs is how many workers should be hired for a given workload?
 If the workload is uneven, then the number of workers and other resources must be sufficient to handle the peak.
-In other periods, when the workload is much lower than the peak workload, the worker pool size can be adjusted to avoid waste.
+In other time, when the workload is much lower than the peak workload, the worker pool size can be adjusted to avoid waste.
 
 ### Microsoft Project
 
@@ -149,7 +149,7 @@ After downloading, please double-click and follow the guides to install.
 After installation, you may need to log in to your Microsoft account registered in the previous steps.
 
 ![](/assets/img/msp3.png)
-## Execution
+## Run
 
 From the __Start screen__ of MSP, please select __Waterfall project__.
 Although __Sprint project__ is available, we will explain it in another article.
@@ -168,10 +168,10 @@ __Is this a good cost performance?__
 
 In reality, it is better to make payrolls by precisely to hours and even by minutes.
 For example, worker A registers a task S for 1 working day.
-But in fact, nobody spends all 8 working hours just for work!
-A study has shown that about 12% of working hours have been spent on other things like visiting toilets, .etc. or _personal time_.
+But in fact, nobody spends all 8 working hours for work!
+A study has shown that about 12% of working hours have been spent on other things like _personal time_.
 Estimating task durations by minutes or hours helps to reduce such uncertainty.
-MSP supports measurements by minutes, but of course, hourly payment is good enough.
+MSP supports measurements by minutes, but hourly payment is good enough.
 Select __Options > Schedule > Input worktime unit__ to __minutes__.
 
 To view the state of distributed tasks, you can switch the view
@@ -187,17 +187,17 @@ Please switch to __Resource Sheet__ view.
 ![](/assets/img/msp10.png)
 
 There are two kinds of resources: noncurrent assets like equipment which price is fixed with one-time payments, and other resources which must be paid by hourly or monthly payments such as labors of office rental fees.
-Of course, office rental fees aren't counted in many cases, especially for remote workers.
+, office rental fees aren't counted in many cases, especially for remote workers.
 
 In this case, we have one worker and one PC (laptop) that are assigned to the tasks.
 For this case, we assign the price of 2,000 JPY per hour (tax included) to the payment.
 Overtime is paid by 2,500 JPY per hour.
-__Note that when the tasks of the same person are executed parallel, the total time is a sum!__
+__Note that when the tasks of the same person are run parallel, the total time is a sum!__
 Then the working time is doubled, and any hours exceed 8 hours per day will be counted as overtime.
 
 To avoid payments for such __concurrency caused overtime__, the PMs should:
 
-* __Break down the tasks smaller and make them executed sequentially within the 8-hour frame__.
+* __Break down the tasks smaller and make them run sequentially within the 8-hour frame__.
 * Pay by hours or minutes for non-contract workers. 
 
 <img src="/assets/img/msp6.png" style="float: right; margin-left: 20px; margin-bottom: 10px; margin-top: 10px;" width="50%"/>
