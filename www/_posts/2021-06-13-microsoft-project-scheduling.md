@@ -176,7 +176,7 @@ Select __Options > Schedule > Input worktime unit__ to __minutes__.
 
 To view the state of distributed tasks, you can switch the view
 
-![](/assets/img/msp9.png)
+![](/assets/img/msp9.PNG)
 
 Assigned workers and resources can be shown, too.
 
@@ -184,7 +184,7 @@ Assigned workers and resources can be shown, too.
 
 Please switch to __Resource Sheet__ view.
 
-![](/assets/img/msp10.png)
+![](/assets/img/msp10.PNG)
 
 There are two kinds of resources: noncurrent assets like equipment which price is fixed with one-time payments, and other resources which must be paid by hourly or monthly payments such as labors of office rental fees.
 , office rental fees aren't counted in many cases, especially for remote workers.
@@ -210,17 +210,17 @@ Readers are recommended to explore by themselves.
 ![](/assets/img/msp4.png)
 
 ### View Critical Paths
-<img src="/assets/img/msp11.png" style="float: left; margin-right: 20px; margin-bottom: 10px; margin-top: 10px;" width="50%"/>
+<img src="/assets/img/msp11.PNG" style="float: left; margin-right: 20px; margin-bottom: 10px; margin-top: 10px;" width="50%"/>
 Switch to the __Gantt chart__ view, and from the __View__ tab in the ribbon, choose __Critical__ as the filter.
 We will observe the Critical Paths automatically as follows.
 
-![](/assets/img/msp12.png)
+![](/assets/img/msp12.PNG)
 ### PERT Analysis
 
 We use the macro from [https://github.com/flametron/MSProject-2019-PERT](https://github.com/flametron/MSProject-2019-PERT).
 With the weight combinations $(1,4,1)$ we have the estimates of __Duration__:
 
-![](/assets/img/msp13.png)
+![](/assets/img/msp13.PNG)
 
 ## Conclusion
 
