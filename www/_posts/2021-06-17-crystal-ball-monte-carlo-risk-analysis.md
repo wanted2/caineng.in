@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Using Oracle Crystal Ball for Monte Carlo Simulation based Risk Analysis"
+title: "Using Oracle CrystalBall for Monte Carlo Simulation based Risk Analysis"
 excerpt_separator: "<!--more-->"
 categories:
   - pm
@@ -38,9 +38,9 @@ For example, let's see when we have to estimate _the duration of a task_, which 
 Then MCS generates a set of 1,000 samples following the assumptions.
 We can find the worst cases and the best cases from simulated results, as the minimum values and the maximum values out of 1,000 samples.
 
-## Oracle Crystal Ball
+## Oracle CrystalBall
 
-__Oracle Crystal Ball (OCB)__ is a simulation software for risk management.
+__Oracle CrystalBall (OCB)__ is a simulation software for risk management.
 It utilizes Monte Carlo Simulation to consider every possibility that can happen when calculating and predicting the outcomes of their occurrences, thereby giving you the critical part of your model in which to concentrate.
 With the Monte Carlo Simulation, your working processes are simplified, including the statistics and the necessary information at its side in split-view format.
 The software is an Excel add-in and useful for Excel professionals.
@@ -60,7 +60,7 @@ That download content was:
 ### Installation
 
 Read the guides and then double-click on __crystalballsetup-x64.exe__ and follow the instructions for installation.
-The Crystal Ball [add-in](https://docs.microsoft.com/en-us/office/dev/add-ins/excel/excel-add-ins-overview) is installed inside Excel and is available for every workbook.
+The CrystalBall [add-in](https://docs.microsoft.com/en-us/office/dev/add-ins/excel/excel-add-ins-overview) is installed inside Excel and is available for every workbook.
 ![](/assets/img/cb04.PNG)
 
 # Examples
@@ -71,7 +71,7 @@ Somewhere in the past, we have [discussed](/pm/2021/06/01/discounted-cash-flow.h
 
 ### Problem
 A company has been planning to develop a new product.
-The project has a hurdle rate $K=0.12$ and propective inflation rate $p=0.03$.
+The project has a hurdle rate $K=0.12$ and prospective inflation rate $p=0.03$.
 The __most likely__ cash flows in ten years are as follows.
 ![](/assets/img/cb05.PNG)
 Recall that the _Discounted factor of $t$-th year_ is $d_t=\frac{1}{(1+K+p)^t}$.
@@ -79,7 +79,7 @@ Note that the above table is the most likely number.
 
 Now let us assume that the expenditures in this example are fixed by contract with an 
 outside vendor.
-Thus, there is no uncertainty about the outflows, but there are, of course, uncertainties about the inflows. 
+Thus, there is no uncertainty about the outflows, but there are, uncertainties about the inflows. 
 Assume that the estimated inflows are as shown in the below table and include a most likely estimate, a minimum (pessimistic) estimate, and a maximum (optimistic) estimate.
 Both the beta and the triangular statistical distributions are well suited for modeling variables with these three parameters, but fitting a beta distribution is complicated and not particularly intuitive. 
 Therefore, we will assume that the triangular distribution will give us a reasonably good fit for the inflow variables.
@@ -100,7 +100,7 @@ Therefore, we will assume that the triangular distribution will give us a reason
 
 ### Register assumption and forecast variables
 To do Monte Carlo simulation, we must register our assumptions on the uncertainties of inflows.
-Select cell __B5__, and then select the __Define Assumption__ button from the ribbon menu of Crystal Ball.
+Select cell __B5__, and then select the __Define Assumption__ button from the ribbon menu of CrystalBall.
 Note that the project was assumed that the project generates no profit in the first three years.
 Therefore, we start from 2008 (or cell __B5__).
 Then choose the __three-point estimates__.
@@ -115,29 +115,13 @@ Select cell __F15__ and the button __Define Forecast__ from the ribbon menu.
 Input the name and the unit as follows.
 ![](/assets/img/cb08.PNG)
 ### Simulation
-Click button __Start__ in the ribbon menu of Crystal Ball to start MCS.
+Click button __Start__ in the ribbon menu of CrystalBall to start MCS.
 The default number of simulations is 1,000.
 After done the simulation, we observe some results like:
 ![](/assets/img/cb09.PNG)
 
-To find a robust estimation, we can see the __median__: 10,689 USD after 10 years is the expected DCF the project will generate.
+To find a robust estimation, we can see the __median__: 10,869 USD after 10 years is the expected DCF the project will generate.
 Not so much!
-
-## Scheduling
-
-### Problems
-
-### Assumptions and forecasts
-
-### Simulation
-
-## Critical chain of events
-
-### Problems
-
-### Assumptions and forecasts
-
-### Simulation
 
 # References
 
