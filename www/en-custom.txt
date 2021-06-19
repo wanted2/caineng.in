@@ -367,3 +367,11 @@ noncurrent
 JPY
 MSProject
 flametron
+USD
+MCS
+OCB
+crystalballsetup
+exe
+carlo
+monte
+CrystalBall
