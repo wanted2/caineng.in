@@ -18,7 +18,12 @@ tags:
 toc: true
 ---
 ![](/assets/img/cb02.PNG)
-
+__Uncertainty__ is everywhere in the lifecycle of a project.
+The duration of activities, resources to assign to actions, and schedules are all uncertain.
+Project managers can manage to reduce the risks associated with uncertainties, but they cannot be eliminated.
+__Risk analysis__ helps to identify and sometimes visualize the risks, not to remove risks from projects.
+__Oracle CrystalBall (OCB)__ is a simulation software for risk management.
+It utilizes Monte Carlo Simulation to consider every possibility that can happen when calculating and predicting the outcomes of their occurrences, thereby giving you the critical part of your model in which to concentrate.
 
 <!--more-->
 
