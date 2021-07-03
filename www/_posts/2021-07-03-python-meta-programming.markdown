@@ -179,6 +179,8 @@ print(linear(-1))
 ```
 
 出力は下記になります。
+この出力からわかるように、実行だけではなくクラス生成過程も監視できます。
+モニタリングとオーディティングは簡易になれます。
 ```text
 MetaActivation.__prepare__(<class '__main__.MetaActivation'>, Sigmoid, (), {})
 MetaActivation.__new__(<class '__main__.MetaActivation'>, Sigmoid, (), {'preprocess': <function preprocess at 0x000001784EC26160>, 'postprocess': <function postprocess at 0x000001784EC261F0>, '__module__': '__main__', '__qualname__': 'Sigmoid', '__call__': <function Sigmoid.__call__ at 0x000001784EC265E0>}, {})
@@ -198,23 +200,33 @@ MetaActivation.__call__(<class '__main__.Linear'>, (), {})
 -1
 ```
 
-![](/assets/img/class-gen.png)
-
 属性を自動的に追加したり管理したりすることもメタプログラミングで行えます。
 例えば、ロガーやデータ準備・整理・正則化などを属性としてメタクラスで追加できます。
 これにより、動的クラスや動的関数を作成できます。
 運用に未知のクラスを動的に生成できるので、未知物体がある場合、静的クラスのアプローチと比べるとより柔軟な対応ができます。
 ## metaclassについて
+上記の例の生成フローは下図に示します。
+![](/assets/img/class-gen.png)
+
+### `__prepare__`
+クラス生成の最初に実行される関数です。
+記述される場合、クラス生成の準備処理を行えます。
+属性配列を返す関数なので、自動的に属性を追加したり管理したりすることができます。
+今回の例では、前処理などを隠蔽しました。
+メタプログラミングのコードを読むときに、下記のクラスだけを読むと`preprocess`や`logger`はどこに定義するか新人にとっては不思議ですが、フレームワークなどのコードではよくあるパターンであろう。
+
+```python
+class Sigmoid(metaclass=MetaActivation):
+  def __call__(self, x):
+    self.logger.debug('Main run started with x = {}'.format(x))
+    x = self.preprocess(x)
+    x = self.postprocess(x)
+    self.logger.debug('Main run finished with x = {}'.format(x))
+    return x
+```
 
 ### `__new__`と`__init__`
 
 ### `__call__`
-
-### `__prepare__`
-
 ## 結論
 
-
-# References
-
-{% bibliography --file pm %}
