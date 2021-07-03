@@ -12,6 +12,10 @@ tags:
   - メタクラス
 toc: true
 ---
+
+![](https://upload.wikimedia.org/wikipedia/commons/4/41/Floral_matryoshka_set_2_smallest_doll_nested.JPG)
+__Source: [Matryoska doll](https://upload.wikimedia.org/wikipedia/commons/4/41/Floral_matryoshka_set_2_smallest_doll_nested.JPG)__
+
 日々でPythonコードを書いています。
 根拠なくコードを書くことが絶対良くないのです。
 自信を持って根拠強いコードを書くとハイクオリティを保証できます。
@@ -67,7 +71,7 @@ sigmoid(-1)
 Python3では、クラスの定義でtypeを継承すればメタクラスを定義できます。
 新クラスの生成過程を定義でき、自由に監視ロガーを追加できます。
 また、前処理や後処理を属性として管理できます。
-例えば、シグモイドクラスの場合、`preprocess`と`postprocess`関数を利用しますが、線形クラスの場合、`identity`関数を利用すると条件分で指定できます。
+例えば、シグモイドクラスの場合、`preprocess`と`postprocess`関数を利用しますが、線形クラスの場合、`identity`関数を利用すると条件文で指定できます。
 
 ```python
 import math, logging
@@ -226,7 +230,18 @@ class Sigmoid(metaclass=MetaActivation):
 ```
 
 ### `__new__`と`__init__`
+`__new__`はクラスを生成するが、未初期化の状態です。
+ここで、属性の見直すのもできます。
+`__prepare__`が返したものが属性の辞書とみなされクラスを生成します。
+`__init__`は`__new__`のクラスを初期化します。
 
 ### `__call__`
+この関数はインスタンス作成時に呼び出されます。
+例えば、`sigmoid = Sigmoid(引数)`で呼び出されるので、クラスのコンストラクタの引数を制限するなど行えます。
 ## 結論
+インスタンスのイベントではなく、クラスのイベントを容易に管理できるようにメタクラスの概念を紹介しました。
+Pythonのmetaclassでクラス生成を制御する事例も紹介しました。
+`__prepare__`, `__new__`, `__init`, `__call__`などで属性を自由に管理できるので、動的に新クラスを定義できるため、実際にいろいろな条件に応じて新クラスを生成できます。
+メタプログラミングをよく知って、使いこなせると強い武器になると思われます。
 
+特に、新クラス、未知クラス、珍クラスなどをメタクラスで制御できるときたいできるのであろう？
