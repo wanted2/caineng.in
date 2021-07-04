@@ -37,8 +37,17 @@ Thế rồi, quản lý dự án đột nhiên xuất hiện và yêu cầu các
 
 * __Bản tính con người là "lười"__: _"Nhân chi sơ, tính bản thiện"_ nhưng ai cũng _"lười"_.
 
+Hậu quả của hiệu ứng Sinh Viên "lười" là giảm chất lượng sản phẩm, khiến cho scope có nhiều chỗ không kịp làm, giảm niềm tin của stakeholders, team dự án thì lúc nào cũng rơi vào tình trạng "áp lực", và rủi ro cho kế hoạch thì gia tăng.
 
 # Thuốc trị
+
+* __Định kỳ thường xuyên theo dõi, giám sát team dự án__: Không bao giờ bỏ bê các bạn. Phải hỏi ngay khi có dấu hiệu không hiểu, phải chỉnh lại ngay khi có dấu hiệu "lạc lối".
+
+* __Định kỳ thường xuyên báo cáo và liên lạc với stakeholders__: báo cáo tiến độ kịp thời và nhận feedback kịp thời khi có vấn đề.
+
+* __Theo dõi sát sao thời gian rảnh của team ("slack") và lên cảnh báo ngay khi có dấu hiệu thời gian rảnh nhiều hoặc khi tiến độ chậm lại.__
+
+* __Chia nhỏ đầu việc, đến mức có thể nắm được__: Tránh giao 1 đầu việc to vì như vậy rủi ro chậm dự án là rất lớn. Lý do bởi vì thời gian để detect được hiệu ứng SInh Viên "lười" luôn không vượt quá thời gian công số của task. Vì vậy nếu để đầu việc công số lớn thì thời gian để phát hiện ra hiệu ứng cũng lớn theo. __Do vậy, không nên để đầu việc nào có thời gian dài quá 1 ngày, hoặc vài giờ, tùy theo dự án__.
 
 # References
 
