@@ -54,7 +54,7 @@ If SPIS cannot handle well this customer relationship, they may lose the 4 outag
 
 * __QA to the right person__: RB didn't ask LM although, LM is the true PIC for contract, not SG.
 
-* __Know the decision maker__: LM and his boss is the right decision-maker, not SG.
+* __Know the decision maker__: LM or the boss is the right decision-maker, not SG.
 
 * __Control the customer__: SPIS wasn't aware of changes in purchasing procedures of NLP.
 
