@@ -37,8 +37,27 @@ Nhân viên thực hiện chat với AttendanceBot bằng cụm từ quy định
 Thời gian checkin được tính từ thời điểm này và được lưu trữ vào bảng timesheet của AttendanceBot.
 Bằng việc nhập lệnh `out` vào cửa sổ chat, nhân viên thực hiện checkout và cập nhật timesheet.
 Nhân viên có thể xem timesheet của chính mình trực tiếp trên công cụ chat bằng lệnh `timesheet`.
+Để tải timesheet của bản thân mình, nhân viên nhập lệnh `timesheet report` và AttendanceBot sẽ trả về đường link tới file timesheet CSV.
+Đồng thời hành vi check in/out của nhân viên cũng được thông báo trên channel của team, do đó PM có thể nhanh chóng nắm bắt nhân sự và nhận cảnh báo.
+Với quyền quản lý, PMs còn có thể truy cập và quản lý timesheet của các nhân viên.
+
+<img src="https://d2d2z0vqdha3nx.cloudfront.net/static/assets/img/ab_v3/Absence-and-leave-management-for-teams%402x.png" style="float: left; margin-right: 20px; width: 50%;" />
+__Quản lý kỳ nghỉ__.
+Nhân viên có thể đăng ký lịch nghỉ dài hạn hoặc ngắn hạn, hoặc Work From Home (WFH) từ cửa sổ chat.
+PM và các quản lý cấp cao có thể nhận cảnh báo ngay lập tức với các kỳ nghỉ của nhân viên.
+Mẫu câu để đăng ký nghỉ có thể phong phú hơn từ khóa `in/out`, ví dụ, nhân viên có thể nhập `WFH on next Monday`, và AttendanceBot có thể nhận ra thời gian là thứ 2 tới ngày 12/7 và nội dung là Work from home.
+
+<img src="https://d2d2z0vqdha3nx.cloudfront.net/static/assets/img/ab_v3/ShiftCal%402x.png" style="float: right; margin-left: 20px; width: 50%;">
+__Quản lý phiên làm việc__.
+Lên kế hoạch làm việc cho nhân viên trong cả tuần tiếp theo là một việc làm thường xuyên của PM.
+PM sẽ thực hiện lên kế hoạch trên công cụ lịch của AttendanceBot và từ đó, AttendanceBot sẽ lên schedule để gửi thông báo (notification) cho nhân viên về time shift.
+Khi gần tới phiên làm việc sẽ có cảnh báo/thông báo gửi về từng nhân viên để làm việc.
 
 ## Đơn giá
+
+Báo giá của AttendanceBot có thể tìm thấy tại [https://www.attendancebot.com/pricing/](https://www.attendancebot.com/pricing/).
+Có 2 phiên bản là bản AttendanceBot và AttendanceBot Pro.
+Mức giá tính theo user và theo tháng là 4 đô và 6 đô tương ứng.
 
 # Sử dụng cùng Microsoft Teams
 
