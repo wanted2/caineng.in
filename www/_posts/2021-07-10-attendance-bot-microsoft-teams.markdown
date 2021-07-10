@@ -63,7 +63,7 @@ Mức giá tính theo user và theo tháng là 4 đô và 6 đô tương ứng.
 
 ![](/assets/img/attendancebot-teams.PNG)
 
-Một điểm hay của AttendanceBot là ngoài việc dùng trực tiếp dịch vụ tại trang chủ attendancebot.com thì các nhà phát triển __chủ động__ tích hợp dịch vụ dưới dạng chatbot tự động vào các nền tảng communication cho dự án nổi tiếng như Slack, Teams và Google Chat.
+Một điểm hay của AttendanceBot là ngoài việc dùng trực tiếp dịch vụ tại trang chủ attendancebot.com thì các nhà phát triển __chủ động một cách thông minh__ tích hợp dịch vụ dưới dạng chatbot tự động vào các nền tảng communication cho dự án nổi tiếng như Slack, Teams và Google Chat.
 Chính sự chủ động này đã khiến cho việc tích hợp AttendanceBot vào dự án đang chạy vô cùng dễ dàng cho người dùng.
 ## Đăng ký lịch nghỉ
 
