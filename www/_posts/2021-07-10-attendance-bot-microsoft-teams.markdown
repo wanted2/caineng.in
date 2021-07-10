@@ -107,6 +107,17 @@ Chức năng này giúp luồng báo cáo của nhân viên tới quản lý d�
 * `my manager`: nhân viên có thể xem tên quản lý trực tiếp của mình bằng lệnh này.
 ## Quản lý báo cáo
 
+![](https://d2d2z0vqdha3nx.cloudfront.net/static/assets/img/ab_v3/DashElements%402x.png)
+
+_Source: AttendanceBot.com_
+
+Công cụ hữu ích cuối cùng là dashboard để quản trị thông tin nhân sự.
+Với công cụ này, quản lý dự án có được cái nhìn tổng thể mà chi tiết (`big picture`) của dự án.
+
+# Kết luận
+
+AttendanceBot là công cụ tự động hóa (RPA) hữu ích, đồng thời cũng là công cụ có tích hợp trí tuệ nhân tạo.
+Mặc dù các xử lý ngôn ngữ tự nhiên bên trong khá đơn giản như quyết định bằng rule gắn với keyword (`in/out`) hay phân tích mẫu câu có sẵn template đơn giản như `vacation from ... to ...`, đây là một công cụ hữu ích và trong tương lai có thể kỳ vọng vào những bước tiến xa hơn.
 # References
 
 {% bibliography --file pm %}
