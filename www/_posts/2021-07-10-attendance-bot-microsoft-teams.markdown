@@ -92,6 +92,19 @@ WFH from 12 December to 14 December
 Những mẫu câu về ngày nhất định như `Vacation today` hoặc `WFH tommorrow` cũng được bot hiểu.
 ## Check in/check out
 
+Quản lý check in/out có thể được thực hiện khá đơn giản bằng các câu lệnh sau:
+
+* `in`: nhân viên bạn quản lý phải nhập câu lệnh này để checkin.
+* `out`: khi ra về nhân viên phải nhập lệnh này để checkout và cập nhật timesheet. Nếu bạn là quản lý trực tiếp của nhân viên, thông tin timesheet sẽ được thông báo để bạn quản lý và theo dõi.
+* `timesheet`: nhân viên có thể dùng lệnh này để tự xem timesheet của mình.
+* `timesheet report`: nhân viên có thể dùng lệnh này để tải CSV của timesheet về máy.
+
+![](/assets/img/attendancebot-teams-2.PNG)
+
+* `change manager`: lần đầu đăng ký timesheet (`in/out`), nhân viên sẽ bị hỏi nhập thông tin quản lý trực tiếp.
+Trong quá trình dự án, nếu có thay đổi quản lý trực tiếp, nhân viên dùng lệnh này chat cập nhật quản lý.
+Chức năng này giúp luồng báo cáo của nhân viên tới quản lý dự án được tự động hóa và thông suốt.
+* `my manager`: nhân viên có thể xem tên quản lý trực tiếp của mình bằng lệnh này.
 ## Quản lý báo cáo
 
 # References
