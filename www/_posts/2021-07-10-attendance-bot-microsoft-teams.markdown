@@ -65,8 +65,31 @@ Mức giá tính theo user và theo tháng là 4 đô và 6 đô tương ứng.
 
 Một điểm hay của AttendanceBot là ngoài việc dùng trực tiếp dịch vụ tại trang chủ attendancebot.com thì các nhà phát triển __chủ động một cách thông minh__ tích hợp dịch vụ dưới dạng chatbot tự động vào các nền tảng communication cho dự án nổi tiếng như Slack, Teams và Google Chat.
 Chính sự chủ động này đã khiến cho việc tích hợp AttendanceBot vào dự án đang chạy vô cùng dễ dàng cho người dùng.
-## Đăng ký lịch nghỉ
 
+Để cài đặt bạn chỉ cần mở tab App và gõ tên app `AttendanceBot` vào khung tìm kiếm để lọc ra app.
+Sau đó theo các hướng dẫn để cài đặt vào thư mục dự án.
+## Đăng ký lịch nghỉ
+![](/assets/img/attendancebot-teams-1.PNG)
+
+Sau khi cài đặt, AttendanceBot sẽ chủ động chat với bạn về cách sử dụng app.
+Có hai cách để tương tác với AttendanceBot:
+
+* Trong thư mục của team dự án, bạn có thể gửi tin lên `@AttendanceBot Vacation from 12 December to 14 December`.
+
+* Bạn mở một chat trực tiếp với AttendanceBot với nội dung `Vacation from 12 December to 14 December`.
+
+Dù làm theo cách nào, thì AttendanceBot cũng sẽ chat lại cho bạn với nội dung như trên.
+Cú pháp xin nghỉ khá đa dạng nhưng phần lớn tuân theo một số kiểu câu:
+
+```
+<Loại nghỉ> from <ngày bắt đầu> to <ngày kết thúc>
+
+Ví dụ:
+Vacation from 12 December to 14 December
+WFH from 12 December to 14 December
+```
+
+Những mẫu câu về ngày nhất định như `Vacation today` hoặc `WFH tommorrow` cũng được bot hiểu.
 ## Check in/check out
 
 ## Quản lý báo cáo
