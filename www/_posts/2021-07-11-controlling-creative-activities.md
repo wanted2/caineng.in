@@ -54,11 +54,11 @@ That is the _phase-gate control_.
 # Personnel Reassignment
 
 For such an uncertain type of project, it is valuable to reassign people: productive personnel are kept, while the rest is reassigned to other projects or other organizations.
-It is easy to perform this control, but there are several issues:
+It is not difficult to perform this control, but there are several issues:
 
 * If the favored personnel doesn't change, then there is a possibility to create an elite group: new personnel becomes demotivated when joining, while old personnel is already highly motivated for further achievements.
 
-* It is difficult to rank middle quartiles.
+* It is difficult to rank the middle quartile.
 
 # Control of Input Resources
 
